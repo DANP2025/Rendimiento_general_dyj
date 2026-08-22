@@ -13,14 +13,14 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 # Inyección CSS (Letras Gigantes y Filtros Limpios)
 st.markdown("""
 <style>
-/* Letra global gigante */
+/* Tipografia global responsive */
 html, body, [class*="st-"] { 
-    font-size: 24px !important; 
+    font-size: 16px !important;
     font-family: 'Agency FB', sans-serif !important; 
 }
 
 h1 { 
-    font-size: 3rem !important; 
+    font-size: 2rem !important;
     color: #2E7D32 !important; 
     text-align: center; 
 }
@@ -29,7 +29,7 @@ h1 {
 .stMultiSelect [data-baseweb="tag"] {
     background-color: transparent !important;
     color: #1E293B !important;
-    font-size: 20px !important;
+    font-size: 14px !important;
     border: 1px solid #CBD5E1 !important;
     border-radius: 4px !important;
     padding: 4px 8px !important;
@@ -60,7 +60,7 @@ div[role="listbox"]::-webkit-scrollbar-thumb:hover {
     background-color: #94A3B8 !important;
 }
 
-li[role="option"] { font-size: 20px !important; padding: 12px !important; }
+li[role="option"] { font-size: 14px !important; padding: 8px !important; }
 
 /* Main canvas styling */
 .main {
@@ -70,23 +70,23 @@ li[role="option"] { font-size: 20px !important; padding: 12px !important; }
 /* Card containers */
 [data-testid="stVerticalBlock"] > [style*="flex-direction: column"] > [data-testid="stVerticalBlock"] {
     background-color: white !important;
-    padding: 24px !important;
-    border-radius: 16px !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
-    margin-bottom: 20px !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
+    margin-bottom: 12px !important;
     border: 1px solid #E5E7EB !important;
 }
 
 /* Tab styling */
 [data-testid="stTabs"] [data-testid="stTab"] {
     background-color: #F9FAFB !important;
-    border-radius: 12px 12px 0 0 !important;
-    padding: 24px 40px !important;
-    font-size: 22px !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 10px 16px !important;
+    font-size: 15px !important;
     font-family: 'Agency FB', sans-serif !important;
     color: #6B7280 !important;
     font-weight: bold !important;
-    border: 2px solid #E5E7EB !important;
+    border: 1px solid #E5E7EB !important;
     border-bottom: none !important;
 }
 
@@ -100,15 +100,15 @@ li[role="option"] { font-size: 20px !important; padding: 12px !important; }
 [data-testid="stRadio"] > div > div > div {
     background-color: #F9FAFB !important;
     border-radius: 8px !important;
-    padding: 16px !important;
-    border: 2px solid #E5E7EB !important;
+    padding: 8px !important;
+    border: 1px solid #E5E7EB !important;
 }
 
 /* Selectbox styling */
 [data-testid="stSelectbox"] > div > div > div {
     background-color: #F9FAFB !important;
     border-radius: 8px !important;
-    border: 2px solid #E5E7EB !important;
+    border: 1px solid #E5E7EB !important;
 }
 
 /* Remove sidebar */
@@ -137,6 +137,15 @@ def normalizar_columnas(df):
     """Normaliza los nombres de columnas para robustez"""
     df.columns = df.columns.str.strip()
     return df
+
+
+def limpiar_datos_grafico(df, columnas_valor):
+    """Elimina valores no finitos para que Plotly no renderice etiquetas NaN."""
+    columnas_existentes = [col for col in columnas_valor if col in df.columns]
+    if not columnas_existentes:
+        return df.iloc[0:0].copy()
+    datos = df.replace([np.inf, -np.inf], np.nan).copy()
+    return datos.dropna(subset=columnas_existentes, how='all')
 
 # Función para cargar datos desde Google Sheets
 @st.cache_data(ttl=3600)
@@ -306,7 +315,12 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
             for metrica in metricas_seleccionadas:
                 if metrica in df.columns and columna_jugador in df.columns:
                     df_metrica = df.groupby(columna_jugador)[metrica].mean(numeric_only=True).reset_index()
+                    df_metrica = limpiar_datos_grafico(df_metrica, [metrica])
                     df_metrica = df_metrica.sort_values(by=metrica, ascending=False)
+
+                    if df_metrica.empty:
+                        st.warning(f"No hay datos disponibles para {metrica}")
+                        continue
                     
                     # Convertir columna Futbolista a string estrictamente
                     df_metrica[columna_jugador] = df_metrica[columna_jugador].astype(str)
@@ -323,7 +337,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                     fig.update_traces(
                         texttemplate='%{y:.2f}',
                         textposition='outside',
-                        textfont=dict(size=22, color='black', family='Arial Black'),
+                        textfont=dict(size=12, color='black', family='Arial Black'),
                         cliponaxis=False
                     )
                     
@@ -334,17 +348,17 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         bargroupgap=0.0,
                         showlegend=False,
                         margin=dict(t=80, b=120),
-                        title=dict(text=f"<b>{metrica}</b>", x=0.5, font=dict(size=28, color="#1E293B")),
+                        title=dict(text=f"<b>{metrica}</b>", x=0.5, font=dict(size=18, color="#1E293B")),
                         xaxis_title="Futbolista",
                         yaxis_title=metrica,
-                        font=dict(family='Agency FB', size=22)
+                        font=dict(family='Agency FB', size=14)
                     )
                     
                     # Eje X (Futbolistas) - CRÍTICO: categórico con tickmode='linear'
-                    fig.update_xaxes(type='category', tickmode='linear', tickangle=-45, tickfont=dict(size=22, family="Agency FB", color="black"))
+                    fig.update_xaxes(type='category', tickmode='linear', tickangle=-45, tickfont=dict(size=12, family="Agency FB", color="black"))
                     
                     # Eje Y (Métrica)
-                    fig.update_yaxes(tickfont=dict(size=22))
+                    fig.update_yaxes(tickfont=dict(size=12))
                     
                     # Grosor nuclear de barras
                     fig.update_traces(width=0.75, selector=dict(type='bar'))
@@ -379,6 +393,8 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
             if metricas_primarias or metricas_secundarias:
                 # Preparar datos agrupados por futbolista
                 df_agrupado = df.groupby(columna_jugador).mean(numeric_only=True).reset_index()
+                metricas_combinadas = metricas_primarias + metricas_secundarias
+                df_agrupado = limpiar_datos_grafico(df_agrupado, metricas_combinadas)
                 df_agrupado[columna_jugador] = df_agrupado[columna_jugador].astype(str)
                 
                 # Crear subplots con doble eje Y
@@ -392,10 +408,10 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 x=df_agrupado[columna_jugador],
                                 y=df_agrupado[metrica],
                                 name=metrica,
-                                text=df_agrupado[metrica],
+                                text=df_agrupado[metrica].where(df_agrupado[metrica].notna(), None),
                                 textposition='outside',
                                 marker_color='#22C55E',
-                                textfont=dict(size=20, color='black', family='Arial Black')
+                                textfont=dict(size=12, color='black', family='Arial Black')
                             ),
                             secondary_y=False
                         )
@@ -409,11 +425,11 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 y=df_agrupado[metrica],
                                 name=metrica,
                                 mode='lines+markers+text',
-                                text=df_agrupado[metrica],
+                                text=df_agrupado[metrica].where(df_agrupado[metrica].notna(), None),
                                 textposition='bottom center',
-                                line=dict(color='#F59E0B', width=4),
-                                marker=dict(size=12, line=dict(width=2, color='black')),
-                                textfont=dict(size=20, color='#B45309', family='Arial Black'),
+                                line=dict(color='#F59E0B', width=3),
+                                marker=dict(size=8, line=dict(width=1, color='black')),
+                                textfont=dict(size=12, color='#B45309', family='Arial Black'),
                                 texttemplate='<b>%{text:.2f}</b>'
                             ),
                             secondary_y=True
@@ -421,7 +437,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                 
                 # Configuración del gráfico combinado
                 fig.update_layout(
-                    title=dict(text="Gráfico Combinado: Barras y Líneas", x=0.5, y=0.98, xanchor='center', yanchor='top', font=dict(size=28, color="#1E293B")),
+                    title=dict(text="Gráfico Combinado: Barras y Líneas", x=0.5, y=0.98, xanchor='center', yanchor='top', font=dict(size=18, color="#1E293B")),
                     showlegend=True,
                     legend=dict(
                         orientation="h",
@@ -429,21 +445,21 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         y=1.08,
                         xanchor="center",
                         x=0.5,
-                        font=dict(size=18, family='Agency FB')
+                        font=dict(size=12, family='Agency FB')
                     ),
                     bargap=0.15,
                     margin=dict(t=150, b=100, l=80, r=80),
                     xaxis_title="Futbolista",
-                    font=dict(family='Agency FB', size=22),
+                    font=dict(family='Agency FB', size=14),
                     height=700
                 )
                 
                 # Eje X categórico - COLOR NEGRO
-                fig.update_xaxes(type='category', tickangle=-45, tickfont=dict(color='black', size=18))
+                fig.update_xaxes(type='category', tickangle=-45, tickfont=dict(color='black', size=12))
                 
                 # Ejes Y - COLOR NEGRO
-                fig.update_yaxes(tickfont=dict(color='black', size=18), title_text="Eje Primario (Barras)", secondary_y=False)
-                fig.update_yaxes(tickfont=dict(color='black', size=18), title_text="Eje Secundario (Líneas)", secondary_y=True)
+                fig.update_yaxes(tickfont=dict(color='black', size=12), title_text="Eje Primario (Barras)", secondary_y=False)
+                fig.update_yaxes(tickfont=dict(color='black', size=12), title_text="Eje Secundario (Líneas)", secondary_y=True)
                 
                 # Grosor nuclear de barras
                 fig.update_traces(width=0.75, selector=dict(type='bar'))
@@ -513,6 +529,8 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                 # Crear DataFrame de Z-Scores
                 if z_scores_data:
                     df_zscore = pd.DataFrame(z_scores_data)
+                    df_zscore['Z-Score'] = pd.to_numeric(df_zscore['Z-Score'], errors='coerce')
+                    df_zscore = df_zscore.replace([np.inf, -np.inf], np.nan).dropna(subset=['Futbolista', 'Métrica', 'Z-Score'])
                     
                     if vista_zscore == "Ranking por Métrica (Horizontal)":
                         # LADO A: Ranking por Métrica - Horizontal
@@ -540,18 +558,18 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                     marker_color=colors,
                                     texttemplate='%{x:.2f}',
                                     textposition='outside',
-                                    textfont=dict(size=18, color='black')
+                                    textfont=dict(size=12, color='black')
                                 )
                                 
                                 # Configuración Plotly Z-Score
                                 fig.update_layout(
                                     height=max(400, len(df_metrica)*40),
                                     showlegend=False,
-                                    title=dict(text=f"<b>Z-Score: {metrica}</b>", x=0.5, font=dict(size=28, color="#1E293B")),
+                                    title=dict(text=f"<b>Z-Score: {metrica}</b>", x=0.5, font=dict(size=18, color="#1E293B")),
                                     xaxis_title="Z-Score",
                                     yaxis_title="",
                                     margin=dict(t=80, b=80, l=150, r=80),
-                                    font=dict(family='Agency FB', size=22),
+                                    font=dict(family='Agency FB', size=14),
                                     bargap=0.2
                                 )
                                 
@@ -562,10 +580,10 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 fig.add_vline(x=0, line_width=3, line_dash="dash", line_color="black")
                                 
                                 # Tamaño de nombres de jugadores en Eje Y
-                                fig.update_yaxes(tickfont=dict(size=22, family="Agency FB", color="black"))
+                                fig.update_yaxes(tickfont=dict(size=12, family="Agency FB", color="black"))
                                 
                                 # Eje X
-                                fig.update_xaxes(tickfont=dict(size=22))
+                                fig.update_xaxes(tickfont=dict(size=12))
                                 
                                 st.plotly_chart(
                                     fig, 
@@ -589,11 +607,11 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         
                         # Configuración del gráfico agrupado
                         fig.update_layout(
-                            title=dict(text="Z-Score por Métrica y Futbolista", y=0.95, x=0.5, xanchor='center', yanchor='top', font=dict(size=24, color="#1E293B")),
+                            title=dict(text="Z-Score por Métrica y Futbolista", y=0.95, x=0.5, xanchor='center', yanchor='top', font=dict(size=18, color="#1E293B")),
                             showlegend=True,
                             legend=dict(
                                 title_text='',
-                                font=dict(size=18),
+                                font=dict(size=12),
                                 orientation="h",
                                 yanchor="bottom",
                                 y=1.20,
@@ -605,7 +623,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                             margin=dict(t=250, b=100, l=60, r=60),
                             xaxis_title="Métrica",
                             yaxis_title="Z-Score",
-                            font=dict(family='Agency FB', size=22),
+                            font=dict(family='Agency FB', size=14),
                             height=700
                         )
                         
@@ -613,7 +631,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         fig.update_traces(
                             texttemplate='%{y:.2f}',
                             textposition='outside',
-                            textfont=dict(size=18, color='black', family='Arial Black'),
+                            textfont=dict(size=12, color='black', family='Arial Black'),
                             cliponaxis=False
                         )
                         
