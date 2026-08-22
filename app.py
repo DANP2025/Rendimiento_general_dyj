@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 import requests
+import time
 from io import StringIO
 
 # Configuración de Pantalla Completa (CRÍTICO)
@@ -167,13 +168,20 @@ def limpiar_datos_grafico(df, columnas_valor):
     return datos.dropna(subset=columnas_existentes, how='all')
 
 # Función para cargar datos desde Google Sheets
-@st.cache_data(ttl=3600)
-def cargar_datos_google_sheets():
+@st.cache_data(ttl=300)
+def cargar_datos_google_sheets(cache_buster=""):
     """Carga datos desde Google Sheets con manejo robusto de errores"""
-    url = "https://docs.google.com/spreadsheets/d/1PiZ_kV-z0L0qxqZN1W6Re7woWN-5dM82Q8vWCCS3L84/export?format=csv&gid=1085591943"
+    url = (
+        "https://docs.google.com/spreadsheets/d/1PiZ_kV-z0L0qxqZN1W6Re7woWN-5dM82Q8vWCCS3L84/"
+        f"export?format=csv&gid=1085591943&_={cache_buster}"
+    )
     
     try:
-        response = requests.get(url, timeout=30)
+        response = requests.get(
+            url,
+            headers={"Cache-Control": "no-cache", "Pragma": "no-cache"},
+            timeout=30
+        )
         response.raise_for_status()
         
         df = pd.read_csv(StringIO(response.text))
@@ -198,6 +206,14 @@ def cargar_datos_google_sheets():
         st.error(f"Error al cargar datos desde Google Sheets: {str(e)}")
         return None
 
+if "google_sheets_cache_buster" not in st.session_state:
+    st.session_state.google_sheets_cache_buster = str(time.time_ns())
+
+if st.button("Actualizar datos", type="primary"):
+    cargar_datos_google_sheets.clear()
+    st.session_state.google_sheets_cache_buster = str(time.time_ns())
+    st.rerun()
+
 # Logo centrado
 col1, col2, col3 = st.columns([3, 1, 3])
 with col2:
@@ -210,7 +226,7 @@ with col2:
 st.markdown('<h1 style="text-align: center; color: #2E7D32;">MONITORIZACIÓN INSTITUCIONAL</h1>', unsafe_allow_html=True)
 
 # Cargar datos
-df = cargar_datos_google_sheets()
+df = cargar_datos_google_sheets(st.session_state.google_sheets_cache_buster)
 
 # REESTRUCTURACIÓN DEL PANEL DE FILTROS (Solo Fila 1)
 if df is not None and not df.empty:
@@ -496,7 +512,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
             )
             
             # Guardar las selecciones actuales
-            df_original = cargar_datos_google_sheets()
+            df_original = cargar_datos_google_sheets(st.session_state.google_sheets_cache_buster)
             
             if df_original is not None and isinstance(df_original, pd.DataFrame):
                 # Filtrar df_poblacion por Categoría y Mes seleccionados
