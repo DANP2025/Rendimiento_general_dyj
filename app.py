@@ -159,27 +159,19 @@ def cargar_datos_google_sheets():
         
         df = pd.read_csv(StringIO(response.text))
         
-        # Normalización de columnas
-        df = normalizar_columnas(df)
-        df = df.fillna('')
-        
-        # Convertir columnas numéricas existentes
-        for col in df.columns:
-            if df[col].dtype == 'object':
-                try:
-                    df[col] = df[col].astype(str).str.replace(',', '.', regex=False)
-                    numeric_values = pd.to_numeric(df[col], errors='coerce')
-                    if numeric_values.notna().sum() / len(df) > 0.7:
-                        df[col] = numeric_values
-                except:
-                    pass
-        
-        # Coerción Forzada - Crear columnas faltantes y forzar numéricas
+        # Normalizar encabezados y convertir todas las métricas con locale español.
+        df.columns = df.columns.astype(str).str.strip()
         for metrica in METRICAS_ESPERADAS:
-            if metrica not in df.columns:
-                df[metrica] = pd.NA  # Crear columna con valores nulos
-            # Forzar conversión numérica
-            df[metrica] = pd.to_numeric(df[metrica], errors='coerce')
+            if metrica in df.columns:
+                df[metrica] = (
+                    df[metrica]
+                    .astype(str)
+                    .str.strip()
+                    .str.replace(',', '.', regex=False)
+                )
+                df[metrica] = pd.to_numeric(df[metrica], errors='coerce')
+            else:
+                df[metrica] = np.nan
         
         return df
     
@@ -214,6 +206,9 @@ if df is not None and not df.empty:
     
     posibles_jugadores = [col for col in columnas if 'futbol' in col.lower() or 'jugador' in col.lower() or 'player' in col.lower() or 'atleta' in col.lower()]
     columna_jugador = posibles_jugadores[0] if posibles_jugadores else columnas[2] if len(columnas) > 2 else None
+
+    if columna_jugador:
+        df[columna_jugador] = df[columna_jugador].astype('string').str.strip()
     
     # Usar la lista maestra de métricas para los selectores
     metricas_disponibles = [m for m in METRICAS_ESPERADAS if m in df.columns]
