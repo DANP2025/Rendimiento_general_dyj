@@ -25,27 +25,38 @@ h1 {
     text-align: center; 
 }
 
-/* Hack para MultiSelect: Quitar fondo de color, poner borde gris y letra oscura */
-.stMultiSelect [data-baseweb="tag"] {
+/* Eliminacion forzada del fondo de color en todas las variantes de multiselect */
+[data-testid="stMultiSelect"] [data-baseweb="tag"],
+[data-testid="stMultiSelect"] span[data-baseweb="tag"],
+[data-testid="stMultiSelectTag"],
+span[data-baseweb="tag"],
+div[data-baseweb="tag"] {
     background-color: transparent !important;
     background: transparent !important;
+    border: 1px solid #94A3B8 !important;
     box-shadow: none !important;
-    color: #1E293B !important;
-    font-size: 14px !important;
-    border: 1px solid #CBD5E1 !important;
-    border-radius: 4px !important;
-    padding: 4px 8px !important;
+    padding: 2px 8px !important;
 }
 
-.stMultiSelect [data-baseweb="tag"] * {
-    background-color: transparent !important;
-    background: transparent !important;
-    color: #1E293B !important;
+/* Texto oscuro y nitido en las pastillas */
+[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
+[data-testid="stMultiSelectTag"] span,
+span[data-baseweb="tag"] span,
+div[data-baseweb="tag"] span {
+    color: #0F172A !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
 }
 
-/* Ocultar la cruz (X) del multiselect */
-.stMultiSelect [data-baseweb="tag"] svg { display: none !important; }
-.stMultiSelect [data-baseweb="tag"] span { padding-right: 0 !important; }
+/* Ocultar la cruz y los botones de eliminar */
+[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
+[data-testid="stMultiSelectTag"] svg,
+span[data-baseweb="tag"] svg,
+div[data-baseweb="tag"] svg,
+[data-baseweb="tag"] button,
+[data-baseweb="tag"] [role="presentation"] {
+    display: none !important;
+}
 
 /* Forzar aparición de la barra de scroll en los dropdowns */
 div[role="listbox"] {
