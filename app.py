@@ -26,36 +26,30 @@ h1 {
     text-align: center; 
 }
 
-/* Eliminacion forzada del fondo de color en todas las variantes de multiselect */
-[data-testid="stMultiSelect"] [data-baseweb="tag"],
-[data-testid="stMultiSelect"] span[data-baseweb="tag"],
-[data-testid="stMultiSelectTag"],
-span[data-baseweb="tag"],
-div[data-baseweb="tag"] {
+/* Anular el fondo rojo en todos los niveles de las etiquetas del Multiselect */
+div[data-baseweb="select"] span[data-baseweb="tag"],
+div[data-baseweb="select"] div[data-baseweb="tag"],
+[data-baseweb="tag"],
+.stMultiSelect [data-baseweb="tag"] {
     background-color: transparent !important;
     background: transparent !important;
-    border: 1px solid #94A3B8 !important;
-    box-shadow: none !important;
-    padding: 2px 8px !important;
+    border: 1px solid #64748B !important;
+    border-radius: 5px !important;
 }
 
-/* Texto oscuro y nitido en las pastillas */
-[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
-[data-testid="stMultiSelectTag"] span,
-span[data-baseweb="tag"] span,
-div[data-baseweb="tag"] span {
-    color: #0F172A !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
+/* Forzar el color del texto a negro */
+div[data-baseweb="select"] span[data-baseweb="tag"] span,
+div[data-baseweb="select"] div[data-baseweb="tag"] span,
+[data-baseweb="tag"] span {
+    color: #000000 !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
 }
 
-/* Ocultar la cruz y los botones de eliminar */
-[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
-[data-testid="stMultiSelectTag"] svg,
-span[data-baseweb="tag"] svg,
-div[data-baseweb="tag"] svg,
-[data-baseweb="tag"] button,
-[data-baseweb="tag"] [role="presentation"] {
+/* Ocultar la cruz de eliminar */
+div[data-baseweb="select"] span[data-baseweb="tag"] svg,
+div[data-baseweb="select"] div[data-baseweb="tag"] svg,
+[data-baseweb="tag"] svg {
     display: none !important;
 }
 
