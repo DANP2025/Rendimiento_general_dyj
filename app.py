@@ -5,8 +5,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 import requests
-import time
 from io import StringIO
+from streamlit_autorefresh import st_autorefresh
 
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
@@ -162,7 +162,6 @@ def limpiar_datos_grafico(df, columnas_valor):
     return datos.dropna(subset=columnas_existentes, how='all')
 
 # Función para cargar datos desde Google Sheets
-@st.cache_data(ttl=300)
 def cargar_datos_google_sheets(cache_buster=""):
     """Carga datos desde Google Sheets con manejo robusto de errores"""
     url = (
@@ -200,13 +199,8 @@ def cargar_datos_google_sheets(cache_buster=""):
         st.error(f"Error al cargar datos desde Google Sheets: {str(e)}")
         return None
 
-if "google_sheets_cache_buster" not in st.session_state:
-    st.session_state.google_sheets_cache_buster = str(time.time_ns())
-
-if st.button("Actualizar datos", type="primary"):
-    cargar_datos_google_sheets.clear()
-    st.session_state.google_sheets_cache_buster = str(time.time_ns())
-    st.rerun()
+# Actualiza los datos periódicamente sin intervención manual.
+st_autorefresh(interval=30 * 1000, key="google_sheets_auto_refresh")
 
 # Logo centrado
 col1, col2, col3 = st.columns([3, 1, 3])
@@ -220,7 +214,7 @@ with col2:
 st.markdown('<h1 style="text-align: center; color: #2E7D32;">MONITORIZACIÓN INSTITUCIONAL</h1>', unsafe_allow_html=True)
 
 # Cargar datos
-df = cargar_datos_google_sheets(st.session_state.google_sheets_cache_buster)
+df = cargar_datos_google_sheets()
 
 # REESTRUCTURACIÓN DEL PANEL DE FILTROS (Solo Fila 1)
 if df is not None and not df.empty:
@@ -510,7 +504,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
             )
             
             # Guardar las selecciones actuales
-            df_original = cargar_datos_google_sheets(st.session_state.google_sheets_cache_buster)
+            df_original = cargar_datos_google_sheets()
             
             if df_original is not None and isinstance(df_original, pd.DataFrame):
                 # Filtrar df_poblacion por Categoría y Mes seleccionados
