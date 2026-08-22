@@ -25,31 +25,49 @@ h1 {
     text-align: center; 
 }
 
-/* Anular el fondo rojo en todos los niveles de las etiquetas del Multiselect */
-div[data-baseweb="select"] span[data-baseweb="tag"],
-div[data-baseweb="select"] div[data-baseweb="tag"],
-[data-baseweb="tag"],
-.stMultiSelect [data-baseweb="tag"] {
-    background-color: transparent !important;
+/* Fondo transparente en todas las variantes de las etiquetas del Multiselect */
+div[data-baseweb="tag"],
+span[data-baseweb="tag"],
+[data-testid="stMultiSelect"] [data-baseweb="tag"],
+[data-testid="stMultiSelectTag"],
+div[data-baseweb="select"] [data-baseweb="tag"] {
     background: transparent !important;
-    border: 1px solid #64748B !important;
-    border-radius: 5px !important;
+    background-color: transparent !important;
+    border: 1.5px solid #94A3B8 !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    padding: 2px 8px !important;
 }
 
-/* Forzar el color del texto a negro */
-div[data-baseweb="select"] span[data-baseweb="tag"] span,
-div[data-baseweb="select"] div[data-baseweb="tag"] span,
-[data-baseweb="tag"] span {
-    color: #000000 !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
+/* Texto nítido dentro de las etiquetas */
+div[data-baseweb="tag"] span,
+span[data-baseweb="tag"] span,
+[data-testid="stMultiSelectTag"] span,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] span {
+    color: #0F172A !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    font-family: 'Agency FB', sans-serif !important;
 }
 
-/* Ocultar la cruz de eliminar */
-div[data-baseweb="select"] span[data-baseweb="tag"] svg,
-div[data-baseweb="select"] div[data-baseweb="tag"] svg,
-[data-baseweb="tag"] svg {
+/* Ocultar la cruz de eliminación */
+div[data-baseweb="tag"] svg,
+span[data-baseweb="tag"] svg,
+[data-testid="stMultiSelectTag"] svg,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
+[data-baseweb="tag"] button {
     display: none !important;
+}
+
+/* Igualar el tamaño de los títulos de los filtros */
+div[data-testid="stMultiSelect"] label p,
+div[data-testid="stMultiSelect"] label,
+.stMultiSelect label,
+.stMultiSelect p {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
 }
 
 /* Forzar aparición de la barra de scroll en los dropdowns */
