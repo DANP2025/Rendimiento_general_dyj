@@ -27,7 +27,7 @@ h1 {
 
 /* Hack para MultiSelect: Quitar fondo de color, poner borde gris y letra oscura */
 .stMultiSelect [data-baseweb="tag"] {
-    background-color: #E5E7EB !important;
+    background-color: transparent !important;
     color: #1E293B !important;
     font-size: 14px !important;
     border: 1px solid #CBD5E1 !important;
@@ -318,7 +318,6 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                     df_metrica = df_metrica.sort_values(by=metrica, ascending=False)
 
                     if df_metrica.empty:
-                        st.warning(f"No hay datos disponibles para {metrica}")
                         continue
                     
                     # Convertir columna Futbolista a string estrictamente
@@ -368,7 +367,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         config={'displayModeBar': False}
                     )
                 else:
-                    st.warning(f"No hay datos disponibles para {metrica}")
+                    continue
         
         else:
             # Gráfico Combinado (Barras y Líneas) - Motor de Doble Eje
@@ -557,18 +556,18 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                     marker_color=colors,
                                     texttemplate='%{x:.2f}',
                                     textposition='outside',
-                                    textfont=dict(size=12, color='black')
+                                    textfont=dict(size=16, color='black')
                                 )
                                 
                                 # Configuración Plotly Z-Score
                                 fig.update_layout(
                                     height=max(400, len(df_metrica)*40),
                                     showlegend=False,
-                                    title=dict(text=f"<b>Z-Score: {metrica}</b>", x=0.5, font=dict(size=18, color="#1E293B")),
+                                    title=dict(text=f"<b>Z-Score: {metrica}</b>", x=0.5, font=dict(size=20, color="#1E293B")),
                                     xaxis_title="Z-Score",
                                     yaxis_title="",
                                     margin=dict(t=80, b=80, l=150, r=80),
-                                    font=dict(family='Agency FB', size=14),
+                                    font=dict(family='Agency FB', size=16),
                                     bargap=0.2
                                 )
                                 
@@ -579,10 +578,10 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 fig.add_vline(x=0, line_width=3, line_dash="dash", line_color="black")
                                 
                                 # Tamaño de nombres de jugadores en Eje Y
-                                fig.update_yaxes(tickfont=dict(size=12, family="Agency FB", color="black"))
+                                fig.update_yaxes(tickfont=dict(size=16, family="Agency FB", color="black"))
                                 
                                 # Eje X
-                                fig.update_xaxes(tickfont=dict(size=12))
+                                fig.update_xaxes(tickfont=dict(size=16))
                                 
                                 st.plotly_chart(
                                     fig, 
@@ -606,11 +605,11 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         
                         # Configuración del gráfico agrupado
                         fig.update_layout(
-                            title=dict(text="Z-Score por Métrica y Futbolista", y=0.95, x=0.5, xanchor='center', yanchor='top', font=dict(size=18, color="#1E293B")),
+                            title=dict(text="Z-Score por Métrica y Futbolista", y=0.95, x=0.5, xanchor='center', yanchor='top', font=dict(size=20, color="#1E293B")),
                             showlegend=True,
                             legend=dict(
                                 title_text='',
-                                font=dict(size=12),
+                                font=dict(size=16),
                                 orientation="h",
                                 yanchor="bottom",
                                 y=1.20,
@@ -622,7 +621,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                             margin=dict(t=250, b=100, l=60, r=60),
                             xaxis_title="Métrica",
                             yaxis_title="Z-Score",
-                            font=dict(family='Agency FB', size=14),
+                            font=dict(family='Agency FB', size=16),
                             height=700
                         )
                         
@@ -630,7 +629,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         fig.update_traces(
                             texttemplate='%{y:.2f}',
                             textposition='outside',
-                            textfont=dict(size=12, color='black', family='Arial Black'),
+                            textfont=dict(size=16, color='black', family='Arial Black'),
                             cliponaxis=False
                         )
                         
