@@ -10,12 +10,12 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
-# Inyección CSS (Letras Gigantes y Filtros Limpios)
+# Inyección CSS (Tipografia institucional y filtros limpios)
 st.markdown("""
 <style>
 /* Tipografia global responsive */
 html, body, [class*="st-"] { 
-    font-size: 16px !important;
+    font-size: 14px !important;
     font-family: 'Agency FB', sans-serif !important; 
 }
 
@@ -27,12 +27,16 @@ h1 {
 
 /* Hack para MultiSelect: Quitar fondo de color, poner borde gris y letra oscura */
 .stMultiSelect [data-baseweb="tag"] {
-    background-color: transparent !important;
+    background-color: #E5E7EB !important;
     color: #1E293B !important;
     font-size: 14px !important;
     border: 1px solid #CBD5E1 !important;
     border-radius: 4px !important;
     padding: 4px 8px !important;
+}
+
+.stMultiSelect [data-baseweb="tag"] * {
+    color: #1E293B !important;
 }
 
 /* Ocultar la cruz (X) del multiselect */
@@ -82,7 +86,7 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
     background-color: #F9FAFB !important;
     border-radius: 8px 8px 0 0 !important;
     padding: 10px 16px !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     font-family: 'Agency FB', sans-serif !important;
     color: #6B7280 !important;
     font-weight: bold !important;
@@ -220,28 +224,28 @@ if df is not None and not df.empty:
         if columna_categoria:
             categorias_unicas = df[columna_categoria].dropna().unique().tolist()
             if categorias_unicas:
-                categorias_opciones = ['Todas'] + [str(cat) for cat in categorias_unicas]
+                categorias_opciones = ['TODAS'] + [str(cat) for cat in categorias_unicas]
                 categoria_seleccionada = st.multiselect(
                     "Categoría",
                     categorias_opciones,
-                    default=['Todas']
+                    default=['TODAS']
                 )
                 
-                if 'Todas' not in categoria_seleccionada and categoria_seleccionada:
+                if 'TODAS' not in categoria_seleccionada and categoria_seleccionada:
                     df = df[df[columna_categoria].isin(categoria_seleccionada)]
     
     with col_mes:
         if columna_mes:
             meses_unicos = df[columna_mes].dropna().unique().tolist()
             if meses_unicos:
-                meses_opciones = ['Todos'] + [str(mes) for mes in meses_unicos]
+                meses_opciones = ['TODOS'] + [str(mes) for mes in meses_unicos]
                 mes_seleccionado = st.multiselect(
                     "Mes de registro",
                     meses_opciones,
-                    default=['Todos']
+                    default=['TODOS']
                 )
                 
-                if 'Todos' not in mes_seleccionado and mes_seleccionado:
+                if 'TODOS' not in mes_seleccionado and mes_seleccionado:
                     df = df[df[columna_mes].isin(mes_seleccionado)]
     
     with col_jug:
@@ -290,8 +294,8 @@ else:
     columna_categoria = None
     columna_mes = None
     jugadores_seleccionados = ['TODOS']
-    categoria_seleccionada = ['Todas']
-    mes_seleccionado = ['Todos']
+    categoria_seleccionada = ['TODAS']
+    mes_seleccionado = ['TODOS']
 
 # PESTAÑAS
 if df is not None and not df.empty and metricas_seleccionadas and columna_jugador:
@@ -484,10 +488,10 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                 # Filtrar df_poblacion por Categoría y Mes seleccionados
                 df_poblacion = df_original.copy()
                 
-                if columna_categoria and 'categoria_seleccionada' in locals() and 'Todas' not in categoria_seleccionada:
+                if columna_categoria and 'categoria_seleccionada' in locals() and 'TODAS' not in categoria_seleccionada:
                     df_poblacion = df_poblacion[df_poblacion[columna_categoria].isin(categoria_seleccionada)]
                 
-                if columna_mes and 'mes_seleccionado' in locals() and 'Todos' not in mes_seleccionado:
+                if columna_mes and 'mes_seleccionado' in locals() and 'TODOS' not in mes_seleccionado:
                     df_poblacion = df_poblacion[df_poblacion[columna_mes].isin(mes_seleccionado)]
                 
                 # Filtrar df_jugadores (si TODOS, igual a df_poblacion)
