@@ -6,7 +6,6 @@ from plotly.subplots import make_subplots
 import numpy as np
 import requests
 from io import StringIO
-from streamlit_autorefresh import st_autorefresh
 
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
@@ -198,9 +197,6 @@ def cargar_datos_google_sheets(cache_buster=""):
     except Exception as e:
         st.error(f"Error al cargar datos desde Google Sheets: {str(e)}")
         return None
-
-# Actualiza los datos periódicamente sin intervención manual.
-st_autorefresh(interval=30 * 1000, key="google_sheets_auto_refresh")
 
 # Logo centrado
 col1, col2, col3 = st.columns([3, 1, 3])
