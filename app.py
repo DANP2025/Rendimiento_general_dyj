@@ -346,13 +346,17 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                 if metrica in df.columns and columna_jugador in df.columns:
                     df_metrica = df.groupby(columna_jugador)[metrica].mean(numeric_only=True).reset_index()
                     df_metrica = limpiar_datos_grafico(df_metrica, [metrica])
-                    df_metrica = df_metrica.sort_values(by=metrica, ascending=False)
 
                     if df_metrica.empty:
                         continue
                     
                     # Convertir columna Futbolista a string estrictamente
                     df_metrica[columna_jugador] = df_metrica[columna_jugador].astype(str)
+                    df_metrica = df_metrica.sort_values(
+                        by=columna_jugador,
+                        key=lambda nombres: nombres.str.casefold(),
+                        ascending=True
+                    )
                     
                     fig = px.bar(
                         df_metrica,
