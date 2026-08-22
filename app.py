@@ -28,6 +28,8 @@ h1 {
 /* Hack para MultiSelect: Quitar fondo de color, poner borde gris y letra oscura */
 .stMultiSelect [data-baseweb="tag"] {
     background-color: transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
     color: #1E293B !important;
     font-size: 14px !important;
     border: 1px solid #CBD5E1 !important;
@@ -36,6 +38,8 @@ h1 {
 }
 
 .stMultiSelect [data-baseweb="tag"] * {
+    background-color: transparent !important;
+    background: transparent !important;
     color: #1E293B !important;
 }
 
@@ -581,7 +585,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 fig.update_yaxes(tickfont=dict(size=16, family="Agency FB", color="black"))
                                 
                                 # Eje X
-                                fig.update_xaxes(tickfont=dict(size=16))
+                                fig.update_xaxes(tickfont=dict(size=18, family="Agency FB", color="black"))
                                 
                                 st.plotly_chart(
                                     fig, 
@@ -631,6 +635,12 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                             textposition='outside',
                             textfont=dict(size=16, color='black', family='Arial Black'),
                             cliponaxis=False
+                        )
+
+                        fig.update_xaxes(
+                            tickangle=-45,
+                            tickfont=dict(size=18, family="Agency FB", color="black"),
+                            automargin=True
                         )
                         
                         st.plotly_chart(
