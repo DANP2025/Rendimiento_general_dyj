@@ -68,7 +68,7 @@ html, body, [class*="st-"] {
 }
 
 h1 { 
-    font-size: 2rem !important;
+    font-size: 2.5rem !important;
     color: #2E7D32 !important; 
     text-align: center; 
 }
@@ -223,7 +223,7 @@ def cargar_datos_google_sheets(cache_buster=""):
 col1, col2, col3 = st.columns([3, 1, 3])
 with col2:
     try:
-        st.image("logo.jpeg", use_container_width=True)
+        st.image("logo.jpeg", width=140)
     except:
         pass  # Si no existe el logo, continuar sin error
 
@@ -316,11 +316,28 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
     
     # PESTAÑA 1: MÉTRICAS - Motor de Doble Eje
     with tab1:
-        # Tipo de Gráfico (DENTRO de Tab 1)
-        tipo_grafico = st.selectbox(
-            "Tipo de Gráfico",
-            ["Gráfico de Barras Simple", "Gráfico Combinado (Barras y Líneas)"]
-        )
+        # Selector de tipo y ejes en una sola fila.
+        col_tipo, col_eje1, col_eje2 = st.columns([1.2, 1.4, 1.4])
+
+        with col_tipo:
+            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>Tipo de Gráfico</p>", unsafe_allow_html=True)
+            tipo_grafico = st.selectbox(
+                "Tipo de Gráfico",
+                ["Gráfico de Barras Simple", "Gráfico Combinado (Barras y Líneas)"],
+                label_visibility="collapsed"
+            )
+
+        if tipo_grafico == "Gráfico Combinado (Barras y Líneas)":
+            with col_eje1:
+                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>Métricas Eje Primario (Barras)</p>", unsafe_allow_html=True)
+                metrica_primaria = st.selectbox("EJE PRIMARIO", metricas_disponibles, index=0, label_visibility="collapsed")
+
+            with col_eje2:
+                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>Métricas Eje Secundario (Líneas)</p>", unsafe_allow_html=True)
+                idx_sec = 1 if len(metricas_disponibles) > 1 else 0
+                metrica_secundaria = st.selectbox("EJE SECUNDARIO", metricas_disponibles, index=idx_sec, label_visibility="collapsed")
+
+            st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
         
         if tipo_grafico == "Gráfico de Barras Simple":
             # Lógica actual: Gráficos de barras simples
@@ -388,22 +405,8 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
         
         else:
             # Gráfico Combinado (Barras y Líneas) - Motor de Doble Eje
-            # Selectores de Eje Primario/Secundario
-            col_prim, col_sec = st.columns(2)
-            
-            with col_prim:
-                metricas_primarias = st.multiselect(
-                    "Métricas Eje Primario (Barras)",
-                    metricas_disponibles,
-                    default=metricas_disponibles[:1] if len(metricas_disponibles) >= 1 else metricas_disponibles
-                )
-            
-            with col_sec:
-                metricas_secundarias = st.multiselect(
-                    "Métricas Eje Secundario (Líneas)",
-                    metricas_disponibles,
-                    default=metricas_disponibles[1:2] if len(metricas_disponibles) >= 2 else []
-                )
+            metricas_primarias = [metrica_primaria]
+            metricas_secundarias = [metrica_secundaria]
             
             if metricas_primarias or metricas_secundarias:
                 # Preparar datos agrupados por futbolista
