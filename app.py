@@ -25,43 +25,35 @@ h1 {
     text-align: center; 
 }
 
-/* 1. Transparencia total forzada en las etiquetas y en TODOS sus elementos hijos */
-[data-baseweb="tag"],
-[data-baseweb="tag"] *,
-[data-testid="stMultiSelect"] [data-baseweb="tag"],
-[data-testid="stMultiSelect"] [data-baseweb="tag"] *,
-div[data-baseweb="select"] [data-baseweb="tag"],
-div[data-baseweb="select"] [data-baseweb="tag"] * {
+/* 1. Anulación definitiva de fondo gris: Transparencia total forzada */
+html body span[data-baseweb="tag"],
+html body div[data-baseweb="tag"],
+html body [data-baseweb="tag"],
+html body .stMultiSelect [data-baseweb="tag"],
+html body div[data-baseweb="select"] span[data-baseweb="tag"] {
     background: transparent !important;
     background-color: transparent !important;
-    box-shadow: none !important;
-}
-
-/* 2. Borde gris sutil y redondeado para enmarcar la etiqueta limpia */
-[data-baseweb="tag"],
-[data-testid="stMultiSelect"] [data-baseweb="tag"],
-div[data-baseweb="select"] [data-baseweb="tag"] {
-    border: 1.5px solid #94A3B8 !important;
+    border: 1.5px solid #94A3B8 !important; /* Borde gris sutil */
     border-radius: 6px !important;
+    box-shadow: none !important;
     padding: 2px 8px !important;
 }
 
-/* 3. Texto en color oscuro/negro en todas las capas internas */
-[data-baseweb="tag"] span,
-[data-baseweb="tag"] div,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] div {
+/* 2. Color del texto negro oscuro nítido en todos los niveles internos */
+html body span[data-baseweb="tag"] span,
+html body [data-baseweb="tag"] span,
+html body .stMultiSelect [data-baseweb="tag"] span {
     color: #0F172A !important;
     font-size: 16px !important;
     font-weight: 700 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
 
-/* 4. Ocultar totalmente la cruz (X) y el contenedor del icono */
-[data-baseweb="tag"] svg,
-[data-baseweb="tag"] [role="presentation"],
-[data-baseweb="tag"] button,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] svg {
+/* 3. Ocultar la cruz (X) y el icono de cierre por completo */
+html body span[data-baseweb="tag"] svg,
+html body [data-baseweb="tag"] svg,
+html body [data-baseweb="tag"] button,
+html body [data-baseweb="tag"] [role="presentation"] {
     display: none !important;
     visibility: hidden !important;
     width: 0 !important;
