@@ -25,37 +25,37 @@ h1 {
     text-align: center; 
 }
 
-/* 1. Anulación definitiva de fondo gris: Transparencia total forzada */
-html body span[data-baseweb="tag"],
-html body div[data-baseweb="tag"],
-html body [data-baseweb="tag"],
-html body .stMultiSelect [data-baseweb="tag"],
-html body div[data-baseweb="select"] span[data-baseweb="tag"] {
+/* 1. Transparencia total atacando los NUEVOS selectores de Streamlit Cloud */
+div[data-testid="stMultiSelectTag"],
+span[data-testid="stMultiSelectTag"],
+.stMultiSelect [data-testid="stMultiSelectTag"],
+[data-baseweb="tag"] {
     background: transparent !important;
     background-color: transparent !important;
     border: 1.5px solid #94A3B8 !important; /* Borde gris sutil */
     border-radius: 6px !important;
     box-shadow: none !important;
-    padding: 2px 8px !important;
+    padding: 4px 10px !important;
 }
 
-/* 2. Color del texto negro oscuro nítido en todos los niveles internos */
-html body span[data-baseweb="tag"] span,
-html body [data-baseweb="tag"] span,
-html body .stMultiSelect [data-baseweb="tag"] span {
+/* 2. Color del texto negro oscuro nítido en el nuevo motor */
+div[data-testid="stMultiSelectTag"] span,
+span[data-testid="stMultiSelectTag"] span,
+[data-baseweb="tag"] span {
     color: #0F172A !important;
-    font-size: 16px !important;
+    font-size: 18px !important;
     font-weight: 700 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
 
-/* 3. Ocultar la cruz (X) y el icono de cierre por completo */
-html body span[data-baseweb="tag"] svg,
-html body [data-baseweb="tag"] svg,
-html body [data-baseweb="tag"] button,
-html body [data-baseweb="tag"] [role="presentation"] {
+/* 3. Ocultar la cruz (X) en el nuevo motor */
+div[data-testid="stMultiSelectTag"] svg,
+span[data-testid="stMultiSelectTag"] svg,
+[data-baseweb="tag"] svg,
+div[data-testid="stMultiSelectTag"] button {
     display: none !important;
     visibility: hidden !important;
+    opacity: 0 !important;
     width: 0 !important;
     height: 0 !important;
 }
