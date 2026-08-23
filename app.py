@@ -55,6 +55,38 @@ div[data-testid="stMultiSelect"] label {
     font-weight: 700 !important;
     color: #0F172A !important;
 }
+
+/* 1. EXTENDER EL BORDE DELICADO Y FONDO A LOS SELECTBOX (Igual que Multiselect) */
+div[data-testid="stSelectbox"] > div[data-baseweb="select"] {
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    background-color: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* 2. REALCE VERDE AL PASAR EL RATÓN (HOVER) EN SELECTBOX */
+div[data-testid="stSelectbox"] > div[data-baseweb="select"]:hover {
+    border-color: #2E7D32 !important;
+    box-shadow: 0 0 0 1px #2E7D32 !important;
+}
+
+/* 3. TAMAÑO DE LETRA INTERNO DEL SELECTBOX (Grande y Nítido) */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] span {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* 4. ASEGURAR QUE LOS TÍTULOS DEL SELECTBOX TENGAN EL MISMO TAMAÑO QUE EL RESTO */
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stSelectbox"] label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
