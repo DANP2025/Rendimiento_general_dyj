@@ -379,7 +379,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         bargap=0.1,
                         bargroupgap=0.0,
                         showlegend=False,
-                        margin=dict(t=80, b=120),
+                        margin=dict(t=80, b=120, l=20, r=20),
                         title=dict(text=f"<b>{metrica}</b>", x=0.5, font=dict(size=18, color="#1E293B")),
                         xaxis_title="Futbolista",
                         yaxis_title=metrica,
@@ -387,7 +387,13 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                     )
                     
                     # Eje X (Futbolistas) - CRÍTICO: categórico con tickmode='linear'
-                    fig.update_xaxes(type='category', tickmode='linear', tickangle=-45, tickfont=dict(size=12, family="Agency FB", color="black"))
+                    fig.update_xaxes(
+                        type='category',
+                        range=[-0.5, len(df_metrica) - 0.5],
+                        tickmode='linear',
+                        tickangle=-45,
+                        tickfont=dict(size=12, family="Agency FB", color="black")
+                    )
                     
                     # Eje Y (Métrica)
                     fig.update_yaxes(tickfont=dict(size=12))
@@ -466,14 +472,19 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         font=dict(size=12, family='Agency FB')
                     ),
                     bargap=0.15,
-                    margin=dict(t=150, b=100, l=80, r=80),
+                    margin=dict(t=150, b=100, l=20, r=20),
                     xaxis_title="Futbolista",
                     font=dict(family='Agency FB', size=14),
                     height=700
                 )
                 
                 # Eje X categórico - COLOR NEGRO
-                fig.update_xaxes(type='category', tickangle=-45, tickfont=dict(color='black', size=12))
+                fig.update_xaxes(
+                    type='category',
+                    range=[-0.5, len(df_agrupado) - 0.5],
+                    tickangle=-45,
+                    tickfont=dict(color='black', size=12)
+                )
                 
                 # Ejes Y - COLOR NEGRO
                 fig.update_yaxes(tickfont=dict(color='black', size=12), title_text="Eje Primario (Barras)", secondary_y=False)
