@@ -25,42 +25,45 @@ h1 {
     text-align: center; 
 }
 
-/* 1. BOMBA DE TRANSPARENCIA: Quita el fondo a CUALQUIER elemento dentro de la caja seleccionada */
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] *,
-div[data-testid="stMultiSelect"] [data-baseweb="tag"],
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] *,
-div[data-testid="stMultiSelect"] > div > div > div > div > div,
-div[data-testid="stMultiSelect"] > div > div > div > div > div > span {
+/* 1. ANIQUILACIÓN DEL FONDO GRIS: Aplica transparencia a la etiqueta y a TODO lo que esté adentro */
+div[data-baseweb="select"] [data-baseweb="tag"],
+div[data-baseweb="select"] [data-baseweb="tag"] *,
+[data-testid="stMultiSelect"] [data-baseweb="tag"],
+[data-testid="stMultiSelect"] [data-baseweb="tag"] * {
     background-color: transparent !important;
     background: transparent !important;
+    background-image: none !important;
 }
 
-/* 2. DIBUJAR EL BORDE: Enmarca el tag limpio */
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] {
+/* 2. DIBUJAR EL BORDE: Enmarcar la etiqueta para que no quede flotando */
+div[data-baseweb="select"] [data-baseweb="tag"] {
     border: 1.5px solid #64748B !important;
     border-radius: 6px !important;
-    padding: 2px 10px !important;
+    padding: 3px 12px !important;
     box-shadow: none !important;
 }
 
-/* 3. TEXTO NÍTIDO: Fuerza color negro, negrita y fuente Agency FB a todo el texto */
-div[data-testid="stMultiSelect"] span,
-div[data-testid="stMultiSelect"] label p {
+/* 3. TEXTO NÍTIDO (FORZADO A NEGRO): El texto se había vuelto blanco, lo forzamos a oscuro */
+div[data-baseweb="select"] [data-baseweb="tag"] span {
     color: #0F172A !important;
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
 }
 
-/* 4. ELIMINAR LA CRUZ (X): Oculta iconos y botones de borrado */
-div[data-testid="stMultiSelect"] svg,
-div[data-testid="stMultiSelect"] [role="button"],
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] button {
+/* 4. IGUALAR TITULOS DE FILTROS */
+div[data-testid="stMultiSelect"] label p,
+div[data-testid="stMultiSelect"] label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* 5. ELIMINAR LA CRUZ (X): Ocultar el botón de borrar de la etiqueta */
+div[data-baseweb="select"] [data-baseweb="tag"] svg,
+div[data-baseweb="select"] [data-baseweb="tag"] button {
     display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
     width: 0 !important;
     height: 0 !important;
     pointer-events: none !important;
