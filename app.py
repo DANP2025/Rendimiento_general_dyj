@@ -25,39 +25,37 @@ h1 {
     text-align: center; 
 }
 
-/* 1. Transparencia total atacando los NUEVOS selectores de Streamlit Cloud */
-div[data-testid="stMultiSelectTag"],
-span[data-testid="stMultiSelectTag"],
-.stMultiSelect [data-testid="stMultiSelectTag"],
-[data-baseweb="tag"] {
-    background: transparent !important;
-    background-color: transparent !important;
-    border: 1.5px solid #94A3B8 !important; /* Borde gris sutil */
+/* 1. BOMBA DE ESPECIFICIDAD: Anulación absoluta del fondo gris en etiquetas */
+html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] {
+    background-color: rgba(0, 0, 0, 0) !important;
+    background: rgba(0, 0, 0, 0) !important;
+    border: 2px solid #94A3B8 !important;
     border-radius: 6px !important;
-    box-shadow: none !important;
-    padding: 4px 10px !important;
+    padding: 2px 10px !important;
 }
 
-/* 2. Color del texto negro oscuro nítido en el nuevo motor */
-div[data-testid="stMultiSelectTag"] span,
-span[data-testid="stMultiSelectTag"] span,
-[data-baseweb="tag"] span {
+/* 2. Anular cualquier fondo en los sub-elementos internos de la etiqueta */
+html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] * {
+    background-color: rgba(0, 0, 0, 0) !important;
+    background: rgba(0, 0, 0, 0) !important;
+}
+
+/* 3. Forzar el color del texto a negro y tamaño legible */
+html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] span {
     color: #0F172A !important;
     font-size: 18px !important;
-    font-weight: 700 !important;
+    font-weight: 800 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
 
-/* 3. Ocultar la cruz (X) en el nuevo motor */
-div[data-testid="stMultiSelectTag"] svg,
-span[data-testid="stMultiSelectTag"] svg,
-[data-baseweb="tag"] svg,
-div[data-testid="stMultiSelectTag"] button {
+/* 4. Erradicación total de la Cruz (X) y el botón interno */
+html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
+html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] button {
     display: none !important;
-    visibility: hidden !important;
+    width: 0px !important;
+    height: 0px !important;
     opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
+    pointer-events: none !important;
 }
 
 /* Igualar el tamaño de los títulos de los filtros */
