@@ -67,27 +67,49 @@ html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important; 
 }
 
-/* Ocultar la barra superior para liberar espacio visual */
+/* 1. Ocultar header nativo de Streamlit */
 header[data-testid="stHeader"] {
     display: none !important;
-    height: 0px !important;
 }
 
-/* Mantener los filtros visibles mientras se recorren los gráficos */
-div[data-testid="stVerticalBlock"]:has(#marcador-filtros) {
+/* 2. Desbloquear el overflow para que sticky funcione */
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stVerticalBlock"],
+[data-testid="stVerticalBlockBorderWrapper"] {
+    overflow: visible !important;
+}
+
+/* 3. Frizar la barra de filtros en la parte superior */
+div[data-testid="stHorizontalBlock"]:has([data-testid="stMultiSelect"]) {
+    position: -webkit-sticky !important;
     position: sticky !important;
     top: 0px !important;
     z-index: 99999 !important;
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    padding: 15px 20px 5px 20px !important;
-    margin-left: -20px !important;
-    margin-right: -20px !important;
+    background-color: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(8px) !important;
+    padding: 12px 15px !important;
+    margin-bottom: 20px !important;
     border-bottom: 2px solid #2E7D32 !important;
-    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
-    border-radius: 0px 0px 10px 10px !important;
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+    border-radius: 0 0 10px 10px !important;
+}
+
+/* 4. Borde delicado en cada segmentador */
+div[data-baseweb="select"] > div,
+div[data-testid="stMultiSelect"] > div {
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    background-color: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Realce sutil al pasar el ratón sobre el filtro */
+div[data-baseweb="select"] > div:hover,
+div[data-testid="stMultiSelect"] > div:hover {
+    border-color: #2E7D32 !important;
+    box-shadow: 0 0 0 1px #2E7D32 !important;
 }
 
 /* Reducir el espacio superior para acercar los filtros al inicio */
