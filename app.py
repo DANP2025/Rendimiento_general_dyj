@@ -25,38 +25,47 @@ h1 {
     text-align: center; 
 }
 
-/* Fondo transparente en todas las variantes de las etiquetas del Multiselect */
-div[data-baseweb="tag"],
-span[data-baseweb="tag"],
+/* 1. Transparencia total forzada en las etiquetas y en TODOS sus elementos hijos */
+[data-baseweb="tag"],
+[data-baseweb="tag"] *,
 [data-testid="stMultiSelect"] [data-baseweb="tag"],
-[data-testid="stMultiSelectTag"],
-div[data-baseweb="select"] [data-baseweb="tag"] {
+[data-testid="stMultiSelect"] [data-baseweb="tag"] *,
+div[data-baseweb="select"] [data-baseweb="tag"],
+div[data-baseweb="select"] [data-baseweb="tag"] * {
     background: transparent !important;
     background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 2. Borde gris sutil y redondeado para enmarcar la etiqueta limpia */
+[data-baseweb="tag"],
+[data-testid="stMultiSelect"] [data-baseweb="tag"],
+div[data-baseweb="select"] [data-baseweb="tag"] {
     border: 1.5px solid #94A3B8 !important;
     border-radius: 6px !important;
-    box-shadow: none !important;
     padding: 2px 8px !important;
 }
 
-/* Texto nítido dentro de las etiquetas */
-div[data-baseweb="tag"] span,
-span[data-baseweb="tag"] span,
-[data-testid="stMultiSelectTag"] span,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] span {
+/* 3. Texto en color oscuro/negro en todas las capas internas */
+[data-baseweb="tag"] span,
+[data-baseweb="tag"] div,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] div {
     color: #0F172A !important;
-    font-size: 18px !important;
+    font-size: 16px !important;
     font-weight: 700 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
 
-/* Ocultar la cruz de eliminación */
-div[data-baseweb="tag"] svg,
-span[data-baseweb="tag"] svg,
-[data-testid="stMultiSelectTag"] svg,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
-[data-baseweb="tag"] button {
+/* 4. Ocultar totalmente la cruz (X) y el contenedor del icono */
+[data-baseweb="tag"] svg,
+[data-baseweb="tag"] [role="presentation"],
+[data-baseweb="tag"] button,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] svg {
     display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 /* Igualar el tamaño de los títulos de los filtros */
