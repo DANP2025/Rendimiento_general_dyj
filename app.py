@@ -10,10 +10,79 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
-# CSS de transparencia y ocultación de cruz para etiquetas multiselect.
+# Bloque maestro de estilos unificado
 st.markdown("""
 <style>
-/* 1. Fondo transparente y borde gris sutil en las etiquetas multiselect */
+/* ========================================================================== */
+/* 1. TIPOGRAFÍA GLOBAL Y CONFIGURACIÓN BASE                                 */
+/* ========================================================================== */
+html, body, [class*="st-"] {
+    font-family: 'Agency FB', sans-serif !important;
+}
+
+/* Ocultar barra superior nativa de Streamlit para ganar espacio */
+header[data-testid="stHeader"] {
+    display: none !important;
+}
+
+/* Desbloqueo y suavizado de scroll */
+[data-testid="stAppViewContainer"] {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scroll-behavior: smooth !important;
+}
+
+/* ========================================================================== */
+/* 2. BORDES DELICADOS UNIFICADOS (MULTISELECT Y SELECTBOX)                  */
+/* ========================================================================== */
+div[data-baseweb="select"] > div,
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div,
+.stMultiSelect [data-baseweb="select"] > div,
+.stSelectbox [data-baseweb="select"] > div,
+div[data-baseweb="select"] > div {
+    border: 1.5px solid #CBD5E1 !important;
+    border-radius: 8px !important;
+    background-color: #FFFFFF !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+    min-height: 42px !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Realce verde al pasar el ratón en cualquier selector */
+.stMultiSelect [data-baseweb="select"] > div:hover,
+.stSelectbox [data-baseweb="select"] > div:hover,
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
+div[data-baseweb="select"] > div:hover {
+    border-color: #2E7D32 !important;
+    box-shadow: 0 0 0 1px #2E7D32 !important;
+}
+
+/* ========================================================================== */
+/* 3. TIPOGRAFÍA Y TEXTO INTERNO DE LOS SELECTORES                          */
+/* ========================================================================== */
+div[data-baseweb="select"] span,
+div[data-baseweb="select"] div,
+[data-testid="stSelectbox"] span,
+[data-testid="stMultiSelect"] span {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stSelectbox"] label,
+div[data-testid="stMultiSelect"] label p,
+div[data-testid="stMultiSelect"] label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* Etiquetas del multiselect */
 div[data-testid="stMultiSelect"] [data-baseweb="tag"],
 div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
 div[data-baseweb="select"] [data-baseweb="tag"],
@@ -25,17 +94,6 @@ span[data-baseweb="tag"] {
     padding: 2px 8px !important;
 }
 
-/* 2. Texto negro nítido */
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] span,
-span[data-baseweb="tag"] span {
-    color: #0F172A !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    font-family: 'Agency FB', sans-serif !important;
-}
-
-/* 3. Ocultar la cruz (X) */
 div[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
 div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] svg,
 span[data-baseweb="tag"] svg,
@@ -45,108 +103,6 @@ div[data-testid="stMultiSelect"] [data-baseweb="tag"] button {
     visibility: hidden !important;
     width: 0 !important;
     height: 0 !important;
-}
-
-/* 4. Títulos de los filtros unificados */
-div[data-testid="stMultiSelect"] label p,
-div[data-testid="stMultiSelect"] label {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* 1. ENMARCAR DE FORMA IDÉNTICA MULTISELECT Y SELECTBOX (Sin selector hijo estricto) */
-.stMultiSelect [data-baseweb="select"] > div,
-.stSelectbox [data-baseweb="select"] > div,
-[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
-[data-testid="stSelectbox"] [data-baseweb="select"] > div,
-div[data-baseweb="select"] > div {
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: 8px !important;
-    background-color: #FFFFFF !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
-    min-height: 42px !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-/* 2. REALCE VERDE AL PASAR EL RATÓN (HOVER) EN TODOS LOS FILTROS */
-.stMultiSelect [data-baseweb="select"] > div:hover,
-.stSelectbox [data-baseweb="select"] > div:hover,
-[data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
-[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
-div[data-baseweb="select"] > div:hover {
-    border-color: #2E7D32 !important;
-    box-shadow: 0 0 0 1px #2E7D32 !important;
-}
-
-/* 3. TEXTO INTERNO DEL SELECTBOX (Grande y Nítido) */
-.stSelectbox div[data-baseweb="select"] div,
-.stSelectbox div[data-baseweb="select"] span,
-[data-testid="stSelectbox"] div[data-baseweb="select"] span {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* 4. TÍTULOS DE SELECTBOX UNIFICADOS (18px, Agency FB, Bold) */
-.stSelectbox label p,
-.stSelectbox label,
-[data-testid="stSelectbox"] label p,
-[data-testid="stSelectbox"] label {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# Inyección CSS (Tipografia institucional y filtros limpios)
-st.markdown("""
-<style>
-/* Tipografia global responsive */
-html, body, [class*="st-"] { 
-    font-size: 14px !important;
-    font-family: 'Agency FB', sans-serif !important; 
-}
-
-/* 1. Scroll suave en el contenedor interno de Streamlit */
-html, body {
-    scroll-behavior: smooth !important;
-}
-
-[data-testid="stAppViewContainer"] {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    scroll-behavior: smooth !important;
-    height: 100vh !important;
-}
-
-/* 2. Borde delicado en cada segmentador */
-div[data-baseweb="select"] > div,
-div[data-testid="stMultiSelect"] > div {
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: 8px !important;
-    background-color: #FFFFFF !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-/* Realce sutil al pasar el ratón sobre el filtro */
-div[data-baseweb="select"] > div:hover,
-div[data-testid="stMultiSelect"] > div:hover {
-    border-color: #2E7D32 !important;
-}
-
-/* 3. Títulos de filtros unificados */
-div[data-testid="stMultiSelect"] label p,
-div[data-testid="stMultiSelect"] label {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
 }
 
 /* 4. Botón flotante para volver arriba */
@@ -232,10 +188,11 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
     background-color: #F9FAFB !important;
     border-radius: 8px 8px 0 0 !important;
     padding: 10px 16px !important;
-    font-size: 14px !important;
+    font-size: 20px !important;
     font-family: 'Agency FB', sans-serif !important;
     color: #6B7280 !important;
-    font-weight: bold !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
     border: 1px solid #E5E7EB !important;
     border-bottom: none !important;
 }
@@ -244,6 +201,7 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
     background-color: #2E7D32 !important;
     color: #FFFFFF !important;
     border-color: #2E7D32 !important;
+    border-bottom-color: #2E7D32 !important;
 }
 
 /* Radio button styling */
@@ -254,41 +212,16 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
     border: 1px solid #E5E7EB !important;
 }
 
-/* Selectbox styling */
-[data-testid="stSelectbox"] > div > div > div {
-    background-color: #F9FAFB !important;
-    border-radius: 8px !important;
-    border: 1px solid #E5E7EB !important;
-}
-
 /* Remove sidebar */
 [data-testid="stSidebar"] {
     display: none !important;
 }
 
-/* Tipografía unificada para Tabs, Tipo de Gráfico y Z-Score */
 button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] div,
 button[data-baseweb="tab"] {
     font-size: 20px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
-}
-
-button[data-baseweb="tab"][aria-selected="true"] {
-    color: #2E7D32 !important;
-    border-bottom-color: #2E7D32 !important;
-}
-
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stSelectbox"] label,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] span {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
 }
 
 div[data-testid="stRadio"] label p,
@@ -308,6 +241,8 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
 }
 </style>
 
+<!-- Ancla al inicio y Botón Flotante -->
+<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>
 <a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
     &#8593; Subir a Filtros
 </a>
@@ -379,9 +314,6 @@ def cargar_datos_google_sheets(cache_buster=""):
     except Exception as e:
         st.error(f"Error al cargar datos desde Google Sheets: {str(e)}")
         return None
-
-# ANCLA AL INICIO ABSOLUTO DE LA APLICACIÓN
-st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
 
 # Logo centrado
 col1, col2, col3 = st.columns([3, 1, 3])
