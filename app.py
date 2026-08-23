@@ -25,48 +25,50 @@ h1 {
     text-align: center; 
 }
 
-/* 1. ANIQUILACIÓN DEL FONDO GRIS: Aplica transparencia a la etiqueta y a TODO lo que esté adentro */
-div[data-baseweb="select"] [data-baseweb="tag"],
-div[data-baseweb="select"] [data-baseweb="tag"] *,
-[data-testid="stMultiSelect"] [data-baseweb="tag"],
-[data-testid="stMultiSelect"] [data-baseweb="tag"] * {
+/* 1. SELECCIÓN DIRECTA Y TRANSPARENCIA ABSOLUTA (Sin depender de contenedores obsoletos) */
+.stMultiSelect [data-baseweb="tag"],
+.stMultiSelect [data-testid="stMultiSelectTag"],
+[data-testid="stMultiSelect"] [data-baseweb="tag"] {
     background-color: transparent !important;
     background: transparent !important;
     background-image: none !important;
-}
-
-/* 2. DIBUJAR EL BORDE: Enmarcar la etiqueta para que no quede flotando */
-div[data-baseweb="select"] [data-baseweb="tag"] {
-    border: 1.5px solid #64748B !important;
+    border: 1.5px solid #94A3B8 !important; /* Borde gris para enmarcar */
     border-radius: 6px !important;
-    padding: 3px 12px !important;
     box-shadow: none !important;
+    padding: 3px 10px !important;
 }
 
-/* 3. TEXTO NÍTIDO (FORZADO A NEGRO): El texto se había vuelto blanco, lo forzamos a oscuro */
-div[data-baseweb="select"] [data-baseweb="tag"] span {
+/* 2. TEXTO NÍTIDO Y GRANDE EN LA ETIQUETA */
+.stMultiSelect [data-baseweb="tag"] span,
+.stMultiSelect [data-testid="stMultiSelectTag"] span,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] span {
     color: #0F172A !important;
     font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
+    font-family: 'Agency FB', sans-serif !important;
 }
 
-/* 4. IGUALAR TITULOS DE FILTROS */
-div[data-testid="stMultiSelect"] label p,
-div[data-testid="stMultiSelect"] label {
+/* 3. ELIMINACIÓN DE LA CRUZ (X) Y BOTONES */
+.stMultiSelect [data-baseweb="tag"] svg,
+.stMultiSelect [data-baseweb="tag"] button,
+.stMultiSelect [data-testid="stMultiSelectTag"] svg,
+.stMultiSelect [data-testid="stMultiSelectTag"] button,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] svg {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+}
+
+/* 4. IGUALAR TÍTULOS DE LOS FILTROS AL MISMO TAMAÑO */
+.stMultiSelect label p,
+.stMultiSelect label {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
-}
-
-/* 5. ELIMINAR LA CRUZ (X): Ocultar el botón de borrar de la etiqueta */
-div[data-baseweb="select"] [data-baseweb="tag"] svg,
-div[data-baseweb="select"] [data-baseweb="tag"] button {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    pointer-events: none !important;
 }
 
 /* Forzar aparición de la barra de scroll en los dropdowns */
