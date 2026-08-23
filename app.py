@@ -222,7 +222,7 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
 }
 </style>
 
-<a href="#top-filtros" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
+<a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
     &#8593; Subir a Filtros
 </a>
 """, unsafe_allow_html=True)
@@ -294,6 +294,9 @@ def cargar_datos_google_sheets(cache_buster=""):
         st.error(f"Error al cargar datos desde Google Sheets: {str(e)}")
         return None
 
+# ANCLA AL INICIO ABSOLUTO DE LA APLICACIÓN
+st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
+
 # Logo centrado
 col1, col2, col3 = st.columns([3, 1, 3])
 with col2:
@@ -332,8 +335,6 @@ if df is not None and not df.empty:
     contenedor_filtros = st.container()
     with contenedor_filtros:
         st.markdown('<div id="marcador-filtros"></div>', unsafe_allow_html=True)
-        # Anclaje de destino para el botón de retorno
-        st.markdown('<div id="top-filtros"></div>', unsafe_allow_html=True)
 
         col_cat, col_mes, col_jug, col_met = st.columns(4)
         df_cat = df
