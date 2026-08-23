@@ -220,6 +220,47 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
 [data-testid="stSidebar"] {
     display: none !important;
 }
+
+/* Tipografía unificada para Tabs, Tipo de Gráfico y Z-Score */
+button[data-baseweb="tab"] p,
+button[data-baseweb="tab"] div,
+button[data-baseweb="tab"] {
+    font-size: 20px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+    color: #2E7D32 !important;
+    border-bottom-color: #2E7D32 !important;
+}
+
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stSelectbox"] label,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] span {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+div[data-testid="stRadio"] label p,
+div[data-testid="stRadio"] label,
+div[data-testid="stRadio"] div[role="radiogroup"] label p,
+div[data-testid="stRadio"] div[role="radiogroup"] label,
+div[data-testid="stRadio"] div[data-testid="stMarkdownContainer"] p {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+div[data-testid="stRadio"] input[type="radio"]:checked + div {
+    border-color: #2E7D32 !important;
+    background-color: #2E7D32 !important;
+}
 </style>
 
 <a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
