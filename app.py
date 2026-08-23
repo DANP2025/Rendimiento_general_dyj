@@ -25,48 +25,45 @@ h1 {
     text-align: center; 
 }
 
-/* 1. BOMBA DE ESPECIFICIDAD: Anulación absoluta del fondo gris en etiquetas */
-html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] {
-    background-color: rgba(0, 0, 0, 0) !important;
-    background: rgba(0, 0, 0, 0) !important;
-    border: 2px solid #94A3B8 !important;
+/* 1. BOMBA DE TRANSPARENCIA: Quita el fondo a CUALQUIER elemento dentro de la caja seleccionada */
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] *,
+div[data-testid="stMultiSelect"] [data-baseweb="tag"],
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] *,
+div[data-testid="stMultiSelect"] > div > div > div > div > div,
+div[data-testid="stMultiSelect"] > div > div > div > div > div > span {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* 2. DIBUJAR EL BORDE: Enmarca el tag limpio */
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] {
+    border: 1.5px solid #64748B !important;
     border-radius: 6px !important;
     padding: 2px 10px !important;
+    box-shadow: none !important;
 }
 
-/* 2. Anular cualquier fondo en los sub-elementos internos de la etiqueta */
-html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] * {
-    background-color: rgba(0, 0, 0, 0) !important;
-    background: rgba(0, 0, 0, 0) !important;
-}
-
-/* 3. Forzar el color del texto a negro y tamaño legible */
-html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] span {
+/* 3. TEXTO NÍTIDO: Fuerza color negro, negrita y fuente Agency FB a todo el texto */
+div[data-testid="stMultiSelect"] span,
+div[data-testid="stMultiSelect"] label p {
     color: #0F172A !important;
     font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
-    font-family: 'Agency FB', sans-serif !important;
 }
 
-/* 4. Erradicación total de la Cruz (X) y el botón interno */
-html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
-html body #root [data-testid="stAppViewContainer"] [data-testid="stMultiSelect"] [data-baseweb="tag"] button {
+/* 4. ELIMINAR LA CRUZ (X): Oculta iconos y botones de borrado */
+div[data-testid="stMultiSelect"] svg,
+div[data-testid="stMultiSelect"] [role="button"],
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] button {
     display: none !important;
-    width: 0px !important;
-    height: 0px !important;
+    visibility: hidden !important;
     opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
     pointer-events: none !important;
-}
-
-/* Igualar el tamaño de los títulos de los filtros */
-div[data-testid="stMultiSelect"] label p,
-div[data-testid="stMultiSelect"] label,
-.stMultiSelect label,
-.stMultiSelect p {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
 }
 
 /* Forzar aparición de la barra de scroll en los dropdowns */
