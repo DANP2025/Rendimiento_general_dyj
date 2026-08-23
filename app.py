@@ -67,6 +67,34 @@ html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important; 
 }
 
+/* Ocultar la barra superior para liberar espacio visual */
+header[data-testid="stHeader"] {
+    display: none !important;
+    height: 0px !important;
+}
+
+/* Mantener los filtros visibles mientras se recorren los gráficos */
+div[data-testid="stVerticalBlock"]:has(#marcador-filtros) {
+    position: sticky !important;
+    top: 0px !important;
+    z-index: 99999 !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    padding: 15px 20px 5px 20px !important;
+    margin-left: -20px !important;
+    margin-right: -20px !important;
+    border-bottom: 2px solid #2E7D32 !important;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 0px 0px 10px 10px !important;
+    transition: all 0.3s ease;
+}
+
+/* Reducir el espacio superior para acercar los filtros al inicio */
+.block-container {
+    padding-top: 2rem !important;
+}
+
 h1 { 
     font-size: 2.5rem !important;
     color: #2E7D32 !important; 
@@ -254,43 +282,47 @@ if df is not None and not df.empty:
     metricas_disponibles = [m for m in METRICAS_ESPERADAS if m in df.columns]
     
     # FILA 1: 4 Columnas (Categoría, Mes, Futbolista, Métricas)
-    col_cat, col_mes, col_jug, col_met = st.columns(4)
-    df_cat = df
+    contenedor_filtros = st.container()
+    with contenedor_filtros:
+        st.markdown('<div id="marcador-filtros"></div>', unsafe_allow_html=True)
+
+        col_cat, col_mes, col_jug, col_met = st.columns(4)
+        df_cat = df
+
+        with col_cat:
+            if columna_categoria:
+                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>CATEGORÍA</p>", unsafe_allow_html=True)
+                opciones_cat = ['TODAS'] + sorted([str(x) for x in df[columna_categoria].dropna().unique()])
+                categoria_seleccionada = st.multiselect("CATEGORÍA", opciones_cat, default=['TODAS'], label_visibility="collapsed")
+                if 'TODAS' not in categoria_seleccionada and categoria_seleccionada:
+                    df_cat = df[df[columna_categoria].astype(str).isin(categoria_seleccionada)]
+                df = df_cat
     
-    with col_cat:
-        if columna_categoria:
-            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>CATEGORÍA</p>", unsafe_allow_html=True)
-            opciones_cat = ['TODAS'] + sorted([str(x) for x in df[columna_categoria].dropna().unique()])
-            categoria_seleccionada = st.multiselect("CATEGORÍA", opciones_cat, default=['TODAS'], label_visibility="collapsed")
-            if 'TODAS' not in categoria_seleccionada and categoria_seleccionada:
-                df_cat = df[df[columna_categoria].astype(str).isin(categoria_seleccionada)]
-            df = df_cat
+        df_mes = df_cat
+        with col_mes:
+            if columna_mes:
+                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MES DE REGISTRO</p>", unsafe_allow_html=True)
+                opciones_mes = ['TODOS'] + sorted([str(x) for x in df_cat[columna_mes].dropna().unique()])
+                mes_seleccionado = st.multiselect("MES DE REGISTRO", opciones_mes, default=['TODOS'], label_visibility="collapsed")
+                if 'TODOS' not in mes_seleccionado and mes_seleccionado:
+                    df_mes = df_cat[df_cat[columna_mes].astype(str).isin(mes_seleccionado)]
+                df = df_mes
     
-    df_mes = df_cat
-    with col_mes:
-        if columna_mes:
-            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MES DE REGISTRO</p>", unsafe_allow_html=True)
-            opciones_mes = ['TODOS'] + sorted([str(x) for x in df_cat[columna_mes].dropna().unique()])
-            mes_seleccionado = st.multiselect("MES DE REGISTRO", opciones_mes, default=['TODOS'], label_visibility="collapsed")
-            if 'TODOS' not in mes_seleccionado and mes_seleccionado:
-                df_mes = df_cat[df_cat[columna_mes].astype(str).isin(mes_seleccionado)]
-            df = df_mes
+        df_filtrado = df_mes
+        with col_jug:
+            if columna_jugador:
+                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>FUTBOLISTA</p>", unsafe_allow_html=True)
+                opciones_jug = ['TODOS'] + sorted([str(x) for x in df_mes[columna_jugador].dropna().unique()])
+                jugadores_seleccionados = st.multiselect("FUTBOLISTA", opciones_jug, default=['TODOS'], label_visibility="collapsed")
+                if 'TODOS' not in jugadores_seleccionados and jugadores_seleccionados:
+                    df_filtrado = df_mes[df_mes[columna_jugador].astype(str).isin(jugadores_seleccionados)]
+                df = df_filtrado
     
-    df_filtrado = df_mes
-    with col_jug:
-        if columna_jugador:
-            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>FUTBOLISTA</p>", unsafe_allow_html=True)
-            opciones_jug = ['TODOS'] + sorted([str(x) for x in df_mes[columna_jugador].dropna().unique()])
-            jugadores_seleccionados = st.multiselect("FUTBOLISTA", opciones_jug, default=['TODOS'], label_visibility="collapsed")
-            if 'TODOS' not in jugadores_seleccionados and jugadores_seleccionados:
-                df_filtrado = df_mes[df_mes[columna_jugador].astype(str).isin(jugadores_seleccionados)]
-            df = df_filtrado
-    
-    with col_met:
-        st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS DE RENDIMIENTO</p>", unsafe_allow_html=True)
-        opciones_met = ['TODAS'] + metricas_disponibles
-        sel_met = st.multiselect("MÉTRICAS DE RENDIMIENTO", opciones_met, default=['TODAS'], label_visibility="collapsed")
-    metricas_seleccionadas = metricas_disponibles if ('TODAS' in sel_met or not sel_met) else [m for m in sel_met if m in metricas_disponibles]
+        with col_met:
+            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS DE RENDIMIENTO</p>", unsafe_allow_html=True)
+            opciones_met = ['TODAS'] + metricas_disponibles
+            sel_met = st.multiselect("MÉTRICAS DE RENDIMIENTO", opciones_met, default=['TODAS'], label_visibility="collapsed")
+            metricas_seleccionadas = metricas_disponibles if ('TODAS' in sel_met or not sel_met) else [m for m in sel_met if m in metricas_disponibles]
     
     st.markdown("---")
     
