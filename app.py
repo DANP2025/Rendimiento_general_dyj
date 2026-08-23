@@ -56,32 +56,45 @@ div[data-testid="stMultiSelect"] label {
     color: #0F172A !important;
 }
 
-/* 1. EXTENDER EL BORDE DELICADO Y FONDO A LOS SELECTBOX (Igual que Multiselect) */
-div[data-testid="stSelectbox"] > div[data-baseweb="select"] {
+/* 1. ENMARCAR DE FORMA IDÉNTICA MULTISELECT Y SELECTBOX (Sin selector hijo estricto) */
+.stMultiSelect [data-baseweb="select"] > div,
+.stSelectbox [data-baseweb="select"] > div,
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div,
+div[data-baseweb="select"] > div {
     border: 1.5px solid #CBD5E1 !important;
     border-radius: 8px !important;
     background-color: #FFFFFF !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    min-height: 42px !important;
     transition: all 0.2s ease-in-out !important;
 }
 
-/* 2. REALCE VERDE AL PASAR EL RATÓN (HOVER) EN SELECTBOX */
-div[data-testid="stSelectbox"] > div[data-baseweb="select"]:hover {
+/* 2. REALCE VERDE AL PASAR EL RATÓN (HOVER) EN TODOS LOS FILTROS */
+.stMultiSelect [data-baseweb="select"] > div:hover,
+.stSelectbox [data-baseweb="select"] > div:hover,
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
+div[data-baseweb="select"] > div:hover {
     border-color: #2E7D32 !important;
     box-shadow: 0 0 0 1px #2E7D32 !important;
 }
 
-/* 3. TAMAÑO DE LETRA INTERNO DEL SELECTBOX (Grande y Nítido) */
-div[data-testid="stSelectbox"] div[data-baseweb="select"] span {
+/* 3. TEXTO INTERNO DEL SELECTBOX (Grande y Nítido) */
+.stSelectbox div[data-baseweb="select"] div,
+.stSelectbox div[data-baseweb="select"] span,
+[data-testid="stSelectbox"] div[data-baseweb="select"] span {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* 4. ASEGURAR QUE LOS TÍTULOS DEL SELECTBOX TENGAN EL MISMO TAMAÑO QUE EL RESTO */
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stSelectbox"] label {
+/* 4. TÍTULOS DE SELECTBOX UNIFICADOS (18px, Agency FB, Bold) */
+.stSelectbox label p,
+.stSelectbox label,
+[data-testid="stSelectbox"] label p,
+[data-testid="stSelectbox"] label {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
