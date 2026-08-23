@@ -10,6 +10,54 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
+# CSS de transparencia y ocultación de cruz para etiquetas multiselect.
+st.markdown("""
+<style>
+/* 1. Fondo transparente y borde gris sutil en las etiquetas multiselect */
+div[data-testid="stMultiSelect"] [data-baseweb="tag"],
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
+div[data-baseweb="select"] [data-baseweb="tag"],
+span[data-baseweb="tag"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: 1.5px solid #94A3B8 !important;
+    border-radius: 6px !important;
+    padding: 2px 8px !important;
+}
+
+/* 2. Texto negro nítido */
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] span,
+span[data-baseweb="tag"] span {
+    color: #0F172A !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    font-family: 'Agency FB', sans-serif !important;
+}
+
+/* 3. Ocultar la cruz (X) */
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] svg,
+span[data-baseweb="tag"] svg,
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] [role="presentation"],
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] button {
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* 4. Títulos de los filtros unificados */
+div[data-testid="stMultiSelect"] label p,
+div[data-testid="stMultiSelect"] label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Inyección CSS (Tipografia institucional y filtros limpios)
 st.markdown("""
 <style>
@@ -23,52 +71,6 @@ h1 {
     font-size: 2rem !important;
     color: #2E7D32 !important; 
     text-align: center; 
-}
-
-/* 1. SELECCIÓN DIRECTA Y TRANSPARENCIA ABSOLUTA (Sin depender de contenedores obsoletos) */
-.stMultiSelect [data-baseweb="tag"],
-.stMultiSelect [data-testid="stMultiSelectTag"],
-[data-testid="stMultiSelect"] [data-baseweb="tag"] {
-    background-color: transparent !important;
-    background: transparent !important;
-    background-image: none !important;
-    border: 1.5px solid #94A3B8 !important; /* Borde gris para enmarcar */
-    border-radius: 6px !important;
-    box-shadow: none !important;
-    padding: 3px 10px !important;
-}
-
-/* 2. TEXTO NÍTIDO Y GRANDE EN LA ETIQUETA */
-.stMultiSelect [data-baseweb="tag"] span,
-.stMultiSelect [data-testid="stMultiSelectTag"] span,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] span {
-    color: #0F172A !important;
-    font-size: 18px !important;
-    font-weight: 800 !important;
-    font-family: 'Agency FB', sans-serif !important;
-}
-
-/* 3. ELIMINACIÓN DE LA CRUZ (X) Y BOTONES */
-.stMultiSelect [data-baseweb="tag"] svg,
-.stMultiSelect [data-baseweb="tag"] button,
-.stMultiSelect [data-testid="stMultiSelectTag"] svg,
-.stMultiSelect [data-testid="stMultiSelectTag"] button,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] svg {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    pointer-events: none !important;
-}
-
-/* 4. IGUALAR TÍTULOS DE LOS FILTROS AL MISMO TAMAÑO */
-.stMultiSelect label p,
-.stMultiSelect label {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
 }
 
 /* Forzar aparición de la barra de scroll en los dropdowns */
@@ -251,67 +253,44 @@ if df is not None and not df.empty:
     # Usar la lista maestra de métricas para los selectores
     metricas_disponibles = [m for m in METRICAS_ESPERADAS if m in df.columns]
     
-    # FILA 1: 3 Columnas (Categoría, Mes, Futbolista)
-    col_cat, col_mes, col_jug = st.columns(3)
+    # FILA 1: 4 Columnas (Categoría, Mes, Futbolista, Métricas)
+    col_cat, col_mes, col_jug, col_met = st.columns(4)
+    df_cat = df
     
     with col_cat:
         if columna_categoria:
-            categorias_unicas = df[columna_categoria].dropna().unique().tolist()
-            if categorias_unicas:
-                categorias_opciones = ['TODAS'] + [str(cat) for cat in categorias_unicas]
-                categoria_seleccionada = st.multiselect(
-                    "Categoría",
-                    categorias_opciones,
-                    default=['TODAS']
-                )
-                
-                if 'TODAS' not in categoria_seleccionada and categoria_seleccionada:
-                    df = df[df[columna_categoria].isin(categoria_seleccionada)]
+            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>CATEGORÍA</p>", unsafe_allow_html=True)
+            opciones_cat = ['TODAS'] + sorted([str(x) for x in df[columna_categoria].dropna().unique()])
+            categoria_seleccionada = st.multiselect("CATEGORÍA", opciones_cat, default=['TODAS'], label_visibility="collapsed")
+            if 'TODAS' not in categoria_seleccionada and categoria_seleccionada:
+                df_cat = df[df[columna_categoria].astype(str).isin(categoria_seleccionada)]
+            df = df_cat
     
+    df_mes = df_cat
     with col_mes:
         if columna_mes:
-            meses_unicos = df[columna_mes].dropna().unique().tolist()
-            if meses_unicos:
-                meses_opciones = ['TODOS'] + [str(mes) for mes in meses_unicos]
-                mes_seleccionado = st.multiselect(
-                    "Mes de registro",
-                    meses_opciones,
-                    default=['TODOS']
-                )
-                
-                if 'TODOS' not in mes_seleccionado and mes_seleccionado:
-                    df = df[df[columna_mes].isin(mes_seleccionado)]
+            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MES DE REGISTRO</p>", unsafe_allow_html=True)
+            opciones_mes = ['TODOS'] + sorted([str(x) for x in df_cat[columna_mes].dropna().unique()])
+            mes_seleccionado = st.multiselect("MES DE REGISTRO", opciones_mes, default=['TODOS'], label_visibility="collapsed")
+            if 'TODOS' not in mes_seleccionado and mes_seleccionado:
+                df_mes = df_cat[df_cat[columna_mes].astype(str).isin(mes_seleccionado)]
+            df = df_mes
     
+    df_filtrado = df_mes
     with col_jug:
         if columna_jugador:
-            jugadores_unicos = df[columna_jugador].dropna().unique().tolist()
-            if jugadores_unicos:
-                jugadores_opciones = ['TODOS'] + [str(jug) for jug in jugadores_unicos]
-                jugadores_seleccionados = st.multiselect(
-                    "Futbolista",
-                    jugadores_opciones,
-                    default=['TODOS']
-                )
-                
-                if 'TODOS' not in jugadores_seleccionados and jugadores_seleccionados:
-                    df = df[df[columna_jugador].isin(jugadores_seleccionados)]
+            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>FUTBOLISTA</p>", unsafe_allow_html=True)
+            opciones_jug = ['TODOS'] + sorted([str(x) for x in df_mes[columna_jugador].dropna().unique()])
+            jugadores_seleccionados = st.multiselect("FUTBOLISTA", opciones_jug, default=['TODOS'], label_visibility="collapsed")
+            if 'TODOS' not in jugadores_seleccionados and jugadores_seleccionados:
+                df_filtrado = df_mes[df_mes[columna_jugador].astype(str).isin(jugadores_seleccionados)]
+            df = df_filtrado
     
-    # Métricas de Rendimiento (con opción TODAS)
-    if metricas_disponibles:
-        metricas_opciones = ['TODAS'] + metricas_disponibles
-        metricas_seleccionadas = st.multiselect(
-            "Métricas de Rendimiento",
-            metricas_opciones,
-            default=['TODAS']
-        )
-        
-        # Lógica TODAS
-        if 'TODAS' in metricas_seleccionadas:
-            metricas_seleccionadas = metricas_disponibles
-        else:
-            metricas_seleccionadas = [m for m in metricas_seleccionadas if m in metricas_disponibles]
-    else:
-        metricas_seleccionadas = []
+    with col_met:
+        st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS DE RENDIMIENTO</p>", unsafe_allow_html=True)
+        opciones_met = ['TODAS'] + metricas_disponibles
+        sel_met = st.multiselect("MÉTRICAS DE RENDIMIENTO", opciones_met, default=['TODAS'], label_visibility="collapsed")
+    metricas_seleccionadas = metricas_disponibles if ('TODAS' in sel_met or not sel_met) else [m for m in sel_met if m in metricas_disponibles]
     
     st.markdown("---")
     
