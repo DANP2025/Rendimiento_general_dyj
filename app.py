@@ -433,9 +433,10 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 y=df_agrupado[metrica],
                                 name=metrica,
                                 text=df_agrupado[metrica].where(df_agrupado[metrica].notna(), None),
-                                textposition='outside',
+                                textposition='inside',
+                                insidetextanchor='middle',
                                 marker_color='#22C55E',
-                                textfont=dict(size=12, color='black', family='Arial Black')
+                                textfont=dict(size=12, color='white', family='Arial Black')
                             ),
                             secondary_y=False
                         )
@@ -450,7 +451,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 name=metrica,
                                 mode='lines+markers+text',
                                 text=df_agrupado[metrica].where(df_agrupado[metrica].notna(), None),
-                                textposition='bottom center',
+                                textposition='top center',
                                 line=dict(color='#F59E0B', width=3),
                                 marker=dict(size=8, line=dict(width=1, color='black')),
                                 textfont=dict(size=12, color='#B45309', family='Arial Black'),
