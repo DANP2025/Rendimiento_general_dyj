@@ -67,7 +67,11 @@ html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important; 
 }
 
-/* 1. Restaurar el scroll principal de Streamlit */
+/* 1. Scroll suave en el contenedor interno de Streamlit */
+html, body {
+    scroll-behavior: smooth !important;
+}
+
 [data-testid="stAppViewContainer"] {
     overflow-y: auto !important;
     overflow-x: hidden !important;
@@ -102,29 +106,30 @@ div[data-testid="stMultiSelect"] label {
 
 /* 4. Botón flotante para volver arriba */
 .btn-flotante-arriba {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    background-color: #2E7D32;
+    position: fixed !important;
+    bottom: 75px !important;
+    right: 20px !important;
+    background-color: #2E7D32 !important;
     color: #FFFFFF !important;
-    padding: 10px 18px;
-    border-radius: 30px;
-    font-family: 'Agency FB', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
+    padding: 10px 20px !important;
+    border-radius: 30px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
     text-decoration: none !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-    z-index: 99999;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
 .btn-flotante-arriba:hover {
-    background-color: #1B5E20;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    background-color: #1B5E20 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
     color: #FFFFFF !important;
 }
 
@@ -217,7 +222,7 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
 }
 </style>
 
-<a href="#" class="btn-flotante-arriba" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+<a href="#top-filtros" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
     &#8593; Subir a Filtros
 </a>
 """, unsafe_allow_html=True)
@@ -327,6 +332,8 @@ if df is not None and not df.empty:
     contenedor_filtros = st.container()
     with contenedor_filtros:
         st.markdown('<div id="marcador-filtros"></div>', unsafe_allow_html=True)
+        # Anclaje de destino para el botón de retorno
+        st.markdown('<div id="top-filtros"></div>', unsafe_allow_html=True)
 
         col_cat, col_mes, col_jug, col_met = st.columns(4)
         df_cat = df
