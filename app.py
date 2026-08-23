@@ -573,36 +573,56 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                             df_metrica = df_zscore[df_zscore['Métrica'] == metrica].copy()
                             
                             if not df_metrica.empty:
-                                # Ordenar los datos (mejor Z-Score arriba)
-                                df_metrica = df_metrica.sort_values(by='Z-Score', ascending=True)
-                                
-                                # Crear color dinámico según Z-Score
-                                colors = ['#22C55E' if x > 0 else '#EF4444' for x in df_metrica['Z-Score']]
-                                
-                                # Crear gráfico de barras horizontales SIN color
+                                # Filtrar y ordenar alfabéticamente de la A a la Z por Futbolista
+                                df_plot = df_metrica.dropna(subset=['Z-Score']).sort_values(
+                                    by='Futbolista', ascending=True
+                                )
+
+                                # Generar colores sincronizados con el DataFrame ordenado
+                                colores = [
+                                    '#22C55E' if val >= 0 else '#EF4444'
+                                    for val in df_plot['Z-Score']
+                                ]
+
+                                if df_plot.empty:
+                                    continue
+
+                                # Crear el gráfico horizontal
                                 fig = px.bar(
-                                    df_metrica,
+                                    df_plot,
                                     x='Z-Score',
                                     y='Futbolista',
                                     orientation='h'
                                 )
                                 
-                                # Aplicar color DESPUÉS
+                                # Asignar colores, etiquetas y estilos a las barras
                                 fig.update_traces(
-                                    marker_color=colors,
+                                    marker_color=colores,
                                     texttemplate='%{x:.2f}',
                                     textposition='outside',
-                                    textfont=dict(size=16, color='black')
+                                    cliponaxis=False,
+                                    textfont=dict(size=16, color='#0F172A', family='Agency FB')
+                                )
+
+                                fig.update_yaxes(
+                                    type='category',
+                                    categoryorder='category descending',
+                                    tickfont=dict(size=16, color='#0F172A', family='Agency FB')
+                                )
+
+                                fig.update_xaxes(
+                                    tickfont=dict(size=14, color='#0F172A'),
+                                    title_text="Z-Score",
+                                    title_font=dict(size=16, color='#0F172A', family='Agency FB')
                                 )
                                 
                                 # Configuración Plotly Z-Score
                                 fig.update_layout(
-                                    height=max(400, len(df_metrica)*40),
+                                    height=max(350, len(df_plot) * 40),
                                     showlegend=False,
                                     title=dict(text=f"<b>Z-Score: {metrica}</b>", x=0.5, font=dict(size=20, color="#1E293B")),
-                                    xaxis_title="Z-Score",
                                     yaxis_title="",
-                                    margin=dict(t=80, b=80, l=150, r=80),
+                                    margin=dict(t=60, b=50, l=150, r=60),
                                     font=dict(family='Agency FB', size=16),
                                     bargap=0.2
                                 )
@@ -611,13 +631,7 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                                 fig.update_traces(width=0.5)
                                 
                                 # Línea base poblacional
-                                fig.add_vline(x=0, line_width=3, line_dash="dash", line_color="black")
-                                
-                                # Tamaño de nombres de jugadores en Eje Y
-                                fig.update_yaxes(tickfont=dict(size=16, family="Agency FB", color="black"))
-                                
-                                # Eje X
-                                fig.update_xaxes(tickfont=dict(size=18, family="Agency FB", color="black"))
+                                fig.add_vline(x=0, line_width=2, line_dash="dash", line_color="#0F172A")
                                 
                                 st.plotly_chart(
                                     fig, 
