@@ -67,35 +67,15 @@ html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important; 
 }
 
-/* 1. Ocultar header nativo de Streamlit */
-header[data-testid="stHeader"] {
-    display: none !important;
+/* 1. Restaurar el scroll principal de Streamlit */
+[data-testid="stAppViewContainer"] {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scroll-behavior: smooth !important;
+    height: 100vh !important;
 }
 
-/* 2. Desbloquear el overflow para que sticky funcione */
-[data-testid="stAppViewContainer"],
-[data-testid="stMain"],
-[data-testid="stVerticalBlock"],
-[data-testid="stVerticalBlockBorderWrapper"] {
-    overflow: visible !important;
-}
-
-/* 3. Frizar la barra de filtros en la parte superior */
-div[data-testid="stHorizontalBlock"]:has([data-testid="stMultiSelect"]) {
-    position: -webkit-sticky !important;
-    position: sticky !important;
-    top: 0px !important;
-    z-index: 99999 !important;
-    background-color: rgba(255, 255, 255, 0.98) !important;
-    backdrop-filter: blur(8px) !important;
-    padding: 12px 15px !important;
-    margin-bottom: 20px !important;
-    border-bottom: 2px solid #2E7D32 !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
-    border-radius: 0 0 10px 10px !important;
-}
-
-/* 4. Borde delicado en cada segmentador */
+/* 2. Borde delicado en cada segmentador */
 div[data-baseweb="select"] > div,
 div[data-testid="stMultiSelect"] > div {
     border: 1.5px solid #CBD5E1 !important;
@@ -109,7 +89,43 @@ div[data-testid="stMultiSelect"] > div {
 div[data-baseweb="select"] > div:hover,
 div[data-testid="stMultiSelect"] > div:hover {
     border-color: #2E7D32 !important;
-    box-shadow: 0 0 0 1px #2E7D32 !important;
+}
+
+/* 3. Títulos de filtros unificados */
+div[data-testid="stMultiSelect"] label p,
+div[data-testid="stMultiSelect"] label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* 4. Botón flotante para volver arriba */
+.btn-flotante-arriba {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #2E7D32;
+    color: #FFFFFF !important;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-family: 'Agency FB', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    z-index: 99999;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-flotante-arriba:hover {
+    background-color: #1B5E20;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    color: #FFFFFF !important;
 }
 
 /* Reducir el espacio superior para acercar los filtros al inicio */
@@ -200,6 +216,10 @@ li[role="option"] { font-size: 14px !important; padding: 8px !important; }
     display: none !important;
 }
 </style>
+
+<a href="#" class="btn-flotante-arriba" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+    &#8593; Subir a Filtros
+</a>
 """, unsafe_allow_html=True)
 
 # Definición de la Lista Maestra de Métricas (Global)
