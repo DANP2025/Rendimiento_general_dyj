@@ -13,34 +13,48 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 # Bloque maestro de estilos unificado
 st.markdown("""
 <style>
-/* ========================================================================== */
-/* 1. TIPOGRAFÍA GLOBAL Y CONFIGURACIÓN BASE                                 */
-/* ========================================================================== */
+/* 1. TIPOGRAFÍA GLOBAL Y SCROLL */
 html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important;
 }
 
-/* Ocultar barra superior nativa de Streamlit para ganar espacio */
 header[data-testid="stHeader"] {
     display: none !important;
 }
 
-/* Desbloqueo y suavizado de scroll */
 [data-testid="stAppViewContainer"] {
     overflow-y: auto !important;
     overflow-x: hidden !important;
     scroll-behavior: smooth !important;
 }
 
-/* ========================================================================== */
-/* 2. BORDES DELICADOS UNIFICADOS (MULTISELECT Y SELECTBOX)                  */
-/* ========================================================================== */
-div[data-baseweb="select"] > div,
-[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
-[data-testid="stSelectbox"] [data-baseweb="select"] > div,
-.stMultiSelect [data-baseweb="select"] > div,
-.stSelectbox [data-baseweb="select"] > div,
-div[data-baseweb="select"] > div {
+/* 2. TEXTO BLANCO RESTAURADO EN LAS ETIQUETAS VERDES (TODAS / TODOS) */
+[data-baseweb="tag"],
+[data-testid="stMultiSelectTag"],
+.stMultiSelect [data-baseweb="tag"] {
+    background-color: #2E7D32 !important;
+    border: none !important;
+    border-radius: 6px !important;
+}
+
+[data-baseweb="tag"] span,
+[data-testid="stMultiSelectTag"] span,
+.stMultiSelect [data-baseweb="tag"] span {
+    color: #FFFFFF !important;
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    font-family: 'Agency FB', sans-serif !important;
+}
+
+[data-baseweb="tag"] svg,
+[data-testid="stMultiSelectTag"] svg {
+    fill: #FFFFFF !important;
+    color: #FFFFFF !important;
+}
+
+/* 3. BORDES ENMARCADOS EN TODOS LOS SELECTBOXES */
+[data-testid="stSelectbox"] [data-baseweb="select"],
+[data-testid="stMultiSelect"] [data-baseweb="select"] {
     border: 1.5px solid #CBD5E1 !important;
     border-radius: 8px !important;
     background-color: #FFFFFF !important;
@@ -49,63 +63,60 @@ div[data-baseweb="select"] > div {
     transition: all 0.2s ease-in-out !important;
 }
 
-/* Realce verde al pasar el ratón en cualquier selector */
-.stMultiSelect [data-baseweb="select"] > div:hover,
-.stSelectbox [data-baseweb="select"] > div:hover,
-[data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
-[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
-div[data-baseweb="select"] > div:hover {
+/* Hover verde al pasar el ratón */
+[data-testid="stSelectbox"] [data-baseweb="select"]:hover,
+[data-testid="stMultiSelect"] [data-baseweb="select"]:hover {
     border-color: #2E7D32 !important;
     box-shadow: 0 0 0 1px #2E7D32 !important;
 }
 
-/* ========================================================================== */
-/* 3. TIPOGRAFÍA Y TEXTO INTERNO DE LOS SELECTORES                          */
-/* ========================================================================== */
-div[data-baseweb="select"] span,
-div[data-baseweb="select"] div,
-[data-testid="stSelectbox"] span,
-[data-testid="stMultiSelect"] span {
+/* 4. TEXTO OSCURO INTERIOR PARA LOS SELECTBOX */
+[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+[data-testid="stSelectbox"] div[data-baseweb="select"] div {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stSelectbox"] label,
-div[data-testid="stMultiSelect"] label p,
-div[data-testid="stMultiSelect"] label {
+/* 5. TÍTULOS DE TODOS LOS FILTROS UNIFICADOS */
+[data-testid="stSelectbox"] label p,
+[data-testid="stSelectbox"] label,
+[data-testid="stMultiSelect"] label p,
+[data-testid="stMultiSelect"] label {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* Etiquetas del multiselect */
-div[data-testid="stMultiSelect"] [data-baseweb="tag"],
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
-div[data-baseweb="select"] [data-baseweb="tag"],
-span[data-baseweb="tag"] {
-    background-color: transparent !important;
-    background: transparent !important;
-    border: 1.5px solid #94A3B8 !important;
-    border-radius: 6px !important;
-    padding: 2px 8px !important;
+/* 6. PESTAÑAS (TABS) Y RADIO BUTTONS */
+button[data-baseweb="tab"] p,
+button[data-baseweb="tab"] {
+    font-size: 20px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 800 !important;
 }
 
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] svg,
-span[data-baseweb="tag"] svg,
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] [role="presentation"],
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] button {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
+button[data-baseweb="tab"][aria-selected="true"] {
+    color: #2E7D32 !important;
+    border-bottom-color: #2E7D32 !important;
 }
 
-/* 4. Botón flotante para volver arriba */
+div[data-testid="stRadio"] label p,
+div[data-testid="stRadio"] div[role="radiogroup"] label p {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+div[data-testid="stRadio"] input[type="radio"]:checked + div {
+    border-color: #2E7D32 !important;
+    background-color: #2E7D32 !important;
+}
+
+/* 7. BOTÓN FLOTANTE 'SUBIR A FILTROS' */
 .btn-flotante-arriba {
     position: fixed !important;
     bottom: 75px !important;
@@ -133,115 +144,9 @@ div[data-testid="stMultiSelect"] [data-baseweb="tag"] button {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
     color: #FFFFFF !important;
 }
-
-/* Reducir el espacio superior para acercar los filtros al inicio */
-.block-container {
-    padding-top: 2rem !important;
-}
-
-h1 { 
-    font-size: 2.5rem !important;
-    color: #2E7D32 !important; 
-    text-align: center; 
-}
-
-/* Forzar aparición de la barra de scroll en los dropdowns */
-div[role="listbox"] {
-    max-height: 400px !important;
-    overflow-y: auto !important;
-}
-
-div[role="listbox"]::-webkit-scrollbar {
-    width: 10px !important;
-    display: block !important;
-    background-color: #F8FAFC !important;
-}
-
-div[role="listbox"]::-webkit-scrollbar-thumb {
-    background-color: #CBD5E1 !important;
-    border-radius: 5px !important;
-}
-
-div[role="listbox"]::-webkit-scrollbar-thumb:hover {
-    background-color: #94A3B8 !important;
-}
-
-li[role="option"] { font-size: 14px !important; padding: 8px !important; }
-
-/* Main canvas styling */
-.main {
-    background-color: #F0F2F5 !important;
-}
-
-/* Card containers */
-[data-testid="stVerticalBlock"] > [style*="flex-direction: column"] > [data-testid="stVerticalBlock"] {
-    background-color: white !important;
-    padding: 12px !important;
-    border-radius: 8px !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
-    margin-bottom: 12px !important;
-    border: 1px solid #E5E7EB !important;
-}
-
-/* Tab styling */
-[data-testid="stTabs"] [data-testid="stTab"] {
-    background-color: #F9FAFB !important;
-    border-radius: 8px 8px 0 0 !important;
-    padding: 10px 16px !important;
-    font-size: 20px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    color: #6B7280 !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
-    border: 1px solid #E5E7EB !important;
-    border-bottom: none !important;
-}
-
-[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] {
-    background-color: #2E7D32 !important;
-    color: #FFFFFF !important;
-    border-color: #2E7D32 !important;
-    border-bottom-color: #2E7D32 !important;
-}
-
-/* Radio button styling */
-[data-testid="stRadio"] > div > div > div {
-    background-color: #F9FAFB !important;
-    border-radius: 8px !important;
-    padding: 8px !important;
-    border: 1px solid #E5E7EB !important;
-}
-
-/* Remove sidebar */
-[data-testid="stSidebar"] {
-    display: none !important;
-}
-
-button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] {
-    font-size: 20px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 800 !important;
-}
-
-div[data-testid="stRadio"] label p,
-div[data-testid="stRadio"] label,
-div[data-testid="stRadio"] div[role="radiogroup"] label p,
-div[data-testid="stRadio"] div[role="radiogroup"] label,
-div[data-testid="stRadio"] div[data-testid="stMarkdownContainer"] p {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-div[data-testid="stRadio"] input[type="radio"]:checked + div {
-    border-color: #2E7D32 !important;
-    background-color: #2E7D32 !important;
-}
 </style>
 
-<!-- Ancla al inicio y Botón Flotante -->
+<!-- Ancla al inicio absoluto y Botón Flotante -->
 <div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>
 <a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
     &#8593; Subir a Filtros
