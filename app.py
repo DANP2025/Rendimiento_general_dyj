@@ -29,16 +29,16 @@ header[data-testid="stHeader"] {
 }
 
 /* 2. PESTAÑAS GIGANTES (22PX EN NEGRITA) */
-button[data-baseweb="tab"] * {
+[data-testid="stTabs"] button[data-baseweb="tab"] * {
     font-size: 22px !important;
     font-weight: 800 !important;
 }
 
-button[data-baseweb="tab"][aria-selected="true"] * {
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] * {
     color: #2E7D32 !important;
 }
 
-button[data-baseweb="tab"][aria-selected="true"] {
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
     border-bottom-color: #2E7D32 !important;
 }
 
