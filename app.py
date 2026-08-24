@@ -28,29 +28,40 @@ header[data-testid="stHeader"] {
     scroll-behavior: smooth !important;
 }
 
-/* 2. PESTAÑAS GIGANTES (22PX EN NEGRITA) */
-[data-testid="stTabs"] button[data-baseweb="tab"] * {
+/* 2. PESTAÑAS (TABS) GIGANTES A 22PX EN NEGRITA */
+div[data-testid="stTabs"] button,
+div[data-testid="stTabs"] button p,
+div[data-testid="stTabs"] button div,
+div[data-testid="stTabs"] button span,
+button[data-baseweb="tab"] * {
     font-size: 22px !important;
+    font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
 }
 
-[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] * {
+/* Pestaña activa en Verde Institucional */
+div[data-testid="stTabs"] button[aria-selected="true"],
+div[data-testid="stTabs"] button[aria-selected="true"] * {
     color: #2E7D32 !important;
 }
 
-[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
-    border-bottom-color: #2E7D32 !important;
+div[data-testid="stTabs"] button[aria-selected="true"] {
+    border-bottom: 3px solid #2E7D32 !important;
 }
 
-/* 3. TITULOS DE SEGMENTADORES (22PX EN NEGRITA) */
-[data-testid="stWidgetLabel"] * {
+/* 3. TÍTULOS DE LOS SEGMENTADORES (22PX EN NEGRITA) */
+div[data-testid="stWidgetLabel"],
+div[data-testid="stWidgetLabel"] p,
+div[data-testid="stWidgetLabel"] label,
+div[data-testid="stWidgetLabel"] * {
     font-size: 22px !important;
+    font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
     color: #0F172A !important;
 }
 
-/* 4. LOS 7 CAJONES CON BORDE VERDE DE 2PX Y FONDO BLANCO */
-[data-baseweb="select"] > div {
+/* 4. LOS 7 CAJONES CON BORDE VERDE INSTITUCIONAL DE 2PX */
+div[data-baseweb="select"] {
     border: 2px solid #2E7D32 !important;
     border-radius: 8px !important;
     background-color: #FFFFFF !important;
@@ -58,8 +69,14 @@ header[data-testid="stHeader"] {
     box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
 }
 
-[data-baseweb="select"] > div:hover,
-[data-baseweb="select"] > div:focus-within {
+div[data-baseweb="select"] > div {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+div[data-baseweb="select"]:hover,
+div[data-baseweb="select"]:focus-within {
     border-color: #1B5E20 !important;
     box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important;
 }
@@ -85,6 +102,7 @@ header[data-testid="stHeader"] {
     color: #0F172A !important;
     font-size: 20px !important;
     font-weight: 800 !important;
+    font-family: 'Agency FB', sans-serif !important;
 }
 
 [data-baseweb="tag"] svg,
@@ -95,8 +113,9 @@ header[data-testid="stHeader"] {
 }
 
 /* 7. RADIO BUTTONS Z-SCORE (20PX) */
-[data-testid="stRadio"] div[role="radiogroup"] * {
+div[data-testid="stRadio"] div[role="radiogroup"] * {
     font-size: 20px !important;
+    font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
