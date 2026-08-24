@@ -18,23 +18,29 @@ st.markdown("""<style>
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* 2. PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES (24PX EN NEGRITA) */
-.stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p,
+/* PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES (24PX EN NEGRITA) */
+[data-testid="stTabs"] button,
+[data-testid="stTabs"] button p,
+[data-testid="stTabs"] button div,
+[data-testid="stTabs"] button span,
 .stTabs [data-baseweb="tab-list"] button p,
 .stTabs button p,
 button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] div {
+button[data-baseweb="tab"] {
     font-size: 24px !important;
     font-family: 'Agency FB', sans-serif !important;
-    font-weight: 900 !important;
+    font-weight: 800 !important;
     letter-spacing: 0.5px !important;
 }
 
-.stTabs [data-baseweb="tab-list"] button[aria-selected="true"] [data-testid="stMarkdownContainer"] p,
+/* Pestaña activa en Verde Institucional */
+[data-testid="stTabs"] button[aria-selected="true"] p,
+.stTabs button[aria-selected="true"] p,
 button[data-baseweb="tab"][aria-selected="true"] p {
     color: #2E7D32 !important;
 }
 
+[data-testid="stTabs"] button[aria-selected="true"],
 button[data-baseweb="tab"][aria-selected="true"] {
     border-bottom: 3px solid #2E7D32 !important;
 }
