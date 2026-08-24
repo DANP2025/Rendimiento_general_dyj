@@ -14,7 +14,7 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 st.markdown("""
 <style>
 /* ==========================================
-   1. SCROLL Y TIPOGRAFÍA
+   1. SCROLL Y TIPOGRAFÍA BASE
    ========================================== */
 html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important;
@@ -29,55 +29,40 @@ header[data-testid="stHeader"] {
 }
 
 /* ==========================================
-   2. ESTILO "FLAT DESIGN" (GRIS CLARO, SIN BORDES) PARA TODOS LOS SELECTORES
+   2. CAJAS FLAT DESIGN (Gris Claro, Sin Bordes NUNCA)
    ========================================== */
-/* Cajas principales de los filtros (Fondo gris claro, sin borde) */
-div[data-baseweb="select"] > div,
+/* Aplicar a Multiselect y Selectbox en reposo */
 [data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+[data-testid="stMultiSelect"] div[data-baseweb="select"],
+[data-testid="stSelectbox"] div[data-baseweb="select"] {
     background-color: #F1F5F9 !important;
+    background: #F1F5F9 !important;
     border: none !important;
-    border-radius: 8px !important;
     box-shadow: none !important;
+    outline: none !important;
     min-height: 42px !important;
-    transition: background-color 0.2s ease !important;
 }
 
-/* Efecto muy sutil al pasar el ratón (Gris un tono más oscuro) */
-div[data-baseweb="select"] > div:hover,
+/* ANULAR EL BORDE VERDE NATIVO DE STREAMLIT AL HACER CLIC (Focus/Hover) */
 [data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover,
+[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:focus-within,
+[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
+[data-testid="stMultiSelect"] div[data-baseweb="select"]:focus-within,
+[data-testid="stSelectbox"] div[data-baseweb="select"]:focus-within {
     background-color: #E2E8F0 !important;
     border: none !important;
     box-shadow: none !important;
+    outline: none !important;
 }
 
 /* ==========================================
-   3. TEXTOS Y TÍTULOS LIMPIOS
+   3. DESTRUIR PASTILLAS VERDES (Tags Transparentes)
    ========================================== */
-/* Títulos de los Segmentadores */
-label[data-testid="stWidgetLabel"] p,
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stMultiSelect"] label p {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* Texto de opciones dentro del cajón */
-div[data-baseweb="select"] span {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* ==========================================
-   4. PASTILLAS INVISIBLES EN EL MULTISELECT
-   ========================================== */
-/* Las pastillas seleccionadas se vuelven totalmente transparentes para simular texto normal */
-[data-baseweb="tag"],
+/* Hacer la pastilla 100% invisible */
+[data-testid="stMultiSelect"] [data-baseweb="tag"],
+[data-testid="stMultiSelect"] [data-baseweb="tag"] > span,
 [data-testid="stMultiSelectTag"] {
     background-color: transparent !important;
     background: transparent !important;
@@ -86,21 +71,44 @@ div[data-baseweb="select"] span {
     padding-left: 0px !important;
 }
 
-/* Texto de la pastilla oscuro */
-[data-baseweb="tag"] span,
+/* Texto de la selección en oscuro y nítido */
+[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
 [data-testid="stMultiSelectTag"] span {
     color: #0F172A !important;
     font-size: 18px !important;
     font-weight: 700 !important;
+    font-family: 'Agency FB', sans-serif !important;
 }
 
-/* Ocultar la Cruz (X) para mantener el diseño limpio */
-[data-baseweb="tag"] svg,
-[data-testid="stMultiSelectTag"] svg,
-[data-baseweb="tag"] button {
+/* Ocultar la Cruz (X) y el botón de borrado */
+[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
+[data-testid="stMultiSelect"] [data-baseweb="tag"] button,
+[data-testid="stMultiSelectTag"] svg {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
+    opacity: 0 !important;
+}
+
+/* ==========================================
+   4. TÍTULOS Y TEXTOS (Selectbox y Multiselect)
+   ========================================== */
+[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+[data-testid="stSelectbox"] div[data-baseweb="select"] div {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+[data-testid="stSelectbox"] label p,
+[data-testid="stSelectbox"] label,
+[data-testid="stMultiSelect"] label p,
+[data-testid="stMultiSelect"] label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
 }
 
 /* ==========================================
