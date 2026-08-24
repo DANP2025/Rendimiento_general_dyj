@@ -10,8 +10,8 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
-# Inyección de estilos con la API moderna st.html (con fallback seguro)
-css_code = """
+# Inyección de estilos CSS puro
+st.markdown("""
 <style>
 /* 1. CONFIGURACIÓN GLOBAL Y TIPOGRAFÍA */
 html, body, [class*="st-"] {
@@ -26,24 +26,23 @@ header[data-testid="stHeader"] {
     scroll-behavior: smooth !important;
 }
 
-/* 2. TÍTULOS Y PESTAÑAS UNIFICADOS A 22PX EN NEGRITA */
-/* Títulos de los 7 segmentadores (Categoría, Mes, Tipo de Gráfico, etc.) */
+/* 2. PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES A 22PX EN NEGRITA */
+/* 3. TÍTULOS DE LOS 7 SEGMENTADORES UNIFICADOS A 22PX */
 div[data-testid="stWidgetLabel"] p,
 div[data-testid="stWidgetLabel"] label,
-div[data-testid="stMultiSelect"] label p,
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stRadio"] label p {
+.stMultiSelect label p,
+.stSelectbox label p,
+.stRadio label p {
     font-size: 22px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
     color: #0F172A !important;
 }
 
-/* Pestañas (Métricas y Z-Score) a 22px */
+button[data-baseweb="tab"],
 button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] span,
 button[data-baseweb="tab"] div,
-button[data-baseweb="tab"] {
+button[data-baseweb="tab"] span {
     font-size: 22px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
@@ -54,28 +53,33 @@ button[data-baseweb="tab"][aria-selected="true"] {
     border-bottom-color: #2E7D32 !important;
 }
 
-/* 3. BORDES DEFINIDOS EN LOS 7 CAJONES (SUPERIORES E INFERIORES) */
-div[data-baseweb="select"] {
-    border: 2px solid #CBD5E1 !important; /* BORDE VISIBLE DE 2PX */
+/* 4. LOS 7 CAJONES CON BORDE VERDE INSTITUCIONAL (2PX) Y FONDO BLANCO */
+.stMultiSelect [data-baseweb="select"] > div,
+.stSelectbox [data-baseweb="select"] > div,
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div,
+div[data-baseweb="select"] > div {
+    border: 2px solid #2E7D32 !important;
     border-radius: 8px !important;
-    background-color: #F8FAFC !important; /* Fondo gris claro sutil */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    transition: all 0.2s ease-in-out !important;
+    background-color: #FFFFFF !important;
+    min-height: 44px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
 }
 
-div[data-baseweb="select"]:hover,
-div[data-baseweb="select"]:focus-within {
-    border-color: #2E7D32 !important; /* Realce verde al interactuar */
-    box-shadow: 0 0 0 1px #2E7D32 !important;
+.stMultiSelect [data-baseweb="select"] > div:hover,
+.stSelectbox [data-baseweb="select"] > div:hover,
+div[data-baseweb="select"] > div:focus-within {
+    border-color: #1B5E20 !important;
+    box-shadow: 0 0 0 1px #1B5E20 !important;
 }
 
 div[data-baseweb="select"] > div {
     background-color: transparent !important;
     border: none !important;
-    min-height: 42px !important;
+    min-height: 44px !important;
 }
 
-/* 4. OPCIONES INTERNAS A 20PX */
+/* 5. TEXTO INTERIOR DE LOS SELECTORES A 20PX */
 div[data-baseweb="select"] span,
 div[data-baseweb="select"] div,
 div[data-testid="stRadio"] div[role="radiogroup"] label p {
@@ -85,14 +89,14 @@ div[data-testid="stRadio"] div[role="radiogroup"] label p {
     color: #0F172A !important;
 }
 
-/* 5. ELIMINAR EL RELLENO VERDE DE LAS PASTILLAS (TRANSPARENCIA TOTAL) */
+/* 6. ERRADICAR EL FONDO VERDE DE LAS PASTILLAS (TRANSPARENCIA TOTAL) */
 [data-baseweb="tag"],
 [data-testid="stMultiSelectTag"] {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding: 0 !important;
+    padding: 0px 4px !important;
 }
 
 [data-baseweb="tag"] span,
@@ -117,7 +121,7 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     border-color: #2E7D32 !important;
 }
 
-/* 7. BOTÓN FLOTANTE */
+/* 7. ESTILOS DEL BOTÓN FLOTANTE */
 .btn-flotante-arriba {
     position: fixed !important;
     bottom: 75px !important;
@@ -135,6 +139,8 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease-in-out !important;
 }
 .btn-flotante-arriba:hover {
     background-color: #1B5E20 !important;
@@ -142,18 +148,13 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     color: #FFFFFF !important;
 }
 </style>
+""", unsafe_allow_html=True)
 
-<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>
-<a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\\'stAppViewContainer\\']')?.scrollTo({top: 0, behavior: 'smooth'});">
-    ⬆ Subir a Filtros
-</a>
-"""
+# Ancla al inicio absoluto
+st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
 
-# Inyección segura con st.html o fallback st.markdown
-try:
-    st.html(css_code)
-except AttributeError:
-    st.markdown(css_code, unsafe_allow_html=True)
+# Botón flotante
+st.markdown('<a href="#inicio-pagina" class="btn-flotante-arriba">⬆ Subir a Filtros</a>', unsafe_allow_html=True)
 
 # Definición de la Lista Maestra de Métricas (Global)
 METRICAS_ESPERADAS = [
