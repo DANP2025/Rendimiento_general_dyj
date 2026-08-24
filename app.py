@@ -13,128 +13,103 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 # Bloque maestro de estilos unificado
 st.markdown("""
 <style>
-/* 1. TIPOGRAFÍA GLOBAL Y SCROLL */
+/* 1. TIPOGRAFÍA Y SCROLL BASE */
 html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important;
 }
-
 header[data-testid="stHeader"] {
     display: none !important;
 }
-
 [data-testid="stAppViewContainer"] {
     overflow-y: auto !important;
     overflow-x: hidden !important;
     scroll-behavior: smooth !important;
 }
 
-/* 2. TEXTO BLANCO RESTAURADO EN LAS ETIQUETAS VERDES (TODAS / TODOS) */
+/* 2. BORDES VERDES INSTITUCIONALES PARA LOS 7 SEGMENTADORES (Infalible) */
+/* Atacamos directamente a la clase base de Streamlit para el selectbox y multiselect */
+.stSelectbox [data-baseweb="select"] > div,
+.stMultiSelect [data-baseweb="select"] > div {
+    border: 2px solid #2E7D32 !important;
+    border-radius: 8px !important;
+    background-color: #FFFFFF !important;
+    min-height: 42px !important;
+}
+
+/* Efecto Hover y Focus (Para que el borde no desaparezca al hacer clic) */
+.stSelectbox [data-baseweb="select"] > div:hover,
+.stMultiSelect [data-baseweb="select"] > div:hover,
+.stSelectbox [data-baseweb="select"] > div:focus-within,
+.stMultiSelect [data-baseweb="select"] > div:focus-within {
+    border: 2px solid #1B5E20 !important;
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.5) !important;
+}
+
+/* 3. TEXTO DE LOS SEGMENTADORES */
+.stSelectbox [data-baseweb="select"] span,
+.stSelectbox [data-baseweb="select"] div,
+.stMultiSelect [data-baseweb="select"] span,
+.stMultiSelect [data-baseweb="select"] div {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* 4. TÍTULOS DE LOS SEGMENTADORES (Categoría, Mes, etc.) */
+.stSelectbox label p,
+.stSelectbox label,
+.stMultiSelect label p,
+.stMultiSelect label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* 5. ETIQUETAS VERDES (PASTILLAS) DENTRO DEL MULTISELECT */
 [data-baseweb="tag"],
-[data-testid="stMultiSelectTag"],
-.stMultiSelect [data-baseweb="tag"] {
+[data-testid="stMultiSelectTag"] {
     background-color: #2E7D32 !important;
     border: none !important;
     border-radius: 6px !important;
 }
-
 [data-baseweb="tag"] span,
-[data-testid="stMultiSelectTag"] span,
-.stMultiSelect [data-baseweb="tag"] span {
+[data-testid="stMultiSelectTag"] span {
     color: #FFFFFF !important;
     font-size: 16px !important;
     font-weight: 800 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
-
 [data-baseweb="tag"] svg,
 [data-testid="stMultiSelectTag"] svg {
     fill: #FFFFFF !important;
     color: #FFFFFF !important;
 }
 
-/* ==========================================================================
-   MARCOS VERDES INSTITUCIONALES PARA LOS 7 SEGMENTADORES (Filtros)
-   ========================================================================== */
-/* Forzar Borde Verde de 2px a todos los contenedores de selección */
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] > div {
-    border: 2px solid #2E7D32 !important;
-    border-radius: 8px !important;
-    background-color: #FFFFFF !important;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
-    min-height: 42px !important;
-    transition: all 0.3s ease !important;
-}
-
-/* Efecto de iluminación al pasar el ratón (Hover) */
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
-    border-color: #1B5E20 !important;
-    box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important;
-}
-
-/* Mantener el color oscuro y tamaño de letra adentro de la caja */
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] span,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] span,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] div {
-    color: #0F172A !important;
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-}
-
-/* Mantener etiquetas/pastillas verdes con texto blanco adentro del multiselect */
-html body [data-baseweb="tag"],
-html body [data-testid="stMultiSelectTag"] {
-    background-color: #2E7D32 !important;
-    border: none !important;
-}
-html body [data-baseweb="tag"] span,
-html body [data-testid="stMultiSelectTag"] span {
-    color: #FFFFFF !important;
-}
-html body [data-baseweb="tag"] svg {
-    fill: #FFFFFF !important;
-}
-
-/* 5. TÍTULOS DE TODOS LOS FILTROS UNIFICADOS */
-[data-testid="stSelectbox"] label p,
-[data-testid="stSelectbox"] label,
-[data-testid="stMultiSelect"] label p,
-[data-testid="stMultiSelect"] label {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* 6. PESTAÑAS (TABS) Y RADIO BUTTONS */
+/* 6. TABS Y RADIO BUTTONS (Z-Score) */
 button[data-baseweb="tab"] p,
 button[data-baseweb="tab"] {
     font-size: 20px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
 }
-
 button[data-baseweb="tab"][aria-selected="true"] {
     color: #2E7D32 !important;
     border-bottom-color: #2E7D32 !important;
 }
-
-div[data-testid="stRadio"] label p,
-div[data-testid="stRadio"] div[role="radiogroup"] label p {
+div[data-testid="stRadio"] label p {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
-
 div[data-testid="stRadio"] input[type="radio"]:checked + div {
-    border-color: #2E7D32 !important;
     background-color: #2E7D32 !important;
+    border-color: #2E7D32 !important;
 }
 
-/* 7. BOTÓN FLOTANTE 'SUBIR A FILTROS' */
+/* 7. BOTÓN FLOTANTE */
 .btn-flotante-arriba {
     position: fixed !important;
     bottom: 75px !important;
@@ -152,14 +127,11 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
-    cursor: pointer !important;
     transition: all 0.2s ease-in-out !important;
 }
-
 .btn-flotante-arriba:hover {
     background-color: #1B5E20 !important;
     transform: translateY(-3px) !important;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
     color: #FFFFFF !important;
 }
 </style>
