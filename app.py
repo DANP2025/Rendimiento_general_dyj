@@ -10,25 +10,139 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
-# Inyección de estilos CSS compacto
+# Inyección de estilos CSS maestro
 st.markdown("""<style>
+/* 1. TIPOGRAFÍA GLOBAL Y SCROLL */
 * { font-family: 'Agency FB', sans-serif !important; }
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
-div[data-testid="stTabs"] button p, [data-baseweb="tab"] p, [data-baseweb="tab"] div, [data-baseweb="tab"] span, [data-baseweb="tab"] { font-size: 22px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 800 !important; letter-spacing: 0.5px !important; }
-div[data-testid="stTabs"] button[aria-selected="true"] p, [data-baseweb="tab"][aria-selected="true"] p { color: #2E7D32 !important; }
-div[data-testid="stTabs"] button[aria-selected="true"] { border-bottom: 3px solid #2E7D32 !important; }
-[data-testid="stWidgetLabel"] p, label p, .stMultiSelect label p, .stSelectbox label p, .stRadio label p { font-size: 22px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 800 !important; color: #0F172A !important; }
-[data-baseweb="select"] > div { border: 2px solid #2E7D32 !important; border-radius: 8px !important; background-color: #FFFFFF !important; min-height: 44px !important; box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; }
-[data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within { border-color: #1B5E20 !important; box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important; }
-[data-baseweb="select"] div, [data-baseweb="select"] span { font-size: 20px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 700 !important; color: #0F172A !important; }
-[data-baseweb="tag"], [data-baseweb="tag"] * { background-color: transparent !important; background: transparent !important; border: none !important; box-shadow: none !important; }
-[data-baseweb="tag"] span { color: #0F172A !important; font-size: 20px !important; font-weight: 800 !important; font-family: 'Agency FB', sans-serif !important; }
-[data-baseweb="tag"] svg, [data-baseweb="tag"] button { display: none !important; width: 0 !important; height: 0 !important; }
-[data-testid="stRadio"] div[role="radiogroup"] * { font-size: 20px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 700 !important; color: #0F172A !important; }
-[data-testid="stRadio"] input[type="radio"]:checked + div { background-color: #2E7D32 !important; border-color: #2E7D32 !important; }
-.btn-flotante-arriba { position: fixed !important; bottom: 75px !important; right: 20px !important; background-color: #2E7D32 !important; color: #FFFFFF !important; padding: 10px 20px !important; border-radius: 30px !important; font-family: 'Agency FB', sans-serif !important; font-size: 18px !important; font-weight: bold !important; text-decoration: none !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important; z-index: 999999 !important; display: flex !important; align-items: center !important; gap: 6px !important; transition: all 0.2s ease-in-out !important; }
-.btn-flotante-arriba:hover { background-color: #1B5E20 !important; transform: translateY(-3px) !important; color: #FFFFFF !important; }
+
+/* 2. PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES (24PX EN NEGRITA) */
+.stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p,
+.stTabs [data-baseweb="tab-list"] button p,
+.stTabs button p,
+button[data-baseweb="tab"] p {
+    font-size: 24px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+}
+
+.stTabs [data-baseweb="tab-list"] button[aria-selected="true"] [data-testid="stMarkdownContainer"] p,
+button[data-baseweb="tab"][aria-selected="true"] p {
+    color: #2E7D32 !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+    border-bottom: 3px solid #2E7D32 !important;
+}
+
+/* 3. TÍTULOS DE LOS 7 SEGMENTADORES (22PX EN NEGRITA) */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] label,
+.stMultiSelect label p,
+.stSelectbox label p,
+.stRadio label p {
+    font-size: 22px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
+}
+
+/* 4. LOS 7 CAJONES CON BORDE VERDE INSTITUCIONAL (2PX) Y FONDO BLANCO */
+[data-baseweb="select"] > div,
+.stMultiSelect [data-baseweb="select"] > div,
+.stSelectbox [data-baseweb="select"] > div {
+    border: 2px solid #2E7D32 !important;
+    border-radius: 8px !important;
+    background-color: #FFFFFF !important;
+    min-height: 44px !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+
+[data-baseweb="select"] > div:hover,
+[data-baseweb="select"] > div:focus-within {
+    border-color: #1B5E20 !important;
+    box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important;
+}
+
+/* 5. TEXTO INTERIOR DE LOS SELECTORES (20PX) */
+[data-baseweb="select"] div,
+[data-baseweb="select"] span,
+.stSelectbox div[data-baseweb="select"] span {
+    font-size: 20px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* 6. ERRADICAR EL FONDO VERDE DE LAS PASTILLAS (TRANSPARENCIA TOTAL) */
+span[data-baseweb="tag"],
+div[data-baseweb="tag"],
+.stMultiSelect span[data-baseweb="tag"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+span[data-baseweb="tag"] span,
+div[data-baseweb="tag"] span,
+.stMultiSelect span[data-baseweb="tag"] span {
+    color: #0F172A !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    font-family: 'Agency FB', sans-serif !important;
+}
+
+span[data-baseweb="tag"] svg,
+div[data-baseweb="tag"] svg,
+span[data-baseweb="tag"] button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* 7. RADIO BUTTONS Z-SCORE */
+[data-testid="stRadio"] div[role="radiogroup"] * {
+    font-size: 20px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+[data-testid="stRadio"] input[type="radio"]:checked + div {
+    background-color: #2E7D32 !important;
+    border-color: #2E7D32 !important;
+}
+
+/* 8. BOTÓN FLOTANTE */
+.btn-flotante-arriba {
+    position: fixed !important;
+    bottom: 75px !important;
+    right: 20px !important;
+    background-color: #2E7D32 !important;
+    color: #FFFFFF !important;
+    padding: 10px 20px !important;
+    border-radius: 30px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.btn-flotante-arriba:hover {
+    background-color: #1B5E20 !important;
+    transform: translateY(-3px) !important;
+    color: #FFFFFF !important;
+}
 </style>""", unsafe_allow_html=True)
 
 # Ancla al inicio absoluto
