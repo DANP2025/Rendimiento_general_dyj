@@ -10,170 +10,26 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
-# Inyección de estilos CSS puro
-st.markdown("""
-<style>
-/* ==========================================================================
-   1. TIPOGRAFÍA GLOBAL Y SCROLL
-   ========================================================================== */
-html, body, [class*="st-"] {
-    font-family: 'Agency FB', sans-serif !important;
-}
-
-header[data-testid="stHeader"] {
-    display: none !important;
-}
-
-[data-testid="stAppViewContainer"] {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    scroll-behavior: smooth !important;
-}
-
-/* ==========================================================================
-   2. PESTAÑAS GIGANTES (22PX EN NEGRITA CON VERDE INSTITUCIONAL)
-   ========================================================================== */
-div[data-testid="stTabs"] button p,
-button[data-baseweb="tab"] p,
-div[data-testid="stTabs"] button,
-button[data-baseweb="tab"] {
-    font-size: 22px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.5px !important;
-}
-
-/* Pestaña activa en Verde Institucional */
-div[data-testid="stTabs"] button[aria-selected="true"] p,
-button[data-baseweb="tab"][aria-selected="true"] p {
-    color: #2E7D32 !important;
-}
-
-div[data-testid="stTabs"] button[aria-selected="true"] {
-    border-bottom: 3px solid #2E7D32 !important;
-}
-
-/* ==========================================================================
-   3. TÍTULOS DE TODOS LOS SEGMENTADORES (22PX EN NEGRITA)
-   ========================================================================== */
-div[data-testid="stWidgetLabel"] p,
-div[data-testid="stWidgetLabel"] label,
-.stMultiSelect label p,
-.stSelectbox label p,
-.stRadio label p {
-    font-size: 22px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 800 !important;
-    color: #0F172A !important;
-}
-
-/* ==========================================================================
-   4. LOS 7 CAJONES: BORDE VERDE DE 2PX Y FONDO BLANCO PERMANENTE
-   ========================================================================== */
-.stMultiSelect [data-baseweb="select"] > div,
-.stSelectbox [data-baseweb="select"] > div,
-[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
-[data-testid="stSelectbox"] [data-baseweb="select"] > div,
-div[data-baseweb="select"] > div {
-    border-color: #2E7D32 !important;
-    border-width: 2px !important;
-    border-style: solid !important;
-    border-radius: 8px !important;
-    background-color: #FFFFFF !important;
-    min-height: 44px !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-}
-
-/* Hover y Focus */
-.stMultiSelect [data-baseweb="select"] > div:hover,
-.stSelectbox [data-baseweb="select"] > div:hover,
-div[data-baseweb="select"] > div:focus-within {
-    border-color: #1B5E20 !important;
-    box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important;
-}
-
-/* ==========================================
-   5. TEXTO INTERIOR DE LOS SELECTORES (20PX)
-   ========================================== */
-.stSelectbox div[data-baseweb="select"] span,
-.stSelectbox div[data-baseweb="select"] div,
-.stMultiSelect div[data-baseweb="select"] span,
-div[data-testid="stRadio"] div[role="radiogroup"] label p {
-    font-size: 20px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* ==========================================================================
-   6. ETIQUETAS DE MULTISELECT: GRIS SUAVE CON TEXTO OSCURO NÍTIDO (SIN X)
-   ========================================================================== */
-span[data-baseweb="tag"],
-div[data-baseweb="tag"],
-[data-testid="stMultiSelectTag"] {
-    background-color: #F1F5F9 !important; /* Fondo gris neutro suave */
-    border: 1px solid #CBD5E1 !important;
-    border-radius: 6px !important;
-}
-
-/* Forzar texto negro/oscuro legible en la etiqueta */
-span[data-baseweb="tag"] span,
-div[data-baseweb="tag"] span,
-[data-testid="stMultiSelectTag"] span {
-    color: #0F172A !important;
-    font-size: 18px !important;
-    font-weight: 800 !important;
-    font-family: 'Agency FB', sans-serif !important;
-}
-
-/* Ocultar la cruz (X) */
-span[data-baseweb="tag"] svg,
-div[data-baseweb="tag"] svg,
-span[data-baseweb="tag"] button,
-[data-testid="stMultiSelectTag"] svg {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-}
-
-/* ==========================================
-   7. RADIO BUTTONS Z-SCORE
-   ========================================== */
-div[data-testid="stRadio"] input[type="radio"]:checked + div {
-    background-color: #2E7D32 !important;
-    border-color: #2E7D32 !important;
-}
-
-/* ==========================================
-   8. BOTÓN FLOTANTE
-   ========================================== */
-.btn-flotante-arriba {
-    position: fixed !important;
-    bottom: 75px !important;
-    right: 20px !important;
-    background-color: #2E7D32 !important;
-    color: #FFFFFF !important;
-    padding: 10px 20px !important;
-    border-radius: 30px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-size: 18px !important;
-    font-weight: bold !important;
-    text-decoration: none !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-    z-index: 999999 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-.btn-flotante-arriba:hover {
-    background-color: #1B5E20 !important;
-    transform: translateY(-3px) !important;
-    color: #FFFFFF !important;
-}
-</style>
-""", unsafe_allow_html=True)
+# Inyección de estilos CSS compacto
+st.markdown("""<style>
+* { font-family: 'Agency FB', sans-serif !important; }
+header[data-testid="stHeader"] { display: none !important; }
+[data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
+div[data-testid="stTabs"] button p, [data-baseweb="tab"] p, [data-baseweb="tab"] div, [data-baseweb="tab"] span, [data-baseweb="tab"] { font-size: 22px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 800 !important; letter-spacing: 0.5px !important; }
+div[data-testid="stTabs"] button[aria-selected="true"] p, [data-baseweb="tab"][aria-selected="true"] p { color: #2E7D32 !important; }
+div[data-testid="stTabs"] button[aria-selected="true"] { border-bottom: 3px solid #2E7D32 !important; }
+[data-testid="stWidgetLabel"] p, label p, .stMultiSelect label p, .stSelectbox label p, .stRadio label p { font-size: 22px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 800 !important; color: #0F172A !important; }
+[data-baseweb="select"] > div { border: 2px solid #2E7D32 !important; border-radius: 8px !important; background-color: #FFFFFF !important; min-height: 44px !important; box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; }
+[data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within { border-color: #1B5E20 !important; box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important; }
+[data-baseweb="select"] div, [data-baseweb="select"] span { font-size: 20px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 700 !important; color: #0F172A !important; }
+[data-baseweb="tag"], [data-baseweb="tag"] * { background-color: transparent !important; background: transparent !important; border: none !important; box-shadow: none !important; }
+[data-baseweb="tag"] span { color: #0F172A !important; font-size: 20px !important; font-weight: 800 !important; font-family: 'Agency FB', sans-serif !important; }
+[data-baseweb="tag"] svg, [data-baseweb="tag"] button { display: none !important; width: 0 !important; height: 0 !important; }
+[data-testid="stRadio"] div[role="radiogroup"] * { font-size: 20px !important; font-family: 'Agency FB', sans-serif !important; font-weight: 700 !important; color: #0F172A !important; }
+[data-testid="stRadio"] input[type="radio"]:checked + div { background-color: #2E7D32 !important; border-color: #2E7D32 !important; }
+.btn-flotante-arriba { position: fixed !important; bottom: 75px !important; right: 20px !important; background-color: #2E7D32 !important; color: #FFFFFF !important; padding: 10px 20px !important; border-radius: 30px !important; font-family: 'Agency FB', sans-serif !important; font-size: 18px !important; font-weight: bold !important; text-decoration: none !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important; z-index: 999999 !important; display: flex !important; align-items: center !important; gap: 6px !important; transition: all 0.2s ease-in-out !important; }
+.btn-flotante-arriba:hover { background-color: #1B5E20 !important; transform: translateY(-3px) !important; color: #FFFFFF !important; }
+</style>""", unsafe_allow_html=True)
 
 # Ancla al inicio absoluto
 st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
@@ -353,26 +209,26 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
         col_tipo, col_eje1, col_eje2 = st.columns([1.2, 1.4, 1.4])
 
         with col_tipo:
-            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>Tipo de Gráfico</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>TIPO DE GRÁFICO</p>", unsafe_allow_html=True)
             tipo_grafico = st.selectbox(
-                "Tipo de Gráfico",
-                ["Gráfico de Barras Simple", "Gráfico Combinado (Barras y Líneas)"],
+                "TIPO DE GRÁFICO",
+                ["GRÁFICO DE BARRAS SIMPLE", "GRÁFICO COMBINADO (BARRAS Y LÍNEAS)"],
                 label_visibility="collapsed"
             )
 
-        if tipo_grafico == "Gráfico Combinado (Barras y Líneas)":
+        if tipo_grafico == "GRÁFICO COMBINADO (BARRAS Y LÍNEAS)":
             with col_eje1:
-                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>Métricas Eje Primario (Barras)</p>", unsafe_allow_html=True)
+                st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS EJE PRIMARIO (BARRAS)</p>", unsafe_allow_html=True)
                 metrica_primaria = st.selectbox("EJE PRIMARIO", metricas_disponibles, index=0, label_visibility="collapsed")
 
             with col_eje2:
-                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>Métricas Eje Secundario (Líneas)</p>", unsafe_allow_html=True)
+                st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS EJE SECUNDARIO (LÍNEAS)</p>", unsafe_allow_html=True)
                 idx_sec = 1 if len(metricas_disponibles) > 1 else 0
                 metrica_secundaria = st.selectbox("EJE SECUNDARIO", metricas_disponibles, index=idx_sec, label_visibility="collapsed")
 
             st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
         
-        if tipo_grafico == "Gráfico de Barras Simple":
+        if tipo_grafico == "GRÁFICO DE BARRAS SIMPLE":
             # Lógica actual: Gráficos de barras simples
             for metrica in metricas_seleccionadas:
                 if metrica in df.columns and columna_jugador in df.columns:
