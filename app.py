@@ -10,7 +10,6 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
-# Inyección de estilos CSS maestro
 st.markdown("""<style>
 /* 1. TIPOGRAFÍA GLOBAL Y SCROLL */
 * { font-family: 'Agency FB', sans-serif !important; }
@@ -21,7 +20,8 @@ header[data-testid="stHeader"] { display: none !important; }
 .stTabs [data-baseweb="tab-list"] button [data-testid="stMarkdownContainer"] p,
 .stTabs [data-baseweb="tab-list"] button p,
 .stTabs button p,
-button[data-baseweb="tab"] p {
+button[data-baseweb="tab"] p,
+button[data-baseweb="tab"] div {
     font-size: 24px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
@@ -37,9 +37,8 @@ button[data-baseweb="tab"][aria-selected="true"] {
     border-bottom: 3px solid #2E7D32 !important;
 }
 
-/* 3. TÍTULOS DE LOS 7 SEGMENTADORES (22PX EN NEGRITA) */
+/* 3. TÍTULOS DE SEGMENTADORES (22PX EN NEGRITA) */
 [data-testid="stWidgetLabel"] p,
-[data-testid="stWidgetLabel"] label,
 .stMultiSelect label p,
 .stSelectbox label p,
 .stRadio label p {
@@ -49,7 +48,7 @@ button[data-baseweb="tab"][aria-selected="true"] {
     color: #0F172A !important;
 }
 
-/* 4. LOS 7 CAJONES CON BORDE VERDE INSTITUCIONAL (2PX) Y FONDO BLANCO */
+/* 4. LOS 7 CAJONES CON BORDE VERDE (2PX) Y FONDO BLANCO */
 [data-baseweb="select"] > div,
 .stMultiSelect [data-baseweb="select"] > div,
 .stSelectbox [data-baseweb="select"] > div {
@@ -60,23 +59,16 @@ button[data-baseweb="tab"][aria-selected="true"] {
     box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
 }
 
-[data-baseweb="select"] > div:hover,
-[data-baseweb="select"] > div:focus-within {
-    border-color: #1B5E20 !important;
-    box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important;
-}
-
 /* 5. TEXTO INTERIOR DE LOS SELECTORES (20PX) */
 [data-baseweb="select"] div,
-[data-baseweb="select"] span,
-.stSelectbox div[data-baseweb="select"] span {
+[data-baseweb="select"] span {
     font-size: 20px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* 6. ERRADICAR EL FONDO VERDE DE LAS PASTILLAS (TRANSPARENCIA TOTAL) */
+/* 6. TRANSPARENCIA TOTAL EN LAS PASTILLAS */
 span[data-baseweb="tag"],
 div[data-baseweb="tag"],
 .stMultiSelect span[data-baseweb="tag"] {
@@ -88,8 +80,7 @@ div[data-baseweb="tag"],
 }
 
 span[data-baseweb="tag"] span,
-div[data-baseweb="tag"] span,
-.stMultiSelect span[data-baseweb="tag"] span {
+div[data-baseweb="tag"] span {
     color: #0F172A !important;
     font-size: 20px !important;
     font-weight: 800 !important;
@@ -97,24 +88,24 @@ div[data-baseweb="tag"] span,
 }
 
 span[data-baseweb="tag"] svg,
-div[data-baseweb="tag"] svg,
-span[data-baseweb="tag"] button {
+div[data-baseweb="tag"] svg {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
 
-/* 7. RADIO BUTTONS Z-SCORE */
-[data-testid="stRadio"] div[role="radiogroup"] * {
-    font-size: 20px !important;
+/* 7. TRADUCCIÓN DE 'Select all' A 'Seleccionar todo' EN EL MENÚ */
+div[role="listbox"] li:first-child span,
+ul[role="listbox"] li:first-child span {
+    font-size: 0px !important;
+}
+div[role="listbox"] li:first-child span::after,
+ul[role="listbox"] li:first-child span::after {
+    content: "Seleccionar todo" !important;
+    font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
-}
-
-[data-testid="stRadio"] input[type="radio"]:checked + div {
-    background-color: #2E7D32 !important;
-    border-color: #2E7D32 !important;
 }
 
 /* 8. BOTÓN FLOTANTE */
@@ -145,10 +136,7 @@ span[data-baseweb="tag"] button {
 }
 </style>""", unsafe_allow_html=True)
 
-# Ancla al inicio absoluto
 st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
-
-# Botón flotante
 st.markdown('<a href="#inicio-pagina" class="btn-flotante-arriba">⬆ Subir a Filtros</a>', unsafe_allow_html=True)
 
 # Definición de la Lista Maestra de Métricas (Global)
@@ -258,42 +246,38 @@ if df is not None and not df.empty:
         st.markdown('<div id="marcador-filtros"></div>', unsafe_allow_html=True)
 
         col_cat, col_mes, col_jug, col_met = st.columns(4)
-        df_cat = df
 
+        # 1. Categoría
         with col_cat:
-            if columna_categoria:
-                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>CATEGORÍA</p>", unsafe_allow_html=True)
-                opciones_cat = ['TODAS'] + sorted([str(x) for x in df[columna_categoria].dropna().unique()])
-                categoria_seleccionada = st.multiselect("CATEGORÍA", opciones_cat, default=['TODAS'], label_visibility="collapsed")
-                if 'TODAS' not in categoria_seleccionada and categoria_seleccionada:
-                    df_cat = df[df[columna_categoria].astype(str).isin(categoria_seleccionada)]
-                df = df_cat
-    
-        df_mes = df_cat
+            st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>CATEGORÍA</p>", unsafe_allow_html=True)
+            opciones_cat = sorted([str(x) for x in df['Categoría'].dropna().unique()])
+            sel_cat = st.multiselect("CATEGORÍA", opciones_cat, default=[], label_visibility="collapsed")
+
+        df_cat = df if (not sel_cat or len(sel_cat) == len(opciones_cat)) else df[df['Categoría'].isin(sel_cat)]
+
+        # 2. Mes de registro
         with col_mes:
-            if columna_mes:
-                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MES DE REGISTRO</p>", unsafe_allow_html=True)
-                opciones_mes = ['TODOS'] + sorted([str(x) for x in df_cat[columna_mes].dropna().unique()])
-                mes_seleccionado = st.multiselect("MES DE REGISTRO", opciones_mes, default=['TODOS'], label_visibility="collapsed")
-                if 'TODOS' not in mes_seleccionado and mes_seleccionado:
-                    df_mes = df_cat[df_cat[columna_mes].astype(str).isin(mes_seleccionado)]
-                df = df_mes
-    
-        df_filtrado = df_mes
+            st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>MES DE REGISTRO</p>", unsafe_allow_html=True)
+            opciones_mes = sorted([str(x) for x in df_cat['Mes de registro'].dropna().unique()])
+            sel_mes = st.multiselect("MES DE REGISTRO", opciones_mes, default=[], label_visibility="collapsed")
+
+        df_mes = df_cat if (not sel_mes or len(sel_mes) == len(opciones_mes)) else df_cat[df_cat['Mes de registro'].isin(sel_mes)]
+
+        # 3. Futbolista
         with col_jug:
-            if columna_jugador:
-                st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>FUTBOLISTA</p>", unsafe_allow_html=True)
-                opciones_jug = ['TODOS'] + sorted([str(x) for x in df_mes[columna_jugador].dropna().unique()])
-                jugadores_seleccionados = st.multiselect("FUTBOLISTA", opciones_jug, default=['TODOS'], label_visibility="collapsed")
-                if 'TODOS' not in jugadores_seleccionados and jugadores_seleccionados:
-                    df_filtrado = df_mes[df_mes[columna_jugador].astype(str).isin(jugadores_seleccionados)]
-                df = df_filtrado
-    
+            st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>FUTBOLISTA</p>", unsafe_allow_html=True)
+            opciones_jug = sorted([str(x) for x in df_mes['Futbolista'].dropna().unique()])
+            sel_jug = st.multiselect("FUTBOLISTA", opciones_jug, default=[], label_visibility="collapsed")
+
+        df_filtrado = df_mes if (not sel_jug or len(sel_jug) == len(opciones_jug)) else df_mes[df_mes['Futbolista'].isin(sel_jug)]
+
+        # 4. Métricas de Rendimiento
         with col_met:
-            st.markdown("<p style='font-family: Agency FB; font-size: 18px; font-weight: 700; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS DE RENDIMIENTO</p>", unsafe_allow_html=True)
-            opciones_met = ['TODAS'] + metricas_disponibles
-            sel_met = st.multiselect("MÉTRICAS DE RENDIMIENTO", opciones_met, default=['TODAS'], label_visibility="collapsed")
-            metricas_seleccionadas = metricas_disponibles if ('TODAS' in sel_met or not sel_met) else [m for m in sel_met if m in metricas_disponibles]
+            st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS DE RENDIMIENTO</p>", unsafe_allow_html=True)
+            metricas_disponibles = [m for m in METRICAS_ESPERADAS if m in df.columns]
+            sel_met = st.multiselect("MÉTRICAS DE RENDIMIENTO", metricas_disponibles, default=[], label_visibility="collapsed")
+
+        metricas_seleccionadas = metricas_disponibles if (not sel_met or len(sel_met) == len(metricas_disponibles)) else sel_met
     
     st.markdown("---")
     
@@ -319,9 +303,8 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
     
     # PESTAÑA 1: MÉTRICAS - Motor de Doble Eje
     with tab1:
-        # Selector de tipo y ejes en una sola fila.
         col_tipo, col_eje1, col_eje2 = st.columns([1.2, 1.4, 1.4])
-
+    
         with col_tipo:
             st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>TIPO DE GRÁFICO</p>", unsafe_allow_html=True)
             tipo_grafico = st.selectbox(
@@ -329,18 +312,16 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                 ["GRÁFICO DE BARRAS SIMPLE", "GRÁFICO COMBINADO (BARRAS Y LÍNEAS)"],
                 label_visibility="collapsed"
             )
-
+    
         if tipo_grafico == "GRÁFICO COMBINADO (BARRAS Y LÍNEAS)":
             with col_eje1:
                 st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS EJE PRIMARIO (BARRAS)</p>", unsafe_allow_html=True)
                 metrica_primaria = st.selectbox("EJE PRIMARIO", metricas_disponibles, index=0, label_visibility="collapsed")
-
+                
             with col_eje2:
                 st.markdown("<p style='font-family: Agency FB; font-size: 22px; font-weight: 800; color: #0F172A; margin-bottom: 2px;'>MÉTRICAS EJE SECUNDARIO (LÍNEAS)</p>", unsafe_allow_html=True)
                 idx_sec = 1 if len(metricas_disponibles) > 1 else 0
                 metrica_secundaria = st.selectbox("EJE SECUNDARIO", metricas_disponibles, index=idx_sec, label_visibility="collapsed")
-
-            st.markdown("<div style='margin-bottom: 20px;'></div>", unsafe_allow_html=True)
         
         if tipo_grafico == "GRÁFICO DE BARRAS SIMPLE":
             # Lógica actual: Gráficos de barras simples
