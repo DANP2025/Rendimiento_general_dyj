@@ -13,9 +13,9 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 # Bloque maestro de estilos unificado
 st.markdown("""
 <style>
-/* ==========================================================================
-   1. SCROLL Y TIPOGRAFÍA BASE
-   ========================================================================== */
+/* ==========================================
+   1. CONFIGURACIÓN GLOBAL Y SCROLL
+   ========================================== */
 html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important;
 }
@@ -29,109 +29,103 @@ header[data-testid="stHeader"] {
 }
 
 /* ==========================================
-   2. MARCOS VISIBLES Y CAJAS EN LOS 7 SELECTORES (SUPERIORES E INFERIORES)
+   2. UNIFICACIÓN DE TÍTULOS (22px) Y OPCIONES (20px)
    ========================================== */
-.stMultiSelect [data-baseweb="select"] > div,
-.stSelectbox [data-baseweb="select"] > div,
-[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
-[data-testid="stSelectbox"] [data-baseweb="select"] > div {
-    background-color: #F8FAFC !important;
-    border: 1.5px solid #CBD5E1 !important;
-    border-radius: 8px !important;
-    min-height: 42px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-/* Efecto Hover: se ilumina en verde institucional al pasar el ratón */
-.stMultiSelect [data-baseweb="select"] > div:hover,
-.stSelectbox [data-baseweb="select"] > div:hover,
-[data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
-[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
-    border-color: #2E7D32 !important;
-    box-shadow: 0 0 0 1px #2E7D32 !important;
-}
-
-/* ==========================================
-   3. ERRADICAR EL FONDO VERDE DE LOS TAGS (TRANSPARENCIA TOTAL)
-   ========================================== */
-span[data-baseweb="tag"],
-div[data-baseweb="tag"],
-.stMultiSelect [data-baseweb="tag"] {
-    background-color: transparent !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0px 4px !important;
-}
-
-/* Texto de la opción seleccionada (TODAS / TODOS) en negro nítido */
-span[data-baseweb="tag"] span,
-div[data-baseweb="tag"] span,
-.stMultiSelect [data-baseweb="tag"] span {
-    color: #0F172A !important;
-    font-size: 18px !important;
-    font-weight: 700 !important;
-    font-family: 'Agency FB', sans-serif !important;
-}
-
-/* Ocultar la Cruz (X) y el botón de borrado */
-span[data-baseweb="tag"] svg,
-div[data-baseweb="tag"] svg,
-span[data-baseweb="tag"] button {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-}
-
-/* ==========================================
-   4. TEXTOS Y TÍTULOS DE LOS 7 SELECTORES (18PX)
-   ========================================== */
-.stSelectbox div[data-baseweb="select"] span,
-.stSelectbox div[data-baseweb="select"] div {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-.stSelectbox label p,
-.stSelectbox label,
-.stMultiSelect label p,
-.stMultiSelect label {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* ==========================================
-    5. TABS Y RADIO BUTTONS (Z-Score)
-    ========================================== */
-button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] {
-    font-size: 20px !important;
+/* Títulos de los 7 Segmentadores (Categoría, Mes, Tipo de Gráfico, etc.) */
+div[data-testid="stMultiSelect"] label p,
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stRadio"] label p {
+    font-size: 22px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
+    color: #0F172A !important;
+}
+
+/* Opciones seleccionadas dentro de los cajones */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] div,
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] span,
+div[data-testid="stRadio"] div[role="radiogroup"] label p {
+    font-size: 20px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* ==========================================
+   3. PESTAÑAS - TABS (Igualadas a 22px)
+   ========================================== */
+button[data-baseweb="tab"] p,
+button[data-baseweb="tab"] span,
+button[data-baseweb="tab"] div {
+    font-size: 22px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
 }
 button[data-baseweb="tab"][aria-selected="true"] {
     color: #2E7D32 !important;
     border-bottom-color: #2E7D32 !important;
 }
-div[data-testid="stRadio"] label p {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
+
+/* ==========================================
+   4. BORDES DEFINIDOS PARA LOS 7 CAJONES
+   ========================================== */
+/* Atacar la raíz visible del selectbox y multiselect para forzar el marco */
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+    border: 2px solid #CBD5E1 !important; /* BORDE GRIS VISIBLE */
+    border-radius: 8px !important;
+    background-color: #F8FAFC !important; /* Fondo gris súper claro */
+    min-height: 45px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease-in-out !important;
 }
-div[data-testid="stRadio"] input[type="radio"]:checked + div {
-    background-color: #2E7D32 !important;
+
+/* Iluminación verde al interactuar */
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover,
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:focus-within,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within {
     border-color: #2E7D32 !important;
+    box-shadow: 0 0 0 1px #2E7D32 !important;
 }
 
 /* ==========================================
-    6. BOTÓN FLOTANTE 'SUBIR A FILTROS'
-    ========================================== */
+   5. ANIQUILACIÓN DEL FONDO VERDE EN LAS PASTILLAS
+   ========================================== */
+/* Transparencia total forzada desde html body */
+html body div[data-testid="stMultiSelect"] [data-baseweb="tag"],
+html body div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Texto de la pastilla negro y grande (20px) */
+html body div[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
+html body div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] span {
+    color: #0F172A !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    font-family: 'Agency FB', sans-serif !important;
+}
+
+/* Esconder definitivamente la cruz (X) */
+html body div[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
+html body div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] svg {
+    display: none !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* ==========================================
+   6. BOTÓN FLOTANTE (Subir)
+   ========================================== */
 .btn-flotante-arriba {
     position: fixed !important;
     bottom: 75px !important;
@@ -153,13 +147,12 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
 .btn-flotante-arriba:hover {
     background-color: #1B5E20 !important;
     transform: translateY(-3px) !important;
-    color: #FFFFFF !important;
 }
 </style>
 
 <!-- Ancla al inicio absoluto y Botón Flotante -->
 <div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>
-<a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
+<a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\\'stAppViewContainer\\']')?.scrollTo({top: 0, behavior: 'smooth'});">
     ⬆ Subir a Filtros
 </a>
 """, unsafe_allow_html=True)
