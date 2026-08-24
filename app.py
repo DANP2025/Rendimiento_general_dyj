@@ -29,40 +29,43 @@ header[data-testid="stHeader"] {
 }
 
 /* ==========================================
-   2. BORDES VERDES ABSOLUTOS (PROPIEDADES INDIVIDUALES EXPLICITAS)
+   2. ESTILO "FLAT DESIGN" (GRIS CLARO, SIN BORDES) PARA TODOS LOS SELECTORES
    ========================================== */
-div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-    background-color: #FFFFFF !important;
-    
-    /* Atacamos cada lado del borde individualmente para vencer a Streamlit */
-    border-top-color: #2E7D32 !important;
-    border-bottom-color: #2E7D32 !important;
-    border-left-color: #2E7D32 !important;
-    border-right-color: #2E7D32 !important;
-    
-    border-top-width: 2px !important;
-    border-bottom-width: 2px !important;
-    border-left-width: 2px !important;
-    border-right-width: 2px !important;
-    
-    border-style: solid !important;
+/* Cajas principales de los filtros (Fondo gris claro, sin borde) */
+div[data-baseweb="select"] > div,
+[data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
+[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+    background-color: #F1F5F9 !important;
+    border: none !important;
     border-radius: 8px !important;
+    box-shadow: none !important;
+    min-height: 42px !important;
+    transition: background-color 0.2s ease !important;
 }
 
-/* Efecto al pasar el ratón por la caja */
-div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
-    border-top-color: #1B5E20 !important;
-    border-bottom-color: #1B5E20 !important;
-    border-left-color: #1B5E20 !important;
-    border-right-color: #1B5E20 !important;
-    box-shadow: 0 0 8px rgba(46, 125, 50, 0.5) !important;
+/* Efecto muy sutil al pasar el ratón (Gris un tono más oscuro) */
+div[data-baseweb="select"] > div:hover,
+[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
+[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+    background-color: #E2E8F0 !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* ==========================================
-   3. TEXTOS Y TÍTULOS (GRANDES Y OSCUROS)
+   3. TEXTOS Y TÍTULOS LIMPIOS
    ========================================== */
+/* Títulos de los Segmentadores */
+label[data-testid="stWidgetLabel"] p,
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stMultiSelect"] label p {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* Texto de opciones dentro del cajón */
 div[data-baseweb="select"] span {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
@@ -70,32 +73,34 @@ div[data-baseweb="select"] span {
     color: #0F172A !important;
 }
 
-label[data-testid="stWidgetLabel"] p {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
 /* ==========================================
-   4. PASTILLAS VERDES EN EL MULTISELECT
+   4. PASTILLAS INVISIBLES EN EL MULTISELECT
    ========================================== */
+/* Las pastillas seleccionadas se vuelven totalmente transparentes para simular texto normal */
 [data-baseweb="tag"],
 [data-testid="stMultiSelectTag"] {
-    background-color: #2E7D32 !important;
+    background-color: transparent !important;
+    background: transparent !important;
     border: none !important;
-    border-radius: 6px !important;
+    box-shadow: none !important;
+    padding-left: 0px !important;
 }
+
+/* Texto de la pastilla oscuro */
 [data-baseweb="tag"] span,
 [data-testid="stMultiSelectTag"] span {
-    color: #FFFFFF !important;
-    font-size: 16px !important;
-    font-weight: 800 !important;
+    color: #0F172A !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
 }
+
+/* Ocultar la Cruz (X) para mantener el diseño limpio */
 [data-baseweb="tag"] svg,
-[data-testid="stMultiSelectTag"] svg {
-    fill: #FFFFFF !important;
-    color: #FFFFFF !important;
+[data-testid="stMultiSelectTag"] svg,
+[data-baseweb="tag"] button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 /* ==========================================
