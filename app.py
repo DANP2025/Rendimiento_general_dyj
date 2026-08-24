@@ -29,82 +29,67 @@ header[data-testid="stHeader"] {
 }
 
 /* ==========================================
-   2. CAJAS FLAT DESIGN (Gris Claro, Sin Bordes NUNCA)
+   2. CAJAS FLAT DESIGN (GRIS CLARO, CERO BORDES)
    ========================================== */
-/* Aplicar a Multiselect y Selectbox en reposo */
-[data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
-[data-testid="stMultiSelect"] div[data-baseweb="select"],
-[data-testid="stSelectbox"] div[data-baseweb="select"] {
-    background-color: #F1F5F9 !important;
-    background: #F1F5F9 !important;
-    border: none !important;
+/* Atacar directamente el contenedor del input en todos los selectores */
+div[data-testid="stMultiSelect"] > div > div > div,
+div[data-testid="stSelectbox"] > div > div > div,
+div[data-baseweb="select"] > div,
+div[data-baseweb="select"] {
+    background-color: #F1F5F9 !important; /* Gris claro sofisticado */
+    border: 0px solid transparent !important; /* CERO BORDES */
     box-shadow: none !important;
-    outline: none !important;
-    min-height: 42px !important;
+    border-radius: 8px !important;
 }
 
-/* ANULAR EL BORDE VERDE NATIVO DE STREAMLIT AL HACER CLIC (Focus/Hover) */
-[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover,
-[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:focus-within,
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
-[data-testid="stMultiSelect"] div[data-baseweb="select"]:focus-within,
-[data-testid="stSelectbox"] div[data-baseweb="select"]:focus-within {
-    background-color: #E2E8F0 !important;
-    border: none !important;
+/* Anular el borde verde al hacer clic (Focus/Hover) */
+div[data-testid="stMultiSelect"] > div > div > div:focus-within,
+div[data-testid="stSelectbox"] > div > div > div:focus-within,
+div[data-baseweb="select"] > div:focus-within,
+div[data-baseweb="select"]:focus-within,
+div[data-baseweb="select"] > div:hover {
+    background-color: #E2E8F0 !important; /* Gris ligeramente más oscuro */
+    border: 0px solid transparent !important; /* CERO BORDES */
     box-shadow: none !important;
     outline: none !important;
 }
 
 /* ==========================================
-   3. DESTRUIR PASTILLAS VERDES (Tags Transparentes)
+   3. DESTRUCCIÓN DE LAS PASTILLAS VERDES (Tags Transparentes)
    ========================================== */
-/* Hacer la pastilla 100% invisible */
-[data-testid="stMultiSelect"] [data-baseweb="tag"],
-[data-testid="stMultiSelect"] [data-baseweb="tag"] > span,
-[data-testid="stMultiSelectTag"] {
-    background-color: transparent !important;
+/* Convertir la pastilla en un texto flotante transparente */
+[data-testid="stMultiSelectTag"],
+[data-baseweb="tag"] {
+    background-color: rgba(0,0,0,0) !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding-left: 0px !important;
 }
 
-/* Texto de la selección en oscuro y nítido */
-[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
-[data-testid="stMultiSelectTag"] span {
+/* Texto de la selección (TODOS/TODAS) en negro absoluto */
+[data-testid="stMultiSelectTag"] span,
+[data-baseweb="tag"] span,
+div[data-baseweb="select"] span {
     color: #0F172A !important;
     font-size: 18px !important;
-    font-weight: 700 !important;
+    font-weight: 800 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
 
-/* Ocultar la Cruz (X) y el botón de borrado */
-[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
-[data-testid="stMultiSelect"] [data-baseweb="tag"] button,
-[data-testid="stMultiSelectTag"] svg {
+/* Esconder la Cruz (X) y el botón de borrado de la pastilla */
+[data-testid="stMultiSelectTag"] svg,
+[data-baseweb="tag"] svg,
+[data-testid="stMultiSelectTag"] button,
+[data-baseweb="tag"] button {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
-    opacity: 0 !important;
 }
 
 /* ==========================================
-   4. TÍTULOS Y TEXTOS (Selectbox y Multiselect)
+   4. TÍTULOS DE LOS FILTROS
    ========================================== */
-[data-testid="stSelectbox"] div[data-baseweb="select"] span,
-[data-testid="stSelectbox"] div[data-baseweb="select"] div {
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-[data-testid="stSelectbox"] label p,
-[data-testid="stSelectbox"] label,
-[data-testid="stMultiSelect"] label p,
-[data-testid="stMultiSelect"] label {
+label[data-testid="stWidgetLabel"] p {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
@@ -136,7 +121,7 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
 }
 
 /* ==========================================
-   6. BOTÓN FLOTANTE
+   6. BOTÓN FLOTANTE (SUBIR)
    ========================================== */
 .btn-flotante-arriba {
     position: fixed !important;
@@ -155,7 +140,6 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
-    transition: all 0.2s ease-in-out !important;
 }
 .btn-flotante-arriba:hover {
     background-color: #1B5E20 !important;
