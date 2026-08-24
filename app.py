@@ -52,31 +52,49 @@ header[data-testid="stHeader"] {
     color: #FFFFFF !important;
 }
 
-/* 3. BORDES ENMARCADOS EN TODOS LOS SELECTBOXES */
-[data-testid="stSelectbox"] [data-baseweb="select"],
-[data-testid="stMultiSelect"] [data-baseweb="select"] {
-    border: 1.5px solid #CBD5E1 !important;
+/* ==========================================================================
+   MARCOS VERDES INSTITUCIONALES PARA LOS 7 SEGMENTADORES (Filtros)
+   ========================================================================== */
+/* Forzar Borde Verde de 2px a todos los contenedores de selección */
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    border: 2px solid #2E7D32 !important;
     border-radius: 8px !important;
     background-color: #FFFFFF !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
     min-height: 42px !important;
-    transition: all 0.2s ease-in-out !important;
+    transition: all 0.3s ease !important;
 }
 
-/* Hover verde al pasar el ratón */
-[data-testid="stSelectbox"] [data-baseweb="select"]:hover,
-[data-testid="stMultiSelect"] [data-baseweb="select"]:hover {
-    border-color: #2E7D32 !important;
-    box-shadow: 0 0 0 1px #2E7D32 !important;
+/* Efecto de iluminación al pasar el ratón (Hover) */
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+    border-color: #1B5E20 !important;
+    box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important;
 }
 
-/* 4. TEXTO OSCURO INTERIOR PARA LOS SELECTBOX */
-[data-testid="stSelectbox"] div[data-baseweb="select"] span,
-[data-testid="stSelectbox"] div[data-baseweb="select"] div {
+/* Mantener el color oscuro y tamaño de letra adentro de la caja */
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] span,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] span,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] div {
+    color: #0F172A !important;
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
-    color: #0F172A !important;
+}
+
+/* Mantener etiquetas/pastillas verdes con texto blanco adentro del multiselect */
+html body [data-baseweb="tag"],
+html body [data-testid="stMultiSelectTag"] {
+    background-color: #2E7D32 !important;
+    border: none !important;
+}
+html body [data-baseweb="tag"] span,
+html body [data-testid="stMultiSelectTag"] span {
+    color: #FFFFFF !important;
+}
+html body [data-baseweb="tag"] svg {
+    fill: #FFFFFF !important;
 }
 
 /* 5. TÍTULOS DE TODOS LOS FILTROS UNIFICADOS */
