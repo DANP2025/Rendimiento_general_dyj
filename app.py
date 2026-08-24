@@ -29,29 +29,35 @@ header[data-testid="stHeader"] {
 }
 
 /* ==========================================
-   2. EL HACK DE LA RAÍZ (BORDES VERDES FIJOS)
+   2. BORDES VERDES ABSOLUTOS (PROPIEDADES INDIVIDUALES EXPLICITAS)
    ========================================== */
-/* Le damos el borde verde y fondo blanco al CONTENEDOR PADRE que no cambia de estado */
-div[data-baseweb="select"] {
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
     background-color: #FFFFFF !important;
-    border: 2px solid #2E7D32 !important;
+    
+    /* Atacamos cada lado del borde individualmente para vencer a Streamlit */
+    border-top-color: #2E7D32 !important;
+    border-bottom-color: #2E7D32 !important;
+    border-left-color: #2E7D32 !important;
+    border-right-color: #2E7D32 !important;
+    
+    border-top-width: 2px !important;
+    border-bottom-width: 2px !important;
+    border-left-width: 2px !important;
+    border-right-width: 2px !important;
+    
+    border-style: solid !important;
     border-radius: 8px !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
-    transition: all 0.3s ease !important;
 }
 
 /* Efecto al pasar el ratón por la caja */
-div[data-baseweb="select"]:hover {
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
+    border-top-color: #1B5E20 !important;
+    border-bottom-color: #1B5E20 !important;
+    border-left-color: #1B5E20 !important;
+    border-right-color: #1B5E20 !important;
     box-shadow: 0 0 8px rgba(46, 125, 50, 0.5) !important;
-}
-
-/* Hacemos 100% INVISIBLE al contenedor HIJO que Streamlit intenta pintar de gris */
-div[data-baseweb="select"] > div {
-    background-color: transparent !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    min-height: 42px !important;
 }
 
 /* ==========================================
