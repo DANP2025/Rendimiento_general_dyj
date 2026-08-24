@@ -14,53 +14,52 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 st.markdown("""
 <style>
 /* 1. TIPOGRAFÍA Y SCROLL BASE */
-html, body, [class*="st-"] {
+html body, html body [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important;
 }
-header[data-testid="stHeader"] {
+html body header[data-testid="stHeader"] {
     display: none !important;
 }
-[data-testid="stAppViewContainer"] {
+html body [data-testid="stAppViewContainer"] {
     overflow-y: auto !important;
     overflow-x: hidden !important;
     scroll-behavior: smooth !important;
 }
 
-/* 2. BORDES VERDES INSTITUCIONALES PARA LOS 7 SEGMENTADORES (Infalible) */
-/* Atacamos directamente a la clase base de Streamlit para el selectbox y multiselect */
-.stSelectbox [data-baseweb="select"] > div,
-.stMultiSelect [data-baseweb="select"] > div {
+/* 2. BORDES VERDES PERMANENTES PARA LOS 7 SEGMENTADORES (REPOSO Y FOCUS) */
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] > div {
     border: 2px solid #2E7D32 !important;
     border-radius: 8px !important;
     background-color: #FFFFFF !important;
     min-height: 42px !important;
 }
 
-/* Efecto Hover y Focus (Para que el borde no desaparezca al hacer clic) */
-.stSelectbox [data-baseweb="select"] > div:hover,
-.stMultiSelect [data-baseweb="select"] > div:hover,
-.stSelectbox [data-baseweb="select"] > div:focus-within,
-.stMultiSelect [data-baseweb="select"] > div:focus-within {
+/* Efecto al pasar el ratón o hacer clic */
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div:focus-within,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
     border: 2px solid #1B5E20 !important;
     box-shadow: 0 0 5px rgba(46, 125, 50, 0.5) !important;
 }
 
-/* 3. TEXTO DE LOS SEGMENTADORES */
-.stSelectbox [data-baseweb="select"] span,
-.stSelectbox [data-baseweb="select"] div,
-.stMultiSelect [data-baseweb="select"] span,
-.stMultiSelect [data-baseweb="select"] div {
+/* 3. TEXTO INTERIOR DE LOS SEGMENTADORES */
+html body [data-testid="stSelectbox"] [data-baseweb="select"] span,
+html body [data-testid="stSelectbox"] [data-baseweb="select"] div,
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] span,
+html body [data-testid="stMultiSelect"] [data-baseweb="select"] div {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* 4. TÍTULOS DE LOS SEGMENTADORES (Categoría, Mes, etc.) */
-.stSelectbox label p,
-.stSelectbox label,
-.stMultiSelect label p,
-.stMultiSelect label {
+/* 4. TÍTULOS SUPERIORES DE LOS SEGMENTADORES */
+html body [data-testid="stSelectbox"] label p,
+html body [data-testid="stSelectbox"] label,
+html body [data-testid="stMultiSelect"] label p,
+html body [data-testid="stMultiSelect"] label {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
@@ -68,43 +67,43 @@ header[data-testid="stHeader"] {
 }
 
 /* 5. ETIQUETAS VERDES (PASTILLAS) DENTRO DEL MULTISELECT */
-[data-baseweb="tag"],
-[data-testid="stMultiSelectTag"] {
+html body [data-baseweb="tag"],
+html body [data-testid="stMultiSelectTag"] {
     background-color: #2E7D32 !important;
     border: none !important;
     border-radius: 6px !important;
 }
-[data-baseweb="tag"] span,
-[data-testid="stMultiSelectTag"] span {
+html body [data-baseweb="tag"] span,
+html body [data-testid="stMultiSelectTag"] span {
     color: #FFFFFF !important;
     font-size: 16px !important;
     font-weight: 800 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
-[data-baseweb="tag"] svg,
-[data-testid="stMultiSelectTag"] svg {
+html body [data-baseweb="tag"] svg,
+html body [data-testid="stMultiSelectTag"] svg {
     fill: #FFFFFF !important;
     color: #FFFFFF !important;
 }
 
 /* 6. TABS Y RADIO BUTTONS (Z-Score) */
-button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] {
+html body button[data-baseweb="tab"] p,
+html body button[data-baseweb="tab"] {
     font-size: 20px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
 }
-button[data-baseweb="tab"][aria-selected="true"] {
+html body button[data-baseweb="tab"][aria-selected="true"] {
     color: #2E7D32 !important;
     border-bottom-color: #2E7D32 !important;
 }
-div[data-testid="stRadio"] label p {
+html body div[data-testid="stRadio"] label p {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
-div[data-testid="stRadio"] input[type="radio"]:checked + div {
+html body div[data-testid="stRadio"] input[type="radio"]:checked + div {
     background-color: #2E7D32 !important;
     border-color: #2E7D32 !important;
 }
