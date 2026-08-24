@@ -13,102 +13,112 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 # Bloque maestro de estilos unificado
 st.markdown("""
 <style>
-/* 1. TIPOGRAFÍA Y SCROLL BASE */
-html body, html body [class*="st-"] {
+/* ==========================================
+   1. SCROLL Y TIPOGRAFÍA
+   ========================================== */
+html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important;
 }
-html body header[data-testid="stHeader"] {
+header[data-testid="stHeader"] {
     display: none !important;
 }
-html body [data-testid="stAppViewContainer"] {
+[data-testid="stAppViewContainer"] {
     overflow-y: auto !important;
     overflow-x: hidden !important;
     scroll-behavior: smooth !important;
 }
 
-/* 2. BORDES VERDES PERMANENTES PARA LOS 7 SEGMENTADORES (REPOSO Y FOCUS) */
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] > div {
+/* ==========================================
+   2. EL HACK DE LA RAÍZ (BORDES VERDES FIJOS)
+   ========================================== */
+/* Le damos el borde verde y fondo blanco al CONTENEDOR PADRE que no cambia de estado */
+div[data-baseweb="select"] {
+    background-color: #FFFFFF !important;
     border: 2px solid #2E7D32 !important;
     border-radius: 8px !important;
-    background-color: #FFFFFF !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Efecto al pasar el ratón por la caja */
+div[data-baseweb="select"]:hover {
+    box-shadow: 0 0 8px rgba(46, 125, 50, 0.5) !important;
+}
+
+/* Hacemos 100% INVISIBLE al contenedor HIJO que Streamlit intenta pintar de gris */
+div[data-baseweb="select"] > div {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     min-height: 42px !important;
 }
 
-/* Efecto al pasar el ratón o hacer clic */
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] > div:focus-within,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within {
-    border: 2px solid #1B5E20 !important;
-    box-shadow: 0 0 5px rgba(46, 125, 50, 0.5) !important;
-}
-
-/* 3. TEXTO INTERIOR DE LOS SEGMENTADORES */
-html body [data-testid="stSelectbox"] [data-baseweb="select"] span,
-html body [data-testid="stSelectbox"] [data-baseweb="select"] div,
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] span,
-html body [data-testid="stMultiSelect"] [data-baseweb="select"] div {
+/* ==========================================
+   3. TEXTOS Y TÍTULOS (GRANDES Y OSCUROS)
+   ========================================== */
+div[data-baseweb="select"] span {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* 4. TÍTULOS SUPERIORES DE LOS SEGMENTADORES */
-html body [data-testid="stSelectbox"] label p,
-html body [data-testid="stSelectbox"] label,
-html body [data-testid="stMultiSelect"] label p,
-html body [data-testid="stMultiSelect"] label {
+label[data-testid="stWidgetLabel"] p {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* 5. ETIQUETAS VERDES (PASTILLAS) DENTRO DEL MULTISELECT */
-html body [data-baseweb="tag"],
-html body [data-testid="stMultiSelectTag"] {
+/* ==========================================
+   4. PASTILLAS VERDES EN EL MULTISELECT
+   ========================================== */
+[data-baseweb="tag"],
+[data-testid="stMultiSelectTag"] {
     background-color: #2E7D32 !important;
     border: none !important;
     border-radius: 6px !important;
 }
-html body [data-baseweb="tag"] span,
-html body [data-testid="stMultiSelectTag"] span {
+[data-baseweb="tag"] span,
+[data-testid="stMultiSelectTag"] span {
     color: #FFFFFF !important;
     font-size: 16px !important;
     font-weight: 800 !important;
-    font-family: 'Agency FB', sans-serif !important;
 }
-html body [data-baseweb="tag"] svg,
-html body [data-testid="stMultiSelectTag"] svg {
+[data-baseweb="tag"] svg,
+[data-testid="stMultiSelectTag"] svg {
     fill: #FFFFFF !important;
     color: #FFFFFF !important;
 }
 
-/* 6. TABS Y RADIO BUTTONS (Z-Score) */
-html body button[data-baseweb="tab"] p,
-html body button[data-baseweb="tab"] {
+/* ==========================================
+   5. TABS Y RADIO BUTTONS (Z-Score)
+   ========================================== */
+button[data-baseweb="tab"] p,
+button[data-baseweb="tab"] {
     font-size: 20px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 800 !important;
 }
-html body button[data-baseweb="tab"][aria-selected="true"] {
+button[data-baseweb="tab"][aria-selected="true"] {
     color: #2E7D32 !important;
     border-bottom-color: #2E7D32 !important;
 }
-html body div[data-testid="stRadio"] label p {
+div[data-testid="stRadio"] label p {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
-html body div[data-testid="stRadio"] input[type="radio"]:checked + div {
+div[data-testid="stRadio"] input[type="radio"]:checked + div {
     background-color: #2E7D32 !important;
     border-color: #2E7D32 !important;
 }
 
-/* 7. BOTÓN FLOTANTE */
+/* ==========================================
+   6. BOTÓN FLOTANTE
+   ========================================== */
 .btn-flotante-arriba {
     position: fixed !important;
     bottom: 75px !important;
@@ -138,7 +148,7 @@ html body div[data-testid="stRadio"] input[type="radio"]:checked + div {
 <!-- Ancla al inicio absoluto y Botón Flotante -->
 <div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>
 <a href="#inicio-pagina" class="btn-flotante-arriba" onclick="document.querySelector('[data-testid=\'stAppViewContainer\']')?.scrollTo({top: 0, behavior: 'smooth'});">
-    &#8593; Subir a Filtros
+    ⬆ Subir a Filtros
 </a>
 """, unsafe_allow_html=True)
 
