@@ -28,56 +28,47 @@ header[data-testid="stHeader"] {
     scroll-behavior: smooth !important;
 }
 
-/* ==========================================================================
-   2. CAJAS FLAT DESIGN GRIS CLARO PARA LOS 7 SELECTORES (SUPERIORES E INFERIORES)
-   ========================================================================== */
-/* Aplica el fondo gris claro a Multiselect y Selectbox sin bordes */
-div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
-div[data-testid="stMultiSelect"] div[data-baseweb="select"],
-div[data-testid="stSelectbox"] div[data-baseweb="select"],
-div[data-testid="stSelectbox"] div[role="combobox"] {
-    background-color: #F1F5F9 !important; /* Gris claro idéntico en los 7 cajones */
-    background: #F1F5F9 !important;
-    border: none !important;
+/* ==========================================
+   2. MARCOS VISIBLES Y CAJAS EN LOS 7 SELECTORES (SUPERIORES E INFERIORES)
+   ========================================== */
+.stMultiSelect [data-baseweb="select"] > div,
+.stSelectbox [data-baseweb="select"] > div,
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background-color: #F8FAFC !important;
+    border: 1.5px solid #CBD5E1 !important;
     border-radius: 8px !important;
-    box-shadow: none !important;
-    outline: none !important;
     min-height: 42px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.2s ease-in-out !important;
 }
 
-/* Anular cualquier borde verde al hacer clic o pasar el ratón (Hover/Focus) */
-div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover,
-div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:focus-within,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
-div[data-testid="stSelectbox"] div[data-baseweb="select"]:focus-within {
-    background-color: #E2E8F0 !important; /* Gris suave al interactuar */
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
+/* Efecto Hover: se ilumina en verde institucional al pasar el ratón */
+.stMultiSelect [data-baseweb="select"] > div:hover,
+.stSelectbox [data-baseweb="select"] > div:hover,
+[data-testid="stMultiSelect"] [data-baseweb="select"] > div:hover,
+[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+    border-color: #2E7D32 !important;
+    box-shadow: 0 0 0 1px #2E7D32 !important;
 }
 
-/* ==========================================================================
-   3. ELIMINAR EL RELLENO VERDE DE LAS PASTILLAS (Tags 100% Transparentes)
-   ========================================================================== */
-/* Eliminar fondo verde de las pastillas */
-div[data-testid="stMultiSelect"] [data-baseweb="tag"],
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
-[data-baseweb="tag"],
-[data-testid="stMultiSelectTag"] {
+/* ==========================================
+   3. ERRADICAR EL FONDO VERDE DE LOS TAGS (TRANSPARENCIA TOTAL)
+   ========================================== */
+span[data-baseweb="tag"],
+div[data-baseweb="tag"],
+.stMultiSelect [data-baseweb="tag"] {
     background-color: transparent !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    padding-left: 0px !important;
+    padding: 0px 4px !important;
 }
 
-/* Texto de la selección (TODAS / TODOS) en negro nítido */
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] span,
-[data-baseweb="tag"] span,
-[data-testid="stMultiSelectTag"] span {
+/* Texto de la opción seleccionada (TODAS / TODOS) en negro nítido */
+span[data-baseweb="tag"] span,
+div[data-baseweb="tag"] span,
+.stMultiSelect [data-baseweb="tag"] span {
     color: #0F172A !important;
     font-size: 18px !important;
     font-weight: 700 !important;
@@ -85,40 +76,38 @@ div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] span,
 }
 
 /* Ocultar la Cruz (X) y el botón de borrado */
-div[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
-div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] svg,
-[data-baseweb="tag"] svg,
-[data-testid="stMultiSelectTag"] svg,
-[data-baseweb="tag"] button {
+span[data-baseweb="tag"] svg,
+div[data-baseweb="tag"] svg,
+span[data-baseweb="tag"] button {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
 
-/* ==========================================================================
-   4. TÍTULOS Y TEXTOS DE LOS 7 SELECTORES (UNIFICADOS A 18PX)
-   ========================================================================== */
-div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
-div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
+/* ==========================================
+   4. TEXTOS Y TÍTULOS DE LOS 7 SELECTORES (18PX)
+   ========================================== */
+.stSelectbox div[data-baseweb="select"] span,
+.stSelectbox div[data-baseweb="select"] div {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-div[data-testid="stSelectbox"] label p,
-div[data-testid="stSelectbox"] label,
-div[data-testid="stMultiSelect"] label p,
-div[data-testid="stMultiSelect"] label {
+.stSelectbox label p,
+.stSelectbox label,
+.stMultiSelect label p,
+.stMultiSelect label {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* ==========================================================================
-   5. TABS Y RADIO BUTTONS (Z-Score)
-   ========================================================================== */
+/* ==========================================
+    5. TABS Y RADIO BUTTONS (Z-Score)
+    ========================================== */
 button[data-baseweb="tab"] p,
 button[data-baseweb="tab"] {
     font-size: 20px !important;
@@ -140,9 +129,9 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     border-color: #2E7D32 !important;
 }
 
-/* ==========================================================================
-   6. BOTÓN FLOTANTE 'SUBIR A FILTROS'
-   ========================================================================== */
+/* ==========================================
+    6. BOTÓN FLOTANTE 'SUBIR A FILTROS'
+    ========================================== */
 .btn-flotante-arriba {
     position: fixed !important;
     bottom: 75px !important;
@@ -160,7 +149,6 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
-    transition: all 0.2s ease-in-out !important;
 }
 .btn-flotante-arriba:hover {
     background-color: #1B5E20 !important;
