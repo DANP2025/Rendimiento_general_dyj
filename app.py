@@ -13,9 +13,9 @@ st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 # Bloque maestro de estilos unificado
 st.markdown("""
 <style>
-/* ==========================================
+/* ==========================================================================
    1. SCROLL Y TIPOGRAFÍA BASE
-   ========================================== */
+   ========================================================================== */
 html, body, [class*="st-"] {
     font-family: 'Agency FB', sans-serif !important;
 }
@@ -28,77 +28,97 @@ header[data-testid="stHeader"] {
     scroll-behavior: smooth !important;
 }
 
-/* ==========================================
-   2. CAJAS FLAT DESIGN (GRIS CLARO, CERO BORDES)
-   ========================================== */
-/* Atacar directamente el contenedor del input en todos los selectores */
-div[data-testid="stMultiSelect"] > div > div > div,
-div[data-testid="stSelectbox"] > div > div > div,
-div[data-baseweb="select"] > div,
-div[data-baseweb="select"] {
-    background-color: #F1F5F9 !important; /* Gris claro sofisticado */
-    border: 0px solid transparent !important; /* CERO BORDES */
-    box-shadow: none !important;
+/* ==========================================================================
+   2. CAJAS FLAT DESIGN GRIS CLARO PARA LOS 7 SELECTORES (SUPERIORES E INFERIORES)
+   ========================================================================== */
+/* Aplica el fondo gris claro a Multiselect y Selectbox sin bordes */
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+div[data-testid="stMultiSelect"] div[data-baseweb="select"],
+div[data-testid="stSelectbox"] div[data-baseweb="select"],
+div[data-testid="stSelectbox"] div[role="combobox"] {
+    background-color: #F1F5F9 !important; /* Gris claro idéntico en los 7 cajones */
+    background: #F1F5F9 !important;
+    border: none !important;
     border-radius: 8px !important;
+    box-shadow: none !important;
+    outline: none !important;
+    min-height: 42px !important;
 }
 
-/* Anular el borde verde al hacer clic (Focus/Hover) */
-div[data-testid="stMultiSelect"] > div > div > div:focus-within,
-div[data-testid="stSelectbox"] > div > div > div:focus-within,
-div[data-baseweb="select"] > div:focus-within,
-div[data-baseweb="select"]:focus-within,
-div[data-baseweb="select"] > div:hover {
-    background-color: #E2E8F0 !important; /* Gris ligeramente más oscuro */
-    border: 0px solid transparent !important; /* CERO BORDES */
+/* Anular cualquier borde verde al hacer clic o pasar el ratón (Hover/Focus) */
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:hover,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover,
+div[data-testid="stMultiSelect"] div[data-baseweb="select"] > div:focus-within,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
+div[data-testid="stSelectbox"] div[data-baseweb="select"]:focus-within {
+    background-color: #E2E8F0 !important; /* Gris suave al interactuar */
+    border: none !important;
     box-shadow: none !important;
     outline: none !important;
 }
 
-/* ==========================================
-   3. DESTRUCCIÓN DE LAS PASTILLAS VERDES (Tags Transparentes)
-   ========================================== */
-/* Convertir la pastilla en un texto flotante transparente */
-[data-testid="stMultiSelectTag"],
-[data-baseweb="tag"] {
-    background-color: rgba(0,0,0,0) !important;
+/* ==========================================================================
+   3. ELIMINAR EL RELLENO VERDE DE LAS PASTILLAS (Tags 100% Transparentes)
+   ========================================================================== */
+/* Eliminar fondo verde de las pastillas */
+div[data-testid="stMultiSelect"] [data-baseweb="tag"],
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"],
+[data-baseweb="tag"],
+[data-testid="stMultiSelectTag"] {
+    background-color: transparent !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
+    padding-left: 0px !important;
 }
 
-/* Texto de la selección (TODOS/TODAS) en negro absoluto */
-[data-testid="stMultiSelectTag"] span,
+/* Texto de la selección (TODAS / TODOS) en negro nítido */
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] span,
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] span,
 [data-baseweb="tag"] span,
-div[data-baseweb="select"] span {
+[data-testid="stMultiSelectTag"] span {
     color: #0F172A !important;
     font-size: 18px !important;
-    font-weight: 800 !important;
+    font-weight: 700 !important;
     font-family: 'Agency FB', sans-serif !important;
 }
 
-/* Esconder la Cruz (X) y el botón de borrado de la pastilla */
-[data-testid="stMultiSelectTag"] svg,
+/* Ocultar la Cruz (X) y el botón de borrado */
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] svg,
+div[data-testid="stMultiSelect"] [data-testid="stMultiSelectTag"] svg,
 [data-baseweb="tag"] svg,
-[data-testid="stMultiSelectTag"] button,
+[data-testid="stMultiSelectTag"] svg,
 [data-baseweb="tag"] button {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
 }
 
-/* ==========================================
-   4. TÍTULOS DE LOS FILTROS
-   ========================================== */
-label[data-testid="stWidgetLabel"] p {
+/* ==========================================================================
+   4. TÍTULOS Y TEXTOS DE LOS 7 SELECTORES (UNIFICADOS A 18PX)
+   ========================================================================== */
+div[data-testid="stSelectbox"] div[data-baseweb="select"] span,
+div[data-testid="stSelectbox"] div[data-baseweb="select"] div {
     font-size: 18px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 700 !important;
     color: #0F172A !important;
 }
 
-/* ==========================================
+div[data-testid="stSelectbox"] label p,
+div[data-testid="stSelectbox"] label,
+div[data-testid="stMultiSelect"] label p,
+div[data-testid="stMultiSelect"] label {
+    font-size: 18px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 700 !important;
+    color: #0F172A !important;
+}
+
+/* ==========================================================================
    5. TABS Y RADIO BUTTONS (Z-Score)
-   ========================================== */
+   ========================================================================== */
 button[data-baseweb="tab"] p,
 button[data-baseweb="tab"] {
     font-size: 20px !important;
@@ -120,9 +140,9 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     border-color: #2E7D32 !important;
 }
 
-/* ==========================================
-   6. BOTÓN FLOTANTE (SUBIR)
-   ========================================== */
+/* ==========================================================================
+   6. BOTÓN FLOTANTE 'SUBIR A FILTROS'
+   ========================================================================== */
 .btn-flotante-arriba {
     position: fixed !important;
     bottom: 75px !important;
@@ -140,6 +160,7 @@ div[data-testid="stRadio"] input[type="radio"]:checked + div {
     display: flex !important;
     align-items: center !important;
     gap: 6px !important;
+    transition: all 0.2s ease-in-out !important;
 }
 .btn-flotante-arriba:hover {
     background-color: #1B5E20 !important;
