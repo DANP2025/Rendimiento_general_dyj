@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
 import requests
+import unicodedata
+import time
 from io import StringIO
 
 # Configuración de Pantalla Completa (CRÍTICO)
@@ -153,6 +155,15 @@ METRICAS_ESPERADAS = [
     "Máx. ACC (m/s²)", "5m-10m-5m", "CMAS", "UNCa VFA (km/h)", "UNCa METROS"
 ]
 
+def normalizar_texto(texto):
+    """Elimina tildes, espacios y convierte a minúsculas para comparaciones seguras."""
+    if not isinstance(texto, str):
+        texto = str(texto)
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', texto)
+        if unicodedata.category(c) != 'Mn'
+    ).strip().lower()
+
 # Función de normalización de columnas
 def normalizar_columnas(df):
     """Normaliza los nombres de columnas para robustez"""
@@ -168,40 +179,59 @@ def limpiar_datos_grafico(df, columnas_valor):
     datos = df.replace([np.inf, -np.inf], np.nan).copy()
     return datos.dropna(subset=columnas_existentes, how='all')
 
+@st.cache_data(ttl=0)
+def cargar_datos():
+    sheet_id = "1PiZ_kV-z0L0qxqZN1W6Re7woWN-5dM82Q8vWCCS3L84"
+    gid = "1085591943"
+    url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}&t={int(time.time())}"
+    
+    # 1. Leer CSV limpiando caracteres BOM ocultos
+    df = pd.read_csv(url, encoding='utf-8-sig')
+    df.columns = df.columns.astype(str).str.strip()
+    
+    # 2. Mapeo inteligente y tolerante a fallos para Columnas Clave
+    mapeo_columnas = {}
+    for col in df.columns:
+        col_norm = normalizar_texto(col)
+        if col_norm in ['categoria', 'cat']:
+            mapeo_columnas[col] = 'Categoría'
+        elif col_norm in ['mes de registro', 'mes', 'mes registro', 'fecha', 'fecha de registro']:
+            mapeo_columnas[col] = 'Mes de registro'
+        elif col_norm in ['futbolista', 'jugador', 'nombre', 'atleta', 'apellido y nombre']:
+            mapeo_columnas[col] = 'Futbolista'
+            
+    df = df.rename(columns=mapeo_columnas)
+    
+    # Garantizar que las 3 columnas maestras existan sí o sí
+    if 'Categoría' not in df.columns:
+        df['Categoría'] = 'General'
+    if 'Mes de registro' not in df.columns:
+        df['Mes de registro'] = 'General'
+    if 'Futbolista' not in df.columns:
+        df['Futbolista'] = 'Atleta'
+        
+    # 3. Mapeo inteligente y limpieza de comas a puntos para METRICAS_ESPERADAS
+    columnas_csv_norm = {normalizar_texto(col): col for col in df.columns}
+    
+    for metrica in METRICAS_ESPERADAS:
+        metrica_norm = normalizar_texto(metrica)
+        if metrica_norm in columnas_csv_norm:
+            col_real = columnas_csv_norm[metrica_norm]
+            if col_real != metrica:
+                df = df.rename(columns={col_real: metrica})
+            # Convertir comas a puntos y forzar numérico
+            df[metrica] = df[metrica].astype(str).str.strip().str.replace(',', '.', regex=False)
+            df[metrica] = pd.to_numeric(df[metrica], errors='coerce')
+        else:
+            df[metrica] = np.nan
+        
+    return df
+
 # Función para cargar datos desde Google Sheets
 def cargar_datos_google_sheets(cache_buster=""):
     """Carga datos desde Google Sheets con manejo robusto de errores"""
-    url = (
-        "https://docs.google.com/spreadsheets/d/1PiZ_kV-z0L0qxqZN1W6Re7woWN-5dM82Q8vWCCS3L84/"
-        f"export?format=csv&gid=1085591943&_={cache_buster}"
-    )
-    
     try:
-        response = requests.get(
-            url,
-            headers={"Cache-Control": "no-cache", "Pragma": "no-cache"},
-            timeout=30
-        )
-        response.raise_for_status()
-        
-        df = pd.read_csv(StringIO(response.text))
-        
-        # Normalizar encabezados y convertir todas las métricas con locale español.
-        df.columns = df.columns.astype(str).str.strip()
-        for metrica in METRICAS_ESPERADAS:
-            if metrica in df.columns:
-                df[metrica] = (
-                    df[metrica]
-                    .astype(str)
-                    .str.strip()
-                    .str.replace(',', '.', regex=False)
-                )
-                df[metrica] = pd.to_numeric(df[metrica], errors='coerce')
-            else:
-                df[metrica] = np.nan
-        
-        return df
-    
+        return cargar_datos()
     except Exception as e:
         st.error(f"Error al cargar datos desde Google Sheets: {str(e)}")
         return None
