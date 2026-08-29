@@ -18,31 +18,29 @@ st.markdown("""<style>
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES (24PX EN NEGRITA) */
-[data-testid="stTabs"] button,
-[data-testid="stTabs"] button p,
-[data-testid="stTabs"] button div,
-[data-testid="stTabs"] button span,
-.stTabs [data-baseweb="tab-list"] button p,
-.stTabs button p,
-button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] {
-    font-size: 24px !important;
+/* ==========================================================================
+   PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES Y VISIBLES (26PX)
+   ========================================================================== */
+div[data-testid="stTabs"] button[data-baseweb="tab"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"] span,
+div[data-testid="stTabs"] button[data-baseweb="tab"] div,
+div[data-testid="stTabs"] button[data-baseweb="tab"],
+button[data-baseweb="tab"] p {
+    font-size: 26px !important;
     font-family: 'Agency FB', sans-serif !important;
-    font-weight: 800 !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
 }
 
-/* Pestaña activa en Verde Institucional */
-[data-testid="stTabs"] button[aria-selected="true"] p,
-.stTabs button[aria-selected="true"] p,
-button[data-baseweb="tab"][aria-selected="true"] p {
+/* Color verde institucional para la pestaña activa */
+div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] span {
     color: #2E7D32 !important;
 }
 
-[data-testid="stTabs"] button[aria-selected="true"],
-button[data-baseweb="tab"][aria-selected="true"] {
-    border-bottom: 3px solid #2E7D32 !important;
+div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
+    border-bottom: 4px solid #2E7D32 !important;
 }
 
 /* 3. TÍTULOS DE SEGMENTADORES (22PX EN NEGRITA) */
