@@ -19,26 +19,29 @@ header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
 /* ==========================================================================
-   LA SOLUCIÓN INFALIBLE PARA LAS PESTAÑAS (ROLES DE ACCESIBILIDAD)
+   LA SOLUCIÓN INFALIBLE PARA LAS PESTAÑAS (TAMAÑO GIGANTE 32PX)
+   Atacamos desde la raíz del body hasta el párrafo final para romper el caché de Emotion CSS
    ========================================================================== */
-/* Forzar tamaño 28px en cualquier cosa dentro de la lista de pestañas */
-div[role="tablist"] button[role="tab"],
-div[role="tablist"] button[role="tab"] p,
-div[role="tablist"] button[role="tab"] span,
-div[role="tablist"] button[role="tab"] div {
-    font-size: 28px !important;
-    font-family: 'Agency FB', sans-serif !important;
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"] p,
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"] span,
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"] div,
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[data-baseweb="tab"] p {
+    font-size: 32px !important; /* TAMAÑO GIGANTE FORZADO */
+    font-family: 'Agency FB', sans-serif !important; /* FUENTE FORZADA */
     font-weight: 900 !important;
     letter-spacing: 1px !important;
+    line-height: 1.2 !important;
+    margin: 0px !important;
 }
 
-/* Pestaña Activa: Color Verde y línea gruesa */
-div[role="tablist"] button[role="tab"][aria-selected="true"] p,
-div[role="tablist"] button[role="tab"][aria-selected="true"] span {
+/* Color Verde Institucional y línea gruesa para la pestaña activa */
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] span {
     color: #2E7D32 !important;
 }
 
-div[role="tablist"] button[role="tab"][aria-selected="true"] {
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
     border-bottom: 5px solid #2E7D32 !important;
 }
 
