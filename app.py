@@ -13,160 +13,34 @@ from io import StringIO
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
 st.markdown("""<style>
-/* 1. TIPOGRAFÍA GLOBAL Y SCROLL */
 * { font-family: 'Agency FB', sans-serif !important; }
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* ==========================================================================
-   PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES Y VISIBLES (26PX)
-   ========================================================================== */
-div[data-testid="stTabs"] button[data-baseweb="tab"] p,
-div[data-testid="stTabs"] button[data-baseweb="tab"] span,
-div[data-testid="stTabs"] button[data-baseweb="tab"] div,
-div[data-testid="stTabs"] button[data-baseweb="tab"],
-button[data-baseweb="tab"] p {
-    font-size: 26px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 900 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-}
+/* --- 1. PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES A 28PX --- */
+button[role="tab"] p, div[data-testid="stTabs"] button p { font-size: 28px !important; font-weight: 900 !important; text-transform: uppercase !important; color: #0F172A !important; letter-spacing: 1px !important; }
+button[role="tab"][aria-selected="true"] p, div[data-testid="stTabs"] button[aria-selected="true"] p { color: #2E7D32 !important; }
+button[role="tab"][aria-selected="true"], div[data-testid="stTabs"] button[aria-selected="true"] { border-bottom: 5px solid #2E7D32 !important; }
 
-/* Color verde institucional para la pestaña activa */
-div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] p,
-div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] span {
-    color: #2E7D32 !important;
-}
+/* --- 2. TÍTULOS DE FILTROS A 22PX --- */
+[data-testid="stWidgetLabel"] p, label p { font-size: 22px !important; font-weight: 800 !important; color: #0F172A !important; text-transform: uppercase !important; }
 
-div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
-    border-bottom: 4px solid #2E7D32 !important;
-}
+/* --- 3. BORDES VERDES DE LOS CAJONES --- */
+[data-baseweb="select"] > div { border: 2px solid #2E7D32 !important; border-radius: 8px !important; background-color: #FFFFFF !important; min-height: 44px !important; box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; }
+[data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within { border-color: #1B5E20 !important; box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important; }
 
-/* 3. TÍTULOS DE SEGMENTADORES (22PX EN NEGRITA) */
-[data-testid="stWidgetLabel"] p,
-.stMultiSelect label p,
-.stSelectbox label p,
-.stRadio label p {
-    font-size: 22px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 800 !important;
-    color: #0F172A !important;
-}
+/* --- 4. TEXTOS INTERNOS Y TRANSPARENCIA TOTAL DE PASTILLAS --- */
+[data-baseweb="select"] div, [data-baseweb="select"] span { font-size: 20px !important; font-weight: 700 !important; color: #0F172A !important; }
+[data-baseweb="tag"], [data-baseweb="tag"] * { background-color: transparent !important; background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+[data-baseweb="tag"] span { color: #0F172A !important; font-size: 20px !important; font-weight: 800 !important; }
+[data-baseweb="tag"] svg, [data-baseweb="tag"] button { display: none !important; width: 0 !important; height: 0 !important; opacity: 0 !important; }
 
-/* 4. LOS 7 CAJONES CON BORDE VERDE (2PX) Y FONDO BLANCO */
-[data-baseweb="select"] > div,
-.stMultiSelect [data-baseweb="select"] > div,
-.stSelectbox [data-baseweb="select"] > div {
-    border: 2px solid #2E7D32 !important;
-    border-radius: 8px !important;
-    background-color: #FFFFFF !important;
-    min-height: 44px !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
-}
-
-/* 5. TEXTO INTERIOR DE LOS SELECTORES (20PX) */
-[data-baseweb="select"] div,
-[data-baseweb="select"] span {
-    font-size: 20px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* 6. TRANSPARENCIA TOTAL EN LAS PASTILLAS */
-span[data-baseweb="tag"],
-div[data-baseweb="tag"],
-.stMultiSelect span[data-baseweb="tag"] {
-    background-color: transparent !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-}
-
-span[data-baseweb="tag"] span,
-div[data-baseweb="tag"] span {
-    color: #0F172A !important;
-    font-size: 20px !important;
-    font-weight: 800 !important;
-    font-family: 'Agency FB', sans-serif !important;
-}
-
-span[data-baseweb="tag"] svg,
-div[data-baseweb="tag"] svg {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-}
-
-/* 7. TRADUCCIÓN DE 'Select all' A 'Seleccionar todo' EN EL MENÚ */
-div[role="listbox"] li:first-child span,
-ul[role="listbox"] li:first-child span {
-    font-size: 0px !important;
-}
-div[role="listbox"] li:first-child span::after,
-ul[role="listbox"] li:first-child span::after {
-    content: "Seleccionar todo" !important;
-    font-size: 18px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 700 !important;
-    color: #0F172A !important;
-}
-
-/* 8. BOTÓN FLOTANTE */
-.btn-flotante-arriba {
-    position: fixed !important;
-    bottom: 75px !important;
-    right: 20px !important;
-    background-color: #2E7D32 !important;
-    color: #FFFFFF !important;
-    padding: 10px 20px !important;
-    border-radius: 30px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-size: 18px !important;
-    font-weight: bold !important;
-    text-decoration: none !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
-    z-index: 999999 !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    transition: all 0.2s ease-in-out !important;
-}
-
-.btn-flotante-arriba:hover {
-    background-color: #1B5E20 !important;
-    transform: translateY(-3px) !important;
-    color: #FFFFFF !important;
-}
+/* --- 5. RADIO BUTTONS Y BOTÓN FLOTANTE --- */
+[data-testid="stRadio"] div[role="radiogroup"] * { font-size: 20px !important; font-weight: 700 !important; color: #0F172A !important; }
+[data-testid="stRadio"] input[type="radio"]:checked + div { background-color: #2E7D32 !important; border-color: #2E7D32 !important; }
+.btn-flotante-arriba { position: fixed !important; bottom: 75px !important; right: 20px !important; background-color: #2E7D32 !important; color: #FFFFFF !important; padding: 10px 20px !important; border-radius: 30px !important; font-size: 18px !important; font-weight: bold !important; text-decoration: none !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important; z-index: 999999 !important; display: flex !important; align-items: center !important; gap: 6px !important; transition: all 0.2s ease-in-out !important; }
+.btn-flotante-arriba:hover { background-color: #1B5E20 !important; transform: translateY(-3px) !important; color: #FFFFFF !important; }
 </style>""", unsafe_allow_html=True)
-
-# INYECCIÓN INDEPENDIENTE EXCLUSIVA PARA PESTAÑAS (MÉTRICAS Y Z-SCORE)
-st.markdown("""
-<style>
-/* Forzar tamaño 26px, negrita y mayúsculas en TODO el contenido de los botones de pestañas */
-html body div[data-testid="stTabs"] button,
-html body div[data-testid="stTabs"] button *,
-html body div[data-testid="stTabs"] button p,
-html body div[data-testid="stTabs"] button span {
-    font-size: 26px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 900 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-}
-
-/* Forzar color Verde Institucional solo en la pestaña activa */
-html body div[data-testid="stTabs"] button[aria-selected="true"],
-html body div[data-testid="stTabs"] button[aria-selected="true"] * {
-    color: #2E7D32 !important;
-}
-html body div[data-testid="stTabs"] button[aria-selected="true"] {
-    border-bottom: 4px solid #2E7D32 !important;
-}
-</style>
-""", unsafe_allow_html=True)
 
 st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
 st.markdown('<a href="#inicio-pagina" class="btn-flotante-arriba">⬆ Subir a Filtros</a>', unsafe_allow_html=True)
