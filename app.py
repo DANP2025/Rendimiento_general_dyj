@@ -523,199 +523,139 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
     
     # PESTAÑA 2: Z-SCORE
     with tab2:
-        if metricas_seleccionadas and columna_jugador:
-            # Toggle para elegir vista
-            vista_zscore = st.radio(
-                "Seleccione la vista de análisis:",
-                ["Perfil Comparativo (Agrupado)", "Ranking por Métrica (Horizontal)"],
-                horizontal=True
-            )
+        st.markdown("<br>", unsafe_allow_html=True)
+        vista_zscore = st.radio(
+            "SELECCIONE LA VISTA DE ANÁLISIS:", 
+            ["PERFIL COMPARATIVO (AGRUPADO)", "RANKING POR MÉTRICA (HORIZONTAL)"], 
+            horizontal=True
+        )
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        if len(metricas_seleccionadas) > 0:
+            z_scores_data = []
             
-            # Guardar las selecciones actuales
-            df_original = cargar_datos_google_sheets()
-            
-            if df_original is not None and isinstance(df_original, pd.DataFrame):
-                # Filtrar df_poblacion por Categoría y Mes seleccionados
-                df_poblacion = df_original.copy()
+            # Iterar sobre las métricas seleccionadas
+            for metrica in metricas_seleccionadas:
+                # 1. ESTADÍSTICA POBLACIONAL: Se calcula con TODOS los jugadores del mes (df_mes)
+                media_pob = df_mes[metrica].mean(numeric_only=True)
+                std_pob = df_mes[metrica].std(numeric_only=True)
                 
-                if columna_categoria and 'categoria_seleccionada' in locals() and 'TODAS' not in categoria_seleccionada:
-                    df_poblacion = df_poblacion[df_poblacion[columna_categoria].isin(categoria_seleccionada)]
-                
-                if columna_mes and 'mes_seleccionado' in locals() and 'TODOS' not in mes_seleccionado:
-                    df_poblacion = df_poblacion[df_poblacion[columna_mes].isin(mes_seleccionado)]
-                
-                # Filtrar df_jugadores (si TODOS, igual a df_poblacion)
-                if 'jugadores_seleccionados' in locals() and 'TODOS' not in jugadores_seleccionados:
-                    df_jugadores = df_poblacion[df_poblacion[columna_jugador].isin(jugadores_seleccionados)].copy()
-                else:
-                    df_jugadores = df_poblacion.copy()
-                
-                # Calcular Z-Scores con la lógica especificada
-                z_scores_data = []
-                
-                for metrica in metricas_seleccionadas:
-                    if metrica in df_poblacion.columns:
-                        # Calcular media y desviación de la población
-                        media = df_poblacion[metrica].mean(numeric_only=True)
-                        desviacion = df_poblacion[metrica].std(numeric_only=True)
-                        
-                        # Evitar división por cero y manejo de NaNs
-                        if desviacion == 0 or pd.isna(desviacion):
-                            desviacion = 1
-                        if pd.isna(media):
-                            media = 0
-                        
-                        # Calcular Z-Score para cada jugador seleccionado
-                        for _, fila in df_jugadores.iterrows():
-                            if metrica in fila and pd.notna(fila[metrica]):
-                                z_val = (fila[metrica] - media) / desviacion
-                                z_scores_data.append({
-                                    'Futbolista': fila[columna_jugador],
-                                    'Métrica': metrica,
-                                    'Z-Score': z_val
-                                })
-                
-                # Crear DataFrame de Z-Scores
-                if z_scores_data:
-                    df_zscore = pd.DataFrame(z_scores_data)
-                    df_zscore['Z-Score'] = pd.to_numeric(df_zscore['Z-Score'], errors='coerce')
-                    df_zscore = df_zscore.replace([np.inf, -np.inf], np.nan).dropna(subset=['Futbolista', 'Métrica', 'Z-Score'])
+                if pd.isna(std_pob) or std_pob == 0:
+                    std_pob = 1  # Evitar división por cero
                     
-                    if vista_zscore == "Ranking por Métrica (Horizontal)":
-                        # LADO A: Ranking por Métrica - Horizontal
-                        for metrica in metricas_seleccionadas:
-                            # Filtrar df_zscore para esa métrica específica
-                            df_metrica = df_zscore[df_zscore['Métrica'] == metrica].copy()
+                # 2. APLICACIÓN AL GRÁFICO: Se itera ÚNICAMENTE sobre los jugadores seleccionados (df_filtrado)
+                for _, fila in df_filtrado.iterrows():
+                    jugador = fila['Futbolista']
+                    valor_jugador = fila[metrica]
+                    
+                    if pd.notna(valor_jugador):
+                        # Cálculo del Z-Score para este jugador en esta métrica
+                        z_val = (valor_jugador - media_pob) / std_pob
+                        z_scores_data.append({
+                            'Futbolista': jugador, 
+                            'Métrica': metrica, 
+                            'Z-Score': z_val
+                        })
+                        
+            # Crear el DataFrame final para los gráficos
+            df_zscore = pd.DataFrame(z_scores_data)
+            
+            if not df_zscore.empty:
+                # =========================================================
+                # LÓGICA: PERFIL COMPARATIVO (AGRUPADO)
+                # =========================================================
+                if vista_zscore == "PERFIL COMPARATIVO (AGRUPADO)":
+                    fig_z_agrupado = px.bar(
+                        df_zscore,
+                        x='Métrica',
+                        y='Z-Score',
+                        color='Futbolista',
+                        barmode='group',
+                        color_discrete_sequence=px.colors.qualitative.Alphabet
+                    )
+                    
+                    fig_z_agrupado.update_traces(
+                        texttemplate='%{y:.2f}', 
+                        textposition='outside',
+                        cliponaxis=False,
+                        textfont=dict(size=16, color='#0F172A', family='Agency FB')
+                    )
+                    
+                    fig_z_agrupado.update_layout(
+                        height=600,
+                        bargap=0.15,
+                        bargroupgap=0.05,
+                        margin=dict(t=150, b=50),
+                        legend=dict(
+                            orientation="h", 
+                            yanchor="bottom", 
+                            y=1.15, 
+                            xanchor="center", 
+                            x=0.5, 
+                            title_text="",
+                            font=dict(size=18, color='#0F172A', family='Agency FB')
+                        )
+                    )
+                    
+                    fig_z_agrupado.update_xaxes(
+                        tickfont=dict(size=16, color='#0F172A', family='Agency FB'), 
+                        tickangle=-45
+                    )
+                    fig_z_agrupado.update_yaxes(tickfont=dict(size=14, color='#0F172A'))
+                    fig_z_agrupado.add_hline(y=0, line_width=2, line_dash="dash", line_color="#0F172A")
+                    
+                    st.plotly_chart(fig_z_agrupado, use_container_width=True, config={'displayModeBar': False})
+                    
+                # =========================================================
+                # LÓGICA: RANKING POR MÉTRICA (HORIZONTAL)
+                # =========================================================
+                else:
+                    for metrica in metricas_seleccionadas:
+                        df_metrica = df_zscore[df_zscore['Métrica'] == metrica].sort_values(by='Futbolista', ascending=True)
+                        
+                        if not df_metrica.empty:
+                            st.markdown(f"<h3 style='text-align: center; color: #0F172A; font-family: Agency FB, sans-serif; font-weight: 800; font-size: 24px;'>Z-Score: {metrica}</h3>", unsafe_allow_html=True)
                             
-                            if not df_metrica.empty:
-                                # Filtrar y ordenar alfabéticamente de la A a la Z por Futbolista
-                                df_plot = df_metrica.dropna(subset=['Z-Score']).sort_values(
-                                    by='Futbolista', ascending=True
-                                )
-
-                                # Generar colores sincronizados con el DataFrame ordenado
-                                colores = [
-                                    '#22C55E' if val >= 0 else '#EF4444'
-                                    for val in df_plot['Z-Score']
-                                ]
-
-                                if df_plot.empty:
-                                    continue
-
-                                # Crear el gráfico horizontal
-                                fig = px.bar(
-                                    df_plot,
-                                    x='Z-Score',
-                                    y='Futbolista',
-                                    orientation='h'
-                                )
-                                
-                                # Asignar colores, etiquetas y estilos a las barras
-                                fig.update_traces(
-                                    marker_color=colores,
-                                    texttemplate='%{x:.2f}',
-                                    textposition='outside',
-                                    cliponaxis=False,
-                                    textfont=dict(size=16, color='#0F172A', family='Agency FB')
-                                )
-
-                                fig.update_yaxes(
-                                    type='category',
-                                    categoryorder='category descending',
-                                    tickfont=dict(size=16, color='#0F172A', family='Agency FB')
-                                )
-
-                                fig.update_xaxes(
-                                    tickfont=dict(size=14, color='#0F172A'),
-                                    title_text="Z-Score",
-                                    title_font=dict(size=16, color='#0F172A', family='Agency FB')
-                                )
-                                
-                                # Configuración Plotly Z-Score
-                                fig.update_layout(
-                                    height=max(350, len(df_plot) * 40),
-                                    showlegend=False,
-                                    title=dict(text=f"<b>Z-Score: {metrica}</b>", x=0.5, font=dict(size=20, color="#1E293B")),
-                                    yaxis_title="",
-                                    margin=dict(t=60, b=50, l=150, r=60),
-                                    font=dict(family='Agency FB', size=16),
-                                    bargap=0.2
-                                )
-                                
-                                # Ancho de barras uniforme
-                                fig.update_traces(width=0.5)
-                                
-                                # Línea base poblacional
-                                fig.add_vline(x=0, line_width=2, line_dash="dash", line_color="#0F172A")
-                                
-                                st.plotly_chart(
-                                    fig, 
-                                    use_container_width=True,
-                                    config={'displayModeBar': False}
-                                )
-                    
-                    else:
-                        # LADO B: Perfil Comparativo - Agrupado
-                        fig = px.bar(
-                            df_zscore,
-                            x='Métrica',
-                            y='Z-Score',
-                            color='Futbolista',
-                            color_discrete_sequence=px.colors.qualitative.Alphabet,
-                            barmode='group'
-                        )
-                        
-                        # Línea negra en Y=0
-                        fig.add_hline(y=0, line_width=2, line_dash="dash", line_color="black")
-                        
-                        # Configuración del gráfico agrupado
-                        fig.update_layout(
-                            title=dict(text="Z-Score por Métrica y Futbolista", y=0.95, x=0.5, xanchor='center', yanchor='top', font=dict(size=20, color="#1E293B")),
-                            showlegend=True,
-                            legend=dict(
-                                title_text='',
-                                font=dict(size=16),
-                                orientation="h",
-                                yanchor="bottom",
-                                y=1.20,
-                                xanchor="center",
-                                x=0.5
-                            ),
-                            bargap=0.15,
-                            bargroupgap=0.05,
-                            margin=dict(t=250, b=100, l=60, r=60),
-                            xaxis_title="Métrica",
-                            yaxis_title="Z-Score",
-                            font=dict(family='Agency FB', size=16),
-                            height=700
-                        )
-                        
-                        # Textos de datos
-                        fig.update_traces(
-                            texttemplate='%{y:.2f}',
-                            textposition='outside',
-                            textfont=dict(size=16, color='black', family='Arial Black'),
-                            cliponaxis=False
-                        )
-
-                        fig.update_xaxes(
-                            tickangle=-45,
-                            tickfont=dict(size=18, family="Agency FB", color="black"),
-                            automargin=True
-                        )
-                        
-                        st.plotly_chart(
-                            fig, 
-                            use_container_width=True,
-                            config={'displayModeBar': False}
-                        )
-                else:
-                    st.warning("No se pudieron calcular los Z-Scores con los datos disponibles")
+                            colores = ['#22C55E' if val >= 0 else '#EF4444' for val in df_metrica['Z-Score']]
+                            
+                            fig_h = px.bar(
+                                df_metrica,
+                                x='Z-Score',
+                                y='Futbolista',
+                                orientation='h'
+                            )
+                            
+                            fig_h.update_traces(
+                                marker_color=colores,
+                                texttemplate='%{x:.2f}',
+                                textposition='outside',
+                                cliponaxis=False,
+                                textfont=dict(size=16, color='#0F172A', family='Agency FB')
+                            )
+                            
+                            fig_h.update_yaxes(
+                                type='category',
+                                categoryorder='category descending',
+                                tickfont=dict(size=18, color='#0F172A', family='Agency FB'),
+                                title_text=""
+                            )
+                            
+                            fig_h.update_xaxes(
+                                tickfont=dict(size=14, color='#0F172A'),
+                                title_font=dict(size=18, color='#0F172A', family='Agency FB')
+                            )
+                            
+                            fig_h.update_layout(
+                                height=max(300, len(df_metrica) * 45),
+                                margin=dict(t=30, b=50, l=150, r=60),
+                                showlegend=False
+                            )
+                            fig_h.add_vline(x=0, line_width=2, line_dash="dash", line_color="#0F172A")
+                            
+                            st.plotly_chart(fig_h, use_container_width=True, config={'displayModeBar': False})
             else:
-                st.warning("Error al cargar datos para cálculo de Z-Score")
-        else:
-            st.warning("Selecciona métricas y asegúrate de que hay datos de futbolistas disponibles")
-
+                st.warning("No se pudieron calcular los Z-Scores con los datos y filtros actuales.")
 elif df is not None and df.empty:
     st.warning("El DataFrame está vacío después de aplicar los filtros. Intenta con otros criterios.")
 else:
