@@ -142,6 +142,32 @@ ul[role="listbox"] li:first-child span::after {
 }
 </style>""", unsafe_allow_html=True)
 
+# INYECCIÓN INDEPENDIENTE EXCLUSIVA PARA PESTAÑAS (MÉTRICAS Y Z-SCORE)
+st.markdown("""
+<style>
+/* Forzar tamaño 26px, negrita y mayúsculas en TODO el contenido de los botones de pestañas */
+html body div[data-testid="stTabs"] button,
+html body div[data-testid="stTabs"] button *,
+html body div[data-testid="stTabs"] button p,
+html body div[data-testid="stTabs"] button span {
+    font-size: 26px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+}
+
+/* Forzar color Verde Institucional solo en la pestaña activa */
+html body div[data-testid="stTabs"] button[aria-selected="true"],
+html body div[data-testid="stTabs"] button[aria-selected="true"] * {
+    color: #2E7D32 !important;
+}
+html body div[data-testid="stTabs"] button[aria-selected="true"] {
+    border-bottom: 4px solid #2E7D32 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
 st.markdown('<a href="#inicio-pagina" class="btn-flotante-arriba">⬆ Subir a Filtros</a>', unsafe_allow_html=True)
 
