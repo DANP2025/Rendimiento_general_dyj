@@ -18,117 +18,50 @@ st.markdown("""<style>
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* --- 2. PESTAÑAS (MÉTRICAS Y Z-SCORE) GIGANTES A 28PX --- */
-/* Selectores directos inmutables de Streamlit */
-button[role="tab"] p, 
-button[data-baseweb="tab"] p, 
-div[data-testid="stTabs"] button p, 
-.stTabs button p { 
-    font-size: 28px !important; 
+/* --- 2. LA BOMBA NUCLEAR PARA LAS PESTAÑAS (MÉTRICAS Y Z-SCORE) A 30PX --- */
+/* Atacamos la clase nativa .stTabs y todas sus capas internas obligando a MAYÚSCULAS */
+.stTabs button p, 
+.stTabs button div, 
+.stTabs button span, 
+.stTabs button[role="tab"] p { 
+    font-size: 30px !important; 
     font-family: 'Agency FB', sans-serif !important; 
     font-weight: 900 !important; 
     text-transform: uppercase !important; 
     color: #0F172A !important; 
     letter-spacing: 1px !important; 
-    margin: 0 !important;
 }
 
-/* Pestaña Activa en Verde */
-button[role="tab"][aria-selected="true"] p, 
-button[data-baseweb="tab"][aria-selected="true"] p { 
+/* Color Verde Institucional para la pestaña activa */
+.stTabs button[aria-selected="true"] p, 
+.stTabs button[aria-selected="true"] span { 
     color: #2E7D32 !important; 
 }
-button[role="tab"][aria-selected="true"], 
-button[data-baseweb="tab"][aria-selected="true"] { 
+.stTabs button[aria-selected="true"] { 
     border-bottom: 5px solid #2E7D32 !important; 
 }
 
 /* --- 3. TÍTULOS DE FILTROS A 22PX --- */
-[data-testid="stWidgetLabel"] p, label p { 
-    font-size: 22px !important; 
-    font-family: 'Agency FB', sans-serif !important; 
-    font-weight: 800 !important; 
-    color: #0F172A !important; 
-    text-transform: uppercase !important; 
-}
+[data-testid="stWidgetLabel"] p, label p { font-size: 22px !important; font-weight: 800 !important; color: #0F172A !important; text-transform: uppercase !important; }
 
 /* --- 4. BORDES VERDES DE LOS CAJONES --- */
-[data-baseweb="select"] > div { 
-    border: 2px solid #2E7D32 !important; 
-    border-radius: 8px !important; 
-    background-color: #FFFFFF !important; 
-    min-height: 44px !important; 
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; 
-}
-[data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within { 
-    border-color: #1B5E20 !important; 
-    box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important; 
-}
+[data-baseweb="select"] > div { border: 2px solid #2E7D32 !important; border-radius: 8px !important; background-color: #FFFFFF !important; min-height: 44px !important; box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; }
+[data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within { border-color: #1B5E20 !important; box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important; }
 
 /* --- 5. TEXTOS INTERNOS Y TRANSPARENCIA TOTAL DE PASTILLAS --- */
-[data-baseweb="select"] div, [data-baseweb="select"] span { 
-    font-size: 20px !important; 
-    font-family: 'Agency FB', sans-serif !important; 
-    font-weight: 700 !important; 
-    color: #0F172A !important; 
-}
-[data-baseweb="tag"], [data-baseweb="tag"] * { 
-    background-color: transparent !important; 
-    background: transparent !important; 
-    border: none !important; 
-    box-shadow: none !important; 
-    padding: 0 !important; 
-    margin: 0 !important; 
-}
-[data-baseweb="tag"] span { 
-    color: #0F172A !important; 
-    font-size: 20px !important; 
-    font-weight: 800 !important; 
-}
-[data-baseweb="tag"] svg, [data-baseweb="tag"] button { 
-    display: none !important; 
-    width: 0 !important; 
-    height: 0 !important; 
-    opacity: 0 !important; 
-}
+[data-baseweb="select"] div, [data-baseweb="select"] span { font-size: 20px !important; font-weight: 700 !important; color: #0F172A !important; }
+[data-baseweb="tag"], [data-baseweb="tag"] * { background-color: transparent !important; background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+[data-baseweb="tag"] span { color: #0F172A !important; font-size: 20px !important; font-weight: 800 !important; }
+[data-baseweb="tag"] svg, [data-baseweb="tag"] button { display: none !important; width: 0 !important; height: 0 !important; opacity: 0 !important; }
 
 /* --- 6. RADIO BUTTONS Y BOTÓN FLOTANTE --- */
-[data-testid="stRadio"] div[role="radiogroup"] * { 
-    font-size: 20px !important; 
-    font-family: 'Agency FB', sans-serif !important; 
-    font-weight: 700 !important; 
-    color: #0F172A !important; 
-}
-[data-testid="stRadio"] input[type="radio"]:checked + div { 
-    background-color: #2E7D32 !important; 
-    border-color: #2E7D32 !important; 
-}
-.btn-flotante-arriba { 
-    position: fixed !important; 
-    bottom: 75px !important; 
-    right: 20px !important; 
-    background-color: #2E7D32 !important; 
-    color: #FFFFFF !important; 
-    padding: 10px 20px !important; 
-    border-radius: 30px !important; 
-    font-family: 'Agency FB', sans-serif !important; 
-    font-size: 18px !important; 
-    font-weight: bold !important; 
-    text-decoration: none !important; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important; 
-    z-index: 999999 !important; 
-    display: flex !important; 
-    align-items: center !important; 
-    gap: 6px !important; 
-    transition: all 0.2s ease-in-out !important; 
-}
-.btn-flotante-arriba:hover { 
-    background-color: #1B5E20 !important; 
-    transform: translateY(-3px) !important; 
-    color: #FFFFFF !important; 
-}
+[data-testid="stRadio"] div[role="radiogroup"] * { font-size: 20px !important; font-weight: 700 !important; color: #0F172A !important; }
+[data-testid="stRadio"] input[type="radio"]:checked + div { background-color: #2E7D32 !important; border-color: #2E7D32 !important; }
+.btn-flotante-arriba { position: fixed !important; bottom: 75px !important; right: 20px !important; background-color: #2E7D32 !important; color: #FFFFFF !important; padding: 10px 20px !important; border-radius: 30px !important; font-size: 18px !important; font-weight: bold !important; text-decoration: none !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important; z-index: 999999 !important; display: flex !important; align-items: center !important; gap: 6px !important; transition: all 0.2s ease-in-out !important; }
+.btn-flotante-arriba:hover { background-color: #1B5E20 !important; transform: translateY(-3px) !important; color: #FFFFFF !important; }
 </style>""", unsafe_allow_html=True)
 
+# Mantener los anclajes
 st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
 st.markdown('<a href="#inicio-pagina" class="btn-flotante-arriba">⬆ Subir a Filtros</a>', unsafe_allow_html=True)
 
