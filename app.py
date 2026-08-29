@@ -18,27 +18,28 @@ st.markdown("""<style>
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* --- 2. LA BOMBA NUCLEAR PARA LAS PESTAÑAS (MÉTRICAS Y Z-SCORE) A 30PX --- */
-/* Atacamos la clase nativa .stTabs y todas sus capas internas obligando a MAYÚSCULAS */
-.stTabs button p, 
-.stTabs button div, 
-.stTabs button span, 
-.stTabs button[role="tab"] p { 
-    font-size: 30px !important; 
-    font-family: 'Agency FB', sans-serif !important; 
-    font-weight: 900 !important; 
-    text-transform: uppercase !important; 
-    color: #0F172A !important; 
-    letter-spacing: 1px !important; 
+/* ==========================================================================
+   LA SOLUCIÓN INFALIBLE PARA LAS PESTAÑAS (ROLES DE ACCESIBILIDAD)
+   ========================================================================== */
+/* Forzar tamaño 28px en cualquier cosa dentro de la lista de pestañas */
+div[role="tablist"] button[role="tab"],
+div[role="tablist"] button[role="tab"] p,
+div[role="tablist"] button[role="tab"] span,
+div[role="tablist"] button[role="tab"] div {
+    font-size: 28px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 900 !important;
+    letter-spacing: 1px !important;
 }
 
-/* Color Verde Institucional para la pestaña activa */
-.stTabs button[aria-selected="true"] p, 
-.stTabs button[aria-selected="true"] span { 
-    color: #2E7D32 !important; 
+/* Pestaña Activa: Color Verde y línea gruesa */
+div[role="tablist"] button[role="tab"][aria-selected="true"] p,
+div[role="tablist"] button[role="tab"][aria-selected="true"] span {
+    color: #2E7D32 !important;
 }
-.stTabs button[aria-selected="true"] { 
-    border-bottom: 5px solid #2E7D32 !important; 
+
+div[role="tablist"] button[role="tab"][aria-selected="true"] {
+    border-bottom: 5px solid #2E7D32 !important;
 }
 
 /* --- 3. TÍTULOS DE FILTROS A 22PX --- */
@@ -253,7 +254,7 @@ else:
 
 # PESTAÑAS
 if df is not None and not df.empty and metricas_seleccionadas and columna_jugador:
-    tab1, tab2 = st.tabs(["Métricas", "Z-Score"])
+    tab1, tab2 = st.tabs(["MÉTRICAS", "Z-SCORE"])
     
     # PESTAÑA 1: MÉTRICAS - Motor de Doble Eje
     with tab1:
