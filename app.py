@@ -688,3 +688,25 @@ div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
 }
 </style>
 """, unsafe_allow_html=True)
+
+# ==============================================================================
+# OVERRIDE RADICAL: FORZADO DE TAMAÑO EN PESTAÑAS (TABS)
+# ==============================================================================
+st.markdown("""
+<style>
+/* Ataque masivo a cualquier nodo dentro de la pestaña para forzar los 30px */
+div[data-testid="stTabs"] button[role="tab"],
+div[data-testid="stTabs"] button[role="tab"] p,
+div[data-testid="stTabs"] button[role="tab"] span,
+div[data-testid="stTabs"] button[role="tab"] div,
+div[data-testid="stTabs"] button[role="tab"] *,
+button[data-baseweb="tab"] p,
+button[data-baseweb="tab"] span,
+button[data-baseweb="tab"] div {
+    font-size: 30px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+}
+</style>
+""", unsafe_allow_html=True)
