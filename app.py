@@ -607,3 +607,37 @@ elif df is not None and df.empty:
     st.warning("El DataFrame está vacío después de aplicar los filtros. Intenta con otros criterios.")
 else:
     st.info("Los datos se están cargando desde Google Sheets. Por favor, espera unos segundos...")
+
+# ==============================================================================
+# OVERRIDE FINAL: FORZAR EL TAMAÑO DE LAS PESTAÑAS (MÉTRICAS Y Z-SCORE) A 28PX
+# Se coloca al final del archivo para garantizar que el navegador lo lea último
+# ==============================================================================
+st.markdown("""
+<style>
+/* Atacamos directamente la estructura interna del Tab en Streamlit Cloud */
+div[data-testid="stTabs"] button[role="tab"],
+div[data-testid="stTabs"] button[data-baseweb="tab"],
+div[data-testid="stTabs"] button[role="tab"] div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"] div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stTabs"] button[role="tab"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"] p,
+div[data-testid="stTabs"] button[role="tab"] span {
+    font-size: 28px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 900 !important;
+    line-height: 1.2 !important;
+}
+
+/* Forzar color verde a la pestaña activa en todos sus sub-niveles */
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] span,
+div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] p {
+    color: #2E7D32 !important;
+}
+
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
+    border-bottom: 5px solid #2E7D32 !important;
+}
+</style>
+""", unsafe_allow_html=True)
