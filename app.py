@@ -52,29 +52,32 @@ header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
 /* ==========================================================================
-   LA SOLUCIÓN INFALIBLE PARA LAS PESTAÑAS (TAMAÑO GIGANTE 32PX)
-   Atacamos desde la raíz del body hasta el párrafo final para romper el caché de Emotion CSS
+   PESTAÑAS (MÉTRICAS Y Z-SCORE) - SATURACIÓN DE SELECTORES PARA TAMAÑO GIGANTE
    ========================================================================== */
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"] p,
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"] span,
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"] div,
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[data-baseweb="tab"] p {
-    font-size: 32px !important; /* TAMAÑO GIGANTE FORZADO */
-    font-family: 'Agency FB', sans-serif !important; /* FUENTE FORZADA */
+/* Forzamos 28px en el botón y en absolutamente CUALQUIER elemento anidado dentro de él */
+div[data-testid="stTabs"] button[role="tab"],
+div[data-testid="stTabs"] button[data-baseweb="tab"],
+div[data-testid="stTabs"] button[role="tab"] > div,
+div[data-testid="stTabs"] button[role="tab"] > div > span,
+div[data-testid="stTabs"] button[role="tab"] > div > p,
+div[data-testid="stTabs"] button[role="tab"] * {
+    font-size: 28px !important;
+    font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
+    color: #0F172A !important;
+    text-transform: uppercase !important;
     letter-spacing: 1px !important;
     line-height: 1.2 !important;
-    margin: 0px !important;
 }
 
-/* Color Verde Institucional y línea gruesa para la pestaña activa */
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] span {
+/* Color Verde Institucional EXCLUSIVO para la pestaña activa */
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] * {
     color: #2E7D32 !important;
 }
 
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
-html body div[data-testid="stAppViewContainer"] div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
+/* Línea base verde más gruesa */
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
     border-bottom: 5px solid #2E7D32 !important;
 }
 
