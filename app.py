@@ -257,6 +257,31 @@ else:
 
 # PESTAÑAS
 if df is not None and not df.empty and metricas_seleccionadas and columna_jugador:
+    # --- INYECCIÓN FRANCOTIRADOR: CSS EXCLUSIVO PARA FORZAR TAMAÑO DE PESTAÑAS ---
+    st.markdown("""
+    <style>
+    /* Atacamos directamente al párrafo interno del contenedor de pestañas */
+    [data-testid="stTabs"] button p {
+        font-size: 30px !important;
+        font-family: 'Agency FB', sans-serif !important;
+        font-weight: 900 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 2px !important;
+        margin: 0 !important;
+        padding: 5px 10px !important;
+    }
+
+    /* Color verde institucional al seleccionar */
+    [data-testid="stTabs"] button[aria-selected="true"] p {
+        color: #2E7D32 !important;
+    }
+    [data-testid="stTabs"] button[aria-selected="true"] {
+        border-bottom: 5px solid #2E7D32 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # Declaración de pestañas forzada a mayúsculas desde Python
     tab1, tab2 = st.tabs(["MÉTRICAS", "Z-SCORE"])
     
     # PESTAÑA 1: MÉTRICAS - Motor de Doble Eje
