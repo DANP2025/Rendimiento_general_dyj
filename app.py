@@ -12,6 +12,39 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
+# ==============================================================================
+# HACK DE JEFE DE INGENIERÍA: FORZADO ABSOLUTO DE PESTAÑAS
+# ==============================================================================
+st.markdown("""
+<style>
+/* ATACAMOS EL PÁRRAFO FINAL SIN IMPORTAR DÓNDE ESTÉ ESCONDIDO */
+div[data-testid="stTabs"] button p,
+div[data-testid="stTabs"] button span,
+div[data-testid="stTabs"] button div,
+.stTabs button p {
+    font-size: 35px !important;
+    font-family: 'Agency FB', sans-serif !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    color: #0F172A !important;
+    margin: 0px !important;
+    padding: 5px !important;
+}
+
+/* FORZAR COLOR VERDE EN LA PESTAÑA ACTIVA */
+div[data-testid="stTabs"] button[aria-selected="true"] p,
+.stTabs button[aria-selected="true"] p {
+    color: #2E7D32 !important;
+}
+
+div[data-testid="stTabs"] button[aria-selected="true"],
+.stTabs button[aria-selected="true"] {
+    border-bottom: 6px solid #2E7D32 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+# ============================================================================== 
+
 st.markdown("""<style>
 /* 1. TIPOGRAFÍA GLOBAL Y SCROLL */
 * { font-family: 'Agency FB', sans-serif !important; }
