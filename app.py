@@ -316,6 +316,31 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
 
     # Declaración de pestañas forzada a mayúsculas desde Python
     tab1, tab2 = st.tabs(["MÉTRICAS", "Z-SCORE"])
+
+    # Inyección directa post-renderizado para vulnerar el bloqueo CSS de las pestañas
+    st.html("""
+    <style>
+    /* Obligar al navegador a aplicar 30px en todas las capas internas del botón de la pestaña */
+    div[data-testid="stTabs"] button[role="tab"] p,
+    div[data-testid="stTabs"] button[role="tab"] span,
+    div[data-testid="stTabs"] button[role="tab"] div,
+    div[data-testid="stTabs"] button[data-baseweb="tab"] p,
+    div[data-testid="stTabs"] button[data-baseweb="tab"] span {
+        font-size: 30px !important;
+        font-family: 'Agency FB', sans-serif !important;
+        font-weight: 900 !important;
+    }
+
+    /* Forzar el color de la pestaña activa */
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] span {
+        color: #2E7D32 !important;
+    }
+    div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+        border-bottom: 6px solid #2E7D32 !important;
+    }
+    </style>
+    """)
     
     # PESTAÑA 1: MÉTRICAS - Motor de Doble Eje
     with tab1:
