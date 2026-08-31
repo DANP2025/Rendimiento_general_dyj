@@ -487,34 +487,29 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
     
     # PESTAÑA 2: Z-SCORE
     with tab2:
-        st.markdown("<br>", unsafe_allow_html=True)
+        # Selector de vista SIN etiquetas <br> que generen espacio muerto
         vista_zscore = st.radio(
             "SELECCIONE LA VISTA DE ANÁLISIS:", 
             ["PERFIL COMPARATIVO (AGRUPADO)", "RANKING POR MÉTRICA (HORIZONTAL)"], 
             horizontal=True
         )
         
-        st.markdown("<br>", unsafe_allow_html=True)
-        
         if len(metricas_seleccionadas) > 0:
             z_scores_data = []
             
-            # Iterar sobre las métricas seleccionadas
+            # (Mantén el bucle existente de cálculo de media_pob, std_pob y z_scores_data...)
             for metrica in metricas_seleccionadas:
-                # 1. ESTADÍSTICA POBLACIONAL: Se calcula con TODOS los jugadores del mes (df_mes)
                 media_pob = df_mes[metrica].mean(numeric_only=True)
                 std_pob = df_mes[metrica].std(numeric_only=True)
                 
                 if pd.isna(std_pob) or std_pob == 0:
-                    std_pob = 1  # Evitar división por cero
+                    std_pob = 1
                     
-                # 2. APLICACIÓN AL GRÁFICO: Se itera ÚNICAMENTE sobre los jugadores seleccionados (df_filtrado)
                 for _, fila in df_filtrado.iterrows():
                     jugador = fila['Futbolista']
                     valor_jugador = fila[metrica]
                     
                     if pd.notna(valor_jugador):
-                        # Cálculo del Z-Score para este jugador en esta métrica
                         z_val = (valor_jugador - media_pob) / std_pob
                         z_scores_data.append({
                             'Futbolista': jugador, 
@@ -522,12 +517,11 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                             'Z-Score': z_val
                         })
                         
-            # Crear el DataFrame final para los gráficos
             df_zscore = pd.DataFrame(z_scores_data)
             
             if not df_zscore.empty:
                 # =========================================================
-                # LÓGICA: PERFIL COMPARATIVO (AGRUPADO)
+                # VISTA: PERFIL COMPARATIVO (AGRUPADO) - ESPACIO COMPACTO
                 # =========================================================
                 if vista_zscore == "PERFIL COMPARATIVO (AGRUPADO)":
                     fig_z_agrupado = px.bar(
@@ -546,19 +540,20 @@ if df is not None and not df.empty and metricas_seleccionadas and columna_jugado
                         textfont=dict(size=16, color='#0F172A', family='Agency FB')
                     )
                     
+                    # AJUSTE CRÍTICO: Reducir t=150 a t=60 y bajar la leyenda a y=1.02 para que el gráfico suba
                     fig_z_agrupado.update_layout(
                         height=600,
                         bargap=0.15,
                         bargroupgap=0.05,
-                        margin=dict(t=150, b=50),
+                        margin=dict(t=60, b=50, l=30, r=30),
                         legend=dict(
                             orientation="h", 
                             yanchor="bottom", 
-                            y=1.15, 
+                            y=1.02, 
                             xanchor="center", 
                             x=0.5, 
                             title_text="",
-                            font=dict(size=18, color='#0F172A', family='Agency FB')
+                            font=dict(size=16, color='#0F172A', family='Agency FB')
                         )
                     )
                     
