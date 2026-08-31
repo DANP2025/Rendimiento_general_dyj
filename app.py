@@ -22,20 +22,24 @@ st.markdown("""
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* 2. PESTAÑAS GIGANTES (EL ATAQUE DIRECTO AL PÁRRAFO A 32PX) */
-div[data-testid="stTabs"] button p,
-div[data-testid="stTabs"] button span,
-div[data-testid="stTabs"] button div[data-testid="stMarkdownContainer"] p {
-    font-size: 32px !important;
+/* 2. PESTAÑAS GIGANTES (ESPECIFICIDAD MÁXIMA PARA APLASTAR A STREAMLIT) */
+div[data-testid="stTabs"] button[role="tab"] div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"] div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stTabs"] button[role="tab"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"] p {
+    font-size: 35px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
     color: #0F172A !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    line-height: 1.2 !important;
 }
 
-div[data-testid="stTabs"] button[aria-selected="true"] p,
-div[data-testid="stTabs"] button[aria-selected="true"] span {
+div[data-testid="stTabs"] button[aria-selected="true"] div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stTabs"] button[aria-selected="true"] p {
     color: #2E7D32 !important;
 }
 
