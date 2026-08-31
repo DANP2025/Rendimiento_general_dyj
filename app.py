@@ -55,6 +55,14 @@ html body .stTabs button[aria-selected="true"] {
     border-bottom: 6px solid #2E7D32 !important;
 }
 
+/* Color Verde Institucional para KaTeX en pestaña activa */
+.stTabs [aria-selected="true"] .katex * {
+    color: #2E7D32 !important;
+}
+.stTabs [aria-selected="true"] {
+    border-bottom: 4px solid #2E7D32 !important;
+}
+
 /* 3. TÍTULOS DE FILTROS A 22PX */
 [data-testid="stWidgetLabel"] p, label p { 
     font-size: 22px !important; 
@@ -290,8 +298,8 @@ else:
 
 # PESTAÑAS
 if df is not None and not df.empty and metricas_seleccionadas and columna_jugador:
-    # Declaración de pestañas forzada a mayúsculas desde Python
-    tab1, tab2 = st.tabs(["MÉTRICAS", "Z-SCORE"])
+    # Renderizado vectorial KaTeX para forzar tamaño 26px nativo en Streamlit
+    tab1, tab2 = st.tabs([r"$\textsf{\LARGE MÉTRICAS}$", r"$\textsf{\LARGE Z-SCORE}$"])
     
     # PESTAÑA 1: MÉTRICAS - Motor de Doble Eje
     with tab1:
