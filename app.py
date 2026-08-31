@@ -28,7 +28,7 @@ header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stTabs"] [data-baseweb="tab"] [data-testid="stMarkdownContainer"] p,
 [data-testid="stTabs"] button[role="tab"],
 [data-testid="stTabs"] button[role="tab"] * {
-    font-size: 35px !important;
+    font-size: 26px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
     color: #0F172A !important;
