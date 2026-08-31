@@ -7,6 +7,7 @@ import numpy as np
 import requests
 import unicodedata
 import time
+import streamlit.components.v1 as components
 from io import StringIO
 
 # Configuración de Pantalla Completa (CRÍTICO)
@@ -604,5 +605,39 @@ elif df is not None and df.empty:
     st.warning("El DataFrame está vacío después de aplicar los filtros. Intenta con otros criterios.")
 else:
     st.info("Los datos se están cargando desde Google Sheets. Por favor, espera unos segundos...")
+
+# ==============================================================================
+# HACK MODO DIOS: INYECCIÓN JAVASCRIPT PARA FORZAR TAMAÑO DE PESTAÑAS A 32PX
+# ==============================================================================
+components.html(
+    """
+    <script>
+    // Seleccionar el documento principal de la aplicación de Streamlit
+    const doc = window.parent.document;
+
+    // Función para forzar el tamaño a 32px en los textos de las pestañas
+    const forzarTamanoPestanas = () => {
+        const elementosPestana = doc.querySelectorAll('button[role="tab"] p, button[role="tab"] span, button[role="tab"] div, button[role="tab"]');
+        elementosPestana.forEach(el => {
+            el.style.setProperty('font-size', '32px', 'important');
+            el.style.setProperty('font-weight', '900', 'important');
+            el.style.setProperty('font-family', 'Agency FB, sans-serif', 'important');
+            el.style.setProperty('text-transform', 'uppercase', 'important');
+        });
+    };
+
+    // Ejecutar inmediatamente
+    setTimeout(forzarTamanoPestanas, 50);
+
+    // Crear un vigilante (Observer) para que si Streamlit intenta achicar la letra, el script la vuelva a agrandar en 1 milisegundo
+    const observer = new MutationObserver(forzarTamanoPestanas);
+    if (doc.body) {
+        observer.observe(doc.body, { childList: true, subtree: true });
+    }
+    </script>
+    """,
+    height=0,
+    width=0
+)
 
 
