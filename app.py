@@ -22,36 +22,35 @@ st.markdown("""
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* 2. PESTAÑAS GIGANTES (ESPECIFICIDAD MÁXIMA ABSOLUTA PARA APLASTAR A STREAMLIT) */
-html body div[data-testid="stTabs"] button[role="tab"] div[data-testid="stMarkdownContainer"] p,
-html body div[data-testid="stTabs"] button[data-baseweb="tab"] div[data-testid="stMarkdownContainer"] p,
-html body div[data-testid="stTabs"] button[role="tab"] p,
-html body div[data-testid="stTabs"] button[data-baseweb="tab"] p,
-html body div[data-testid="stTabs"] button span,
-html body .stTabs button p,
-html body .stTabs button span {
-    font-size: 32px !important;
+/* 2. PESTAÑAS GIGANTES (EL ATAQUE DIRECTO AL BOTÓN BASE A 35PX) */
+[data-baseweb="tab"],
+[data-baseweb="tab"] *,
+[data-baseweb="tab"] span,
+[data-baseweb="tab"] p,
+[data-baseweb="tab"] div,
+button[role="tab"],
+button[role="tab"] * {
+    font-size: 35px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
     color: #0F172A !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
-    margin: 0px !important;
-    padding: 0px !important;
     line-height: 1.2 !important;
+    white-space: nowrap !important;
 }
 
-/* Color verde para pestaña activa */
-html body div[data-testid="stTabs"] button[aria-selected="true"] div[data-testid="stMarkdownContainer"] p,
-html body div[data-testid="stTabs"] button[aria-selected="true"] p,
-html body div[data-testid="stTabs"] button[aria-selected="true"] span,
-html body .stTabs button[aria-selected="true"] p {
+[data-baseweb="tab"][aria-selected="true"],
+[data-baseweb="tab"][aria-selected="true"] *,
+button[role="tab"][aria-selected="true"],
+button[role="tab"][aria-selected="true"] * {
     color: #2E7D32 !important;
 }
 
-html body div[data-testid="stTabs"] button[aria-selected="true"],
-html body .stTabs button[aria-selected="true"] {
+[data-baseweb="tab"][aria-selected="true"],
+button[role="tab"][aria-selected="true"] {
     border-bottom: 6px solid #2E7D32 !important;
+    box-shadow: none !important;
 }
 
 /* 3. TÍTULOS DE FILTROS A 22PX */
