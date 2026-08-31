@@ -22,14 +22,12 @@ st.markdown("""
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* 2. PESTAÑAS GIGANTES (EL ATAQUE DIRECTO AL BOTÓN BASE A 35PX) */
-[data-baseweb="tab"],
-[data-baseweb="tab"] *,
-[data-baseweb="tab"] span,
-[data-baseweb="tab"] p,
-[data-baseweb="tab"] div,
-button[role="tab"],
-button[role="tab"] * {
+/* 2. PESTAÑAS GIGANTES (MÉTRICAS / Z-SCORE) — selector reforzado */
+[data-testid="stTabs"] [data-baseweb="tab"],
+[data-testid="stTabs"] [data-baseweb="tab"] *,
+[data-testid="stTabs"] [data-baseweb="tab"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stTabs"] button[role="tab"],
+[data-testid="stTabs"] button[role="tab"] * {
     font-size: 35px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
@@ -40,15 +38,15 @@ button[role="tab"] * {
     white-space: nowrap !important;
 }
 
-[data-baseweb="tab"][aria-selected="true"],
-[data-baseweb="tab"][aria-selected="true"] *,
-button[role="tab"][aria-selected="true"],
-button[role="tab"][aria-selected="true"] * {
+[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"],
+[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] *,
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"] * {
     color: #2E7D32 !important;
 }
 
-[data-baseweb="tab"][aria-selected="true"],
-button[role="tab"][aria-selected="true"] {
+[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"],
+[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
     border-bottom: 6px solid #2E7D32 !important;
     box-shadow: none !important;
 }
