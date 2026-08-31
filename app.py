@@ -7,7 +7,6 @@ import numpy as np
 import requests
 import unicodedata
 import time
-import streamlit.components.v1 as components
 from io import StringIO
 
 # Configuración de Pantalla Completa (CRÍTICO)
@@ -23,9 +22,10 @@ st.markdown("""
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* 2. PESTAÑAS GIGANTES (EL CÓDIGO INFALIBLE A 32PX) */
-.stTabs button *,
-div[data-testid="stTabs"] button * {
+/* 2. PESTAÑAS GIGANTES (EL ATAQUE DIRECTO AL PÁRRAFO A 32PX) */
+div[data-testid="stTabs"] button p,
+div[data-testid="stTabs"] button span,
+div[data-testid="stTabs"] button div[data-testid="stMarkdownContainer"] p {
     font-size: 32px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
@@ -34,12 +34,11 @@ div[data-testid="stTabs"] button * {
     letter-spacing: 1.5px !important;
 }
 
-.stTabs button[aria-selected="true"] *,
-div[data-testid="stTabs"] button[aria-selected="true"] * {
+div[data-testid="stTabs"] button[aria-selected="true"] p,
+div[data-testid="stTabs"] button[aria-selected="true"] span {
     color: #2E7D32 !important;
 }
 
-.stTabs button[aria-selected="true"],
 div[data-testid="stTabs"] button[aria-selected="true"] {
     border-bottom: 6px solid #2E7D32 !important;
 }
@@ -606,38 +605,5 @@ elif df is not None and df.empty:
 else:
     st.info("Los datos se están cargando desde Google Sheets. Por favor, espera unos segundos...")
 
-# ==============================================================================
-# HACK MODO DIOS: INYECCIÓN JAVASCRIPT PARA FORZAR TAMAÑO DE PESTAÑAS A 32PX
-# ==============================================================================
-components.html(
-    """
-    <script>
-    // Seleccionar el documento principal de la aplicación de Streamlit
-    const doc = window.parent.document;
-
-    // Función para forzar el tamaño a 32px en los textos de las pestañas
-    const forzarTamanoPestanas = () => {
-        const elementosPestana = doc.querySelectorAll('button[role="tab"] p, button[role="tab"] span, button[role="tab"] div, button[role="tab"]');
-        elementosPestana.forEach(el => {
-            el.style.setProperty('font-size', '32px', 'important');
-            el.style.setProperty('font-weight', '900', 'important');
-            el.style.setProperty('font-family', 'Agency FB, sans-serif', 'important');
-            el.style.setProperty('text-transform', 'uppercase', 'important');
-        });
-    };
-
-    // Ejecutar inmediatamente
-    setTimeout(forzarTamanoPestanas, 50);
-
-    // Crear un vigilante (Observer) para que si Streamlit intenta achicar la letra, el script la vuelva a agrandar en 1 milisegundo
-    const observer = new MutationObserver(forzarTamanoPestanas);
-    if (doc.body) {
-        observer.observe(doc.body, { childList: true, subtree: true });
-    }
-    </script>
-    """,
-    height=0,
-    width=0
-)
 
 
