@@ -23,22 +23,23 @@ header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
 /* 2. PESTAÑAS GIGANTES (EL CÓDIGO INFALIBLE A 32PX) */
-div[data-testid="stTabs"] button[role="tab"] p,
-div[data-testid="stTabs"] button[data-baseweb="tab"] p,
-div[data-testid="stTabs"] button[role="tab"] span {
+.stTabs button *,
+div[data-testid="stTabs"] button * {
     font-size: 32px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
     color: #0F172A !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
-    margin: 0px !important;
-    padding: 0px !important;
 }
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p {
+
+.stTabs button[aria-selected="true"] *,
+div[data-testid="stTabs"] button[aria-selected="true"] * {
     color: #2E7D32 !important;
 }
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+
+.stTabs button[aria-selected="true"],
+div[data-testid="stTabs"] button[aria-selected="true"] {
     border-bottom: 6px solid #2E7D32 !important;
 }
 
