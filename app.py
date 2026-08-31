@@ -22,33 +22,37 @@ st.markdown("""
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* 2. PESTAÑAS GIGANTES (MÉTRICAS / Z-SCORE) — selector reforzado */
-[data-testid="stTabs"] [data-baseweb="tab"],
-[data-testid="stTabs"] [data-baseweb="tab"] *,
-[data-testid="stTabs"] [data-baseweb="tab"] [data-testid="stMarkdownContainer"] p,
-[data-testid="stTabs"] button[role="tab"],
-[data-testid="stTabs"] button[role="tab"] * {
+/* 2. PESTAÑAS (MÉTRICAS Y Z-SCORE) A 26PX (ESPECIFICIDAD MÁXIMA PARA STREAMLIT CLOUD) */
+html body div[data-testid="stTabs"] button[role="tab"] div[data-testid="stMarkdownContainer"] p,
+html body div[data-testid="stTabs"] button[data-baseweb="tab"] div[data-testid="stMarkdownContainer"] p,
+html body div[data-testid="stTabs"] button[role="tab"] p,
+html body div[data-testid="stTabs"] button[data-baseweb="tab"] p,
+html body div[data-testid="stTabs"] button span,
+html body .stTabs button p,
+html body .stTabs button span {
     font-size: 26px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
     color: #0F172A !important;
     text-transform: uppercase !important;
     letter-spacing: 1.5px !important;
+    margin: 0px !important;
+    padding: 0px !important;
     line-height: 1.2 !important;
-    white-space: nowrap !important;
 }
 
-[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"],
-[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"] *,
-[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
-[data-testid="stTabs"] button[role="tab"][aria-selected="true"] * {
+/* Color verde para pestaña activa en todas las capas de texto */
+html body div[data-testid="stTabs"] button[aria-selected="true"] div[data-testid="stMarkdownContainer"] p,
+html body div[data-testid="stTabs"] button[aria-selected="true"] p,
+html body div[data-testid="stTabs"] button[aria-selected="true"] span,
+html body .stTabs button[aria-selected="true"] p {
     color: #2E7D32 !important;
 }
 
-[data-testid="stTabs"] [data-baseweb="tab"][aria-selected="true"],
-[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
+/* Línea inferior verde para pestaña activa */
+html body div[data-testid="stTabs"] button[aria-selected="true"],
+html body .stTabs button[aria-selected="true"] {
     border-bottom: 6px solid #2E7D32 !important;
-    box-shadow: none !important;
 }
 
 /* 3. TÍTULOS DE FILTROS A 22PX */
