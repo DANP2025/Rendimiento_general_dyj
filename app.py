@@ -12,96 +12,80 @@ from io import StringIO
 # Configuración de Pantalla Completa (CRÍTICO)
 st.set_page_config(page_title="Dashboard Rendimiento", layout="wide")
 
-# ==============================================================================
-# HACK DE JEFE DE INGENIERÍA: FORZADO ABSOLUTO DE PESTAÑAS
-# ==============================================================================
+# ============================================================================== 
+# CSS MAESTRO UNIFICADO Y PURIFICADO
+# ============================================================================== 
 st.markdown("""
 <style>
-/* ATACAMOS EL PÁRRAFO FINAL SIN IMPORTAR DÓNDE ESTÉ ESCONDIDO */
-div[data-testid="stTabs"] button p,
-div[data-testid="stTabs"] button span,
-div[data-testid="stTabs"] button div,
-.stTabs button p {
-    font-size: 35px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 900 !important;
-    text-transform: uppercase !important;
-    color: #0F172A !important;
-    margin: 0px !important;
-    padding: 5px !important;
-}
-
-/* FORZAR COLOR VERDE EN LA PESTAÑA ACTIVA */
-div[data-testid="stTabs"] button[aria-selected="true"] p,
-.stTabs button[aria-selected="true"] p {
-    color: #2E7D32 !important;
-}
-
-div[data-testid="stTabs"] button[aria-selected="true"],
-.stTabs button[aria-selected="true"] {
-    border-bottom: 6px solid #2E7D32 !important;
-}
-</style>
-""", unsafe_allow_html=True)
-# ============================================================================== 
-
-st.markdown("""<style>
 /* 1. TIPOGRAFÍA GLOBAL Y SCROLL */
 * { font-family: 'Agency FB', sans-serif !important; }
 header[data-testid="stHeader"] { display: none !important; }
 [data-testid="stAppViewContainer"] { overflow-y: auto !important; overflow-x: hidden !important; scroll-behavior: smooth !important; }
 
-/* ==========================================================================
-   PESTAÑAS (MÉTRICAS Y Z-SCORE) - SATURACIÓN DE SELECTORES PARA TAMAÑO GIGANTE
-   ========================================================================== */
-/* Forzamos 28px en el botón y en absolutamente CUALQUIER elemento anidado dentro de él */
-div[data-testid="stTabs"] button[role="tab"],
-div[data-testid="stTabs"] button[data-baseweb="tab"],
-div[data-testid="stTabs"] button[role="tab"] > div,
-div[data-testid="stTabs"] button[role="tab"] > div > span,
-div[data-testid="stTabs"] button[role="tab"] > div > p,
-div[data-testid="stTabs"] button[role="tab"] * {
-    font-size: 28px !important;
+/* 2. PESTAÑAS GIGANTES (EL CÓDIGO INFALIBLE A 32PX) */
+div[data-testid="stTabs"] button[role="tab"] p,
+div[data-testid="stTabs"] button[data-baseweb="tab"] p,
+div[data-testid="stTabs"] button[role="tab"] span {
+    font-size: 32px !important;
     font-family: 'Agency FB', sans-serif !important;
     font-weight: 900 !important;
     color: #0F172A !important;
     text-transform: uppercase !important;
-    letter-spacing: 1px !important;
-    line-height: 1.2 !important;
+    letter-spacing: 1.5px !important;
+    margin: 0px !important;
+    padding: 0px !important;
 }
-
-/* Color Verde Institucional EXCLUSIVO para la pestaña activa */
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] * {
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p {
     color: #2E7D32 !important;
 }
-
-/* Línea base verde más gruesa */
 div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] {
-    border-bottom: 5px solid #2E7D32 !important;
+    border-bottom: 6px solid #2E7D32 !important;
 }
 
-/* --- 3. TÍTULOS DE FILTROS A 22PX --- */
-[data-testid="stWidgetLabel"] p, label p { font-size: 22px !important; font-weight: 800 !important; color: #0F172A !important; text-transform: uppercase !important; }
+/* 3. TÍTULOS DE FILTROS A 22PX */
+[data-testid="stWidgetLabel"] p, label p { 
+    font-size: 22px !important; 
+    font-weight: 800 !important; 
+    color: #0F172A !important; 
+    text-transform: uppercase !important; 
+}
 
-/* --- 4. BORDES VERDES DE LOS CAJONES --- */
-[data-baseweb="select"] > div { border: 2px solid #2E7D32 !important; border-radius: 8px !important; background-color: #FFFFFF !important; min-height: 44px !important; box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; }
-[data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within { border-color: #1B5E20 !important; box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important; }
+/* 4. CAJONES (BORDES VERDES) */
+[data-baseweb="select"] > div { 
+    border: 2px solid #2E7D32 !important; 
+    border-radius: 8px !important; 
+    background-color: #FFFFFF !important; 
+    min-height: 44px !important; 
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important; 
+}
+[data-baseweb="select"] > div:hover, [data-baseweb="select"] > div:focus-within { 
+    border-color: #1B5E20 !important; 
+    box-shadow: 0 0 8px rgba(46, 125, 50, 0.4) !important; 
+}
 
-/* --- 5. TEXTOS INTERNOS Y TRANSPARENCIA TOTAL DE PASTILLAS --- */
-[data-baseweb="select"] div, [data-baseweb="select"] span { font-size: 20px !important; font-weight: 700 !important; color: #0F172A !important; }
-[data-baseweb="tag"], [data-baseweb="tag"] * { background-color: transparent !important; background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+/* 5. TEXTOS INTERNOS Y TRANSPARENCIA DE PASTILLAS */
+[data-baseweb="select"] div, [data-baseweb="select"] span { 
+    font-size: 20px !important; 
+    font-weight: 700 !important; 
+    color: #0F172A !important; 
+}
+[data-baseweb="tag"], [data-baseweb="tag"] * { 
+    background-color: transparent !important; 
+    background: transparent !important; 
+    border: none !important; 
+    box-shadow: none !important; 
+    padding: 0 !important; 
+    margin: 0 !important; 
+}
 [data-baseweb="tag"] span { color: #0F172A !important; font-size: 20px !important; font-weight: 800 !important; }
-[data-baseweb="tag"] svg, [data-baseweb="tag"] button { display: none !important; width: 0 !important; height: 0 !important; opacity: 0 !important; }
+[data-baseweb="tag"] svg, [data-baseweb="tag"] button { display: none !important; width: 0 !important; height: 0 !important; }
 
-/* --- 6. RADIO BUTTONS Y BOTÓN FLOTANTE --- */
-[data-testid="stRadio"] div[role="radiogroup"] * { font-size: 20px !important; font-weight: 700 !important; color: #0F172A !important; }
-[data-testid="stRadio"] input[type="radio"]:checked + div { background-color: #2E7D32 !important; border-color: #2E7D32 !important; }
+/* 6. BOTÓN FLOTANTE */
 .btn-flotante-arriba { position: fixed !important; bottom: 75px !important; right: 20px !important; background-color: #2E7D32 !important; color: #FFFFFF !important; padding: 10px 20px !important; border-radius: 30px !important; font-size: 18px !important; font-weight: bold !important; text-decoration: none !important; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important; z-index: 999999 !important; display: flex !important; align-items: center !important; gap: 6px !important; transition: all 0.2s ease-in-out !important; }
 .btn-flotante-arriba:hover { background-color: #1B5E20 !important; transform: translateY(-3px) !important; color: #FFFFFF !important; }
-</style>""", unsafe_allow_html=True)
+</style>
+""", unsafe_allow_html=True)
 
-# Mantener los anclajes
 st.markdown('<div id="inicio-pagina" style="scroll-margin-top: 50px;"></div>', unsafe_allow_html=True)
 st.markdown('<a href="#inicio-pagina" class="btn-flotante-arriba">⬆ Subir a Filtros</a>', unsafe_allow_html=True)
 
@@ -293,41 +277,6 @@ else:
 
 # PESTAÑAS
 if df is not None and not df.empty and metricas_seleccionadas and columna_jugador:
-    # --- INYECCIÓN FRANCOTIRADOR: CSS EXCLUSIVO PARA FORZAR TAMAÑO DE PESTAÑAS ---
-    st.markdown("""
-    <style>
-    /* Atacamos directamente al párrafo interno del contenedor de pestañas */
-    [data-testid="stTabs"] button p {
-        font-size: 30px !important;
-        font-family: 'Agency FB', sans-serif !important;
-        font-weight: 900 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 2px !important;
-        margin: 0 !important;
-        padding: 5px 10px !important;
-    }
-
-    /* Color verde institucional al seleccionar */
-    [data-testid="stTabs"] button[aria-selected="true"] p {
-        color: #2E7D32 !important;
-    }
-    [data-testid="stTabs"] button[aria-selected="true"] {
-        border-bottom: 5px solid #2E7D32 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-    # HACK QUIRÚRGICO: Forzar tamaño exclusivo a las pestañas vulnerando el contenedor Markdown
-    st.markdown("""
-    <style>
-    div[data-testid="stTabs"] button[role="tab"] div[data-testid="stMarkdownContainer"] p {
-        font-size: 30px !important;
-        font-family: 'Agency FB', sans-serif !important;
-        font-weight: 900 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
     # Declaración de pestañas forzada a mayúsculas desde Python
     tab1, tab2 = st.tabs(["MÉTRICAS", "Z-SCORE"])
     
@@ -655,58 +604,4 @@ elif df is not None and df.empty:
 else:
     st.info("Los datos se están cargando desde Google Sheets. Por favor, espera unos segundos...")
 
-# ==============================================================================
-# OVERRIDE FINAL: FORZAR EL TAMAÑO DE LAS PESTAÑAS (MÉTRICAS Y Z-SCORE) A 28PX
-# Se coloca al final del archivo para garantizar que el navegador lo lea último
-# ==============================================================================
-st.markdown("""
-<style>
-/* Atacamos directamente la estructura interna del Tab en Streamlit Cloud */
-div[data-testid="stTabs"] button[role="tab"],
-div[data-testid="stTabs"] button[data-baseweb="tab"],
-div[data-testid="stTabs"] button[role="tab"] div[data-testid="stMarkdownContainer"] p,
-div[data-testid="stTabs"] button[data-baseweb="tab"] div[data-testid="stMarkdownContainer"] p,
-div[data-testid="stTabs"] button[role="tab"] p,
-div[data-testid="stTabs"] button[data-baseweb="tab"] p,
-div[data-testid="stTabs"] button[role="tab"] span {
-    font-size: 28px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 900 !important;
-    line-height: 1.2 !important;
-}
 
-/* Forzar color verde a la pestaña activa en todos sus sub-niveles */
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] p,
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"] span,
-div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] p {
-    color: #2E7D32 !important;
-}
-
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
-div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
-    border-bottom: 5px solid #2E7D32 !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
-# ==============================================================================
-# OVERRIDE RADICAL: FORZADO DE TAMAÑO EN PESTAÑAS (TABS)
-# ==============================================================================
-st.markdown("""
-<style>
-/* Ataque masivo a cualquier nodo dentro de la pestaña para forzar los 30px */
-div[data-testid="stTabs"] button[role="tab"],
-div[data-testid="stTabs"] button[role="tab"] p,
-div[data-testid="stTabs"] button[role="tab"] span,
-div[data-testid="stTabs"] button[role="tab"] div,
-div[data-testid="stTabs"] button[role="tab"] *,
-button[data-baseweb="tab"] p,
-button[data-baseweb="tab"] span,
-button[data-baseweb="tab"] div {
-    font-size: 30px !important;
-    font-family: 'Agency FB', sans-serif !important;
-    font-weight: 900 !important;
-    line-height: 1.2 !important;
-}
-</style>
-""", unsafe_allow_html=True)
